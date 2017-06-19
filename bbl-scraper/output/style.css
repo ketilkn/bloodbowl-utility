@@ -1,0 +1,84 @@
+.repeated {
+	color: #ddd;
+}
+body {
+	font-size: 100%;
+}
+sub {
+}
+table.wide-table {
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+}
+table {
+	font-size: 62.5%;
+}
+table td {
+	text-align: center;
+}
+
+
+table tbody td.name, tbody td.race, tbody td .coach {
+	text-align: left;
+}
+
+table tbody td a{
+   color: #777;
+}
+
+table.pure-table tbody th , table.pure-table tbody td.empty-column {
+ background-color: #e0e0e0;
+ text-align: left;
+}
+
+ul.year {
+ 	margin 0;
+	padding: 0;
+}
+ul.non-pure-menu-list li, ul.year li{
+  display: inline; 
+  list-style-type: none; 
+  padding: 0;
+  margin: 0;
+  margin-left: 0.5em;
+}
+ul.non-pure-menu-list a{
+	color: #003366;
+	font-weight: bold;
+	text-decoration: none;
+}
+ul.year li a{
+	color: rgb(51, 51, 51);
+}
+
+thead td.sortable.reverse {
+	cursor: s-resize;
+}
+
+thead td.sortable {
+	cursor: n-resize;
+}
+
+thead td.not-sortable {
+	cursor: default;
+}
+thead td.current-sort {
+	text-decoration: underline;	
+}
+thead td.current-sort:after, thead td.sorted:after{
+	content: "↓";
+}
+thead td.reverse:after, thead td.sorted.reverse:after{
+	content: "↑";
+}
+
+
+div.narrow-content {
+	padding-right: 2em;
+	float: left;
+}
+
+p.clearer {
+	clear: both;
+}

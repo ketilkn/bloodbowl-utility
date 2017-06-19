@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+<!--h2 class="content-subhead">Games</h2>-->
+<ul class="year">
+	<li><a href="/games.html">All time</a></li>
+	<li><a href="/games-2017.html">2017</a></li>
+	<li><a href="/games-2016.html">2016</a></li>
+	<li><a href="/games-2015.html">2015</a></li>
+	<li><a href="/games-2014.html">2014</a></li>
+	<li><a href="/games-2013.html">2013</a></li>
+	<li><a href="/games-2012.html">2012</a></li>
+	<li><a href="/games-2011.html">2011</a></li>
+	<li><a href="/games-2010.html">2010</a></li>
+	<li><a href="/games-2009.html">2009</a></li>
+	<li><a href="/games-2008.html">2008</a></li>
+	<li><a href="/games-2007.html">2007</a></li>
+</ul>
+<table class="pure-table">
+	<thead>
+		<tr>
+			<td class="current-sort">Date</td>
+			<td class="sort-ascending">Home</td>
+			<td class="sort-ascending">Away</td>
+			<td>Score</td>
+			<td>Casualties</td>
+			<td class="sort-ascending">tournament</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% set previous_date = "" %} {% set previous_season = "" %} 
+		{% for match in matches %}
+		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+			<td class="date{% if match.date == previous_date %} repeated{% endif %}">{{match.date}}</td>
+			<td class="home team">{{match.home}}</td>
+			<td class="away team">{{match.away}}</td>
+			<td class="score">{{match.td_home}}-{{match.td_away}}</td>
+			<td class="casualties">{{match.cas_home}}-{{match.cas_away}}</td>
+			<td class="season{% if match.season == previous_season %} repeated{% endif %}">{{match.season}}</td>
+		</tr>
+		{% set previous_date = match.date %} 
+		{% set previous_season = match.season %} 
+		{% endfor %}
+	</tbody>
+
+	{%if teams_average or teams_total %}
+	{%if teams_average %}
+	<tfoot>
+	<tr>
+		<td class="rank number"></td>
+		<td class="name"></td>
+		<td class="race"></td>
+		<!--<td>TV</td>-->
+		<td class="coach">Average</td>
+		<td class="gamesplayed">{{'%0.0f' %teams_average.gamesplayed}}</td>
+		<td class="win-tie-loss">{{'%0.1f' % teams_average.win}}-{{'%0.1f' % teams_average.tie}}-{{'%0.1f' % teams_average.loss}}</td>
+		<td class="performance">{{'%0.2f' % teams_average.performance}}%</td>
+		<!--<td>W</td>
+		<td>D</td>
+		<td>L</td>-->
+		<td class="touchdown">{{'%0.2f' % teams_average.td_for}}-{{'%0.2f' % teams_average.td_against}}</td>
+		<td class="casualty">{{'%0.2f' % teams_average.cas_for}}-{{'%0.2f' % teams_average.cas_against}}</td>
+		<td class="points">{{'%0.2f' %teams_average.points}}</td>
+	</tr>
+	{% endif %}
+	{%if teams_total %}
+	<tr>
+		<td class="rank number"></td>
+		<td class="name"></td>
+		<td class="race"></td>
+		<td class="coach">Total</td>
+		<!--<td>TV</td>-->
+		<td class="gamesplayed">{{teams_total.gamesplayed}}</td>
+		<td class="win-tie-loss">{{teams_total.win}}-{{teams_total.tie}}-{{teams_total.loss}}</td>
+		<td class="performance">{{'%0.2f' % teams_total.performance}}%</td>
+		<!--<td>W</td>
+		<td>D</td>
+		<td>L</td>-->
+		<td class="touchdown" >{{teams_total.td_for}}-{{teams_total.td_against}}</td>
+		<td class="casualty" >{{teams_total.cas_for}}-{{teams_total.cas_against}}</td>
+		<td class="points">{{teams_total.points}}</td>
+	</tr>
+	</tfoot>
+	{% endif %}
+	{% endif %}
+	
+	
+</table>
+{% endblock %}
+

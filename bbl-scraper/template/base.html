@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stats for AnBBL. {{title}} {{subtitle}}">
+    <title>{{title}}</title>
+    
+    <link rel="stylesheet" href="/pure-min.css" >
+    <!--link rel="stylesheet" href="/bb/side-menu.css">-->
+    <link rel="stylesheet" href="/style.css">
+	<script src="/script.js"></script>
+</head>
+<body>
+<div id="layout">
+    <!-- Menu toggle -->
+    <!--a href="#menu" id="menuLink" class="menu-link">
+        <span></span>
+    </a-->
+
+    <div id="menu">
+        <div class="non-pure-menu">
+		<!--a class="non-pure-menu-heading" href="/bb">AnBBL</a>-->
+
+            <ul class="non-pure-menu-list">
+                <li class="non-pure-menu-item non-pure-menu-selected2"><a href="/team.html" class="non-pure-menu-link ">Teams</a></li>
+		<li class="non-pure-menu-item"><a href="/games-2017.html" class="non-pure-menu-link">Games</a></li>
+		<li class="non-pure-menu-item"><a href="/coaches-2017.html" class="non-pure-menu-link">Coach</a></li>
+		<li class="non-pure-menu-item"><a href="/races.html" class="non-pure-menu-link">Race</a></li>
+		<!--li class="non-pure-menu-item"><a href="/bb/recent-matches.html" class="non-pure-menu-link">Recent</a></li>
+		<li class="non-pure-menu-item"><a href="/mål-skade-snitt.html" class="non-pure-menu-link">Average</a></li-->
+<!--                
+                <li class="pure-menu-item" class="menu-item-divided pure-menu-selected">
+                    <a href="#" class="pure-menu-link">Services</a>
+                </li>
+
+                <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>-->
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="header">
+            <h1>{{title}}</h1>
+            <h2>{{subtitle}}</h2>
+        </div>
+
+        <div class="content" style="margin-left: 5%; margin-right: 5%; width: 90%; max-width: 1920px">
+	{% block content %} {% endblock %}
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- script src="/bb/ui.js"></script -->
+
+</body>
+</html>
+

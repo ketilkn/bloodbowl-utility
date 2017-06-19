@@ -1,0 +1,9 @@
+output/*
+!output/script.js
+!output/style.css
+input/*
+__pycache__
+*.swp
+*.swo
+*~
+*.pyc

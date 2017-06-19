@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="content-subhead">Who is {{coach.nick}}</h2>
+<table class="pure-table pure-table-bordered">
+	<tbody>
+		<!--
+		<tr>
+			<th>Role</th>
+			<td>{{coach.role}}</td>
+		</tr>-->
+		<tr>
+			<th>Location</th>
+			<td>{{coach.location}}</td>
+		</tr>
+		{% if coach.gp > 1 and coach.last_game%}
+		<tr>
+			<th>First game</th>
+			<td>{{coach.first_game.split('T')[0]}}</th>
+		</tr>
+		{% endif %}
+		{% if coach.last_game %}
+		<tr>
+			<th>Games played</th>
+			<td>{{coach.gp}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.gp > 1 and coach.last_game%}
+		<tr>
+			<th>Last game</th>
+			<td>{{coach.last_game.split('T')[0]}}</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<th>Game frequency</th>
+			<td>{{coach.game_frequency}}</td>
+		</tr>
+		<tr>
+			<th>Favorite day</th>
+			<td>{{coach.favorite_day}}</td>
+		</tr>
+		<tr>
+			<th>Games played over time</th>
+			<td class="gamesplayed-time">{{'%0.3f' % (coach.gamesplayed_time)}}</td>
+		</tr>
+		<tr>
+			<th>Win ratio</th>
+			<td>{{'%0.3f' % (teams_average.win)}}</td>
+		</tr>
+
+		<tr>
+			<th>AnBBL rating</th>
+			<td>{{coach.anbbl_rating}}</td>
+		</tr>
+		{% if coach.naf %}
+		<tr>
+			<th>NAF-member</th>
+			<td><a href="https://member.thenaf.net/index.php?module=NAF&type=coachpage&coach={{coach.naf}}">{{coach.naf}}</td>
+		<tr>
+		{% endif %}
+	</tbody>
+</table>
+
+<p class="clearer"></p>
+<div class="narrow-content">
+<h2 class="content-subhead">Statistics</h2>
+
+<table class="pure-table pure-table-bordered">
+	<thead>
+		<tr>
+			<td></td>
+			<td>Average</td></td>
+			<td>Total
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<th class="gamesplayed">Games played</th>
+		<td class="gamesplayed empty-column"></td>
+		<td class="gamesplayed">{{teams_total.gamesplayed}}</td>
+	</tr>
+	<tr>
+		<th class="win">win</th>
+		<td class="win">{{'%0.3f' % teams_average.win}}</td>
+		<td class="win">{{teams_total.win}}</td>
+	</tr>
+	<tr>
+		<th class="tie">tie</th>
+		<td class="tie">{{'%0.3f' % teams_average.tie}}</td>
+		<td class="tie">{{teams_total.tie}}</td>
+	</tr>
+	<tr>
+		<th class="loss">loss</th>
+		<td class="loss">{{'%0.3f' % teams_average.loss}}</td>
+		<td class="loss">{{teams_total.loss}}</td>
+	</tr>
+	<tr>
+		<th class="">Performance</th>
+		<td class="performance empty-column"></td>
+		<td class="performance">{{'%0.2f' % teams_total.performance}}%</td>
+	</tr>
+	<tr>
+		<th class="">Touchdowns</th>
+		<td class="touchdown empty-column"></td>
+		<td class="touchdown" >{%if teams_total.td > 0 %}+{% endif %}{{teams_total.td}}</td>
+	</tr>
+	<tr>
+		<th class="">For</th>
+		<td class="touchdown">{{'%0.2f' % teams_average.td_for}}</td>
+		<td class="touchdown" >{{teams_total.td_for}}</td>
+	</tr>
+	<tr>
+		<th class="">Against</th>
+		<td class="touchdown">{{'%0.2f' % teams_average.td_against}}</td>
+		<td class="touchdown" >{{teams_total.td_against}}</td>
+	</tr>
+	<tr>
+		<th class="">Casualties</th>
+		<td class="casualty empty-column"></td>
+		<td class="casualty" >{%if teams_total.cas > 0 %}+{% endif %}{{teams_total.cas}}</td>
+	</tr>
+	<tr>
+		<th class="">For</th>
+		<td class="casualty">{{'%0.2f' % teams_average.cas_for}}</td>
+		<td class="casualty" >{{teams_total.cas_for}}</td>
+	</tr>
+	<tr>
+		<th class="">Against</th>
+		<td class="casualty">{{'%0.2f' % teams_average.cas_against}}</td>
+		<td class="casualty" >{{teams_total.cas_against}}</td>
+	</tr>
+	<tr>
+		<th class="">Kills</th>
+		<td class="casualty">{{'%0.2f' % teams_average.dead_for}}-{{'%0.2f' % teams_average.dead_against}}</td>
+		<td class="casualty" >{{teams_total.dead_for}}-{{teams_total.dead_against}}</td>
+	</tr>
+	<tr>
+		<th class="">Points</th>
+		<td class="points">{{'%0.2f' %teams_average.points}}</td>
+		<td class="points">{{teams_total.points}}</td>
+	</tr>
+	<tr>
+	</tr>
+	</tbody>
+</table>
+</div> <!-- narrow-content -->
+
+<div class="narrow-content">
+<h2 class="content-subhead">Streaks</h2>
+<table class="pure-table pure-table-bordered">
+	<tbody>
+
+		{% if coach.gamestreak %}
+		<tr>
+			<th>Game streak</th>
+			<td>played {{coach.gamestreak.count}} games in {{coach.gamestreak.days}} day{%if coach.gamestreak.days > 1 %}s{%endif%}</td>
+		</tr>
+		{% endif %}
+		{% if coach.nolosstreak %}
+		<tr>
+			<th>Win or tie streak</th>
+			<td>{{coach.nolosstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.winstreak %}
+		<tr>
+			<th>Win streak</th>
+			<td>{{coach.winstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.tiestreak %}
+		<tr>
+			<th>Tie streak</th>
+			<td>{{coach.tiestreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.losstreak %}
+		<tr>
+			<th>Loss streak</th>
+			<td>{{coach.losstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.killstreak %}
+		<tr>
+			<th>Kill streak</th>
+			<td>{{coach.killstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.shutoutstreak %}
+		<tr>
+			<th>No TDs against</th>
+			<td>{{coach.shutoutstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.didnotscore %}
+		<tr>
+			<th>No TDs for</th>
+			<td>{{coach.didnotscore}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.wonby2 %}
+		<tr>
+			<th>Won by 2+</th>
+			<td>{{coach.wonby2}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.lostby2 %}
+		<tr>
+			<th>Lostby 2+</th>
+			<td>{{coach.lostby2}}</td>
+		</tr>
+		{% endif %}
+	</tbody>
+</table>
+</div> <!-- narrow-content -->
+
+<p class="clearer"></p>
+
+<h2 class="content-subhead">Teams coached by {{title}}</h2>
+<table class="pure-table">
+	<thead>
+		<tr>
+			<td class="rank number not-sortable">#</td>
+			<td class="name sort-ascending">Team</td>
+			<td class="race sort-ascending">Race</td>
+			<!--<td>TV</td>-->
+			<td class="gamesplayed current-sort reverse">GP</td>
+			<td class="win-tie-loss">W-T-L</td>
+			<td class="performance">P/GP</td>
+			<!--<td>W</td>
+			<td>D</td>
+			<td>L</td>-->
+			<td class="touchdown">TD</td>
+			<td class="casualty">Cas</td>
+			<td class="points">P</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% for team in teams %}
+		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+			<td class="number">{{loop.index }}</td>
+			<td class="name"><a href="/team/{{team.id}}.html">{{team.name}}</a></td>
+			<td class="race"><a href="/race/{{team.race.replace(' ', '-')}}.html">{{team.race}}</a></td>
+			<!-- <td class="teamvalue">{#'%0.0f' % team.teamvalue#}</td>-->
+			<td class="gamesplayed">{{team.total.gamesplayed}}</td>
+			<td class="win-tie-loss">{{team.total.win}}-{{team.total.tie}}-{{team.total.loss}}</td>
+			<td class="performance">{{'%0.2f' % team.total.performance}}%</td>
+		<!--	<td class="win">{{team.total.win}}</td>
+			<td class="tie">{{team.total.tie}}</td>
+			<td class="loss">{{team.total.loss}}</td>-->
+			<td class="touchdown" title="{{team.total.td_for}} - {{team.total.td_against}}">{%if team.total.td > 0 %}+{% endif %}{{team.total.td}}</td>
+			<td class="casualty" title="{{team.total.cas_for}}-{{team.total.cas_against}}">{%if team.total.cas > 0 %}+{% endif %}{{team.total.cas}} </td>
+			<td class="points">{{team.total.points}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+
+{%if more_games > 0%}<h2 class="content-subhead">10 last games played by {{title}}</h2>
+{% else %}<h2 class="content-subhead">Games played by {{title}}</h2>{% endif %}
+
+
+<table class="pure-table">
+	<thead>
+		<tr>
+			<td class="current-sort reverse">Date</td>
+			<td class="sort-ascending">{{coach.nick}}</td>
+			<td class="sort-ascending">Opponent</td>
+			<td class="result">R</td>
+			<td>Score</td>
+			<td>Casualties</td>
+			<td class="sort-ascending">tournament</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% set previous_date = "" %} {% set previous_season = "" %} 
+		{% for game in games %}
+		<tr class="game {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+			<td class="date{% if game.date == previous_date %} repeated{% endif %}">{{game.date.split('T')[0]}}</td>
+			<td class="home coach-team team">{{game.us.team.name}}</td>
+			<td class="away opponent-team team">{{game.them.team.name}}</td>
+			<td class="result">{{game.us.result}}</td>
+			<td class="score">{{game.us.td}}-{{game.them.td}}</td>
+			<td class="casualties">{{game.us.casualties.total}}-{{game.them.casualties.total}}</td>
+			<td class="season{% if game.season == previous_season %} repeated{% endif %}">{{game.season.season}}</td>
+		</tr>
+		{% set previous_date = game.date %} 
+		{% set previous_season = game.season %} 
+		{% endfor %}
+	</tbody>
+</table>
+{%if more_games > 0%}<a href="/coach/{{coach_name.replace(' ','-')}}-games.html">+{{more_games}} more game{%if more_games > 1%}s{%endif%}..</a>{% endif %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="year">
+	<li><a href="/coaches.html">All time</a></li>
+	<li><a href="/coaches-2017.html">2017</a></li>
+	<li><a href="/coaches-2016.html">2016</a></li>
+	<li><a href="/coaches-2015.html">2015</a></li>
+	<li><a href="/coaches-2014.html">2014</a></li>
+	<li><a href="/coaches-2013.html">2013</a></li>
+	<li><a href="/coaches-2012.html">2012</a></li>
+	<li><a href="/coaches-2011.html">2011</a></li>
+	<li><a href="/coaches-2010.html">2010</a></li>
+	<li><a href="/coaches-2009.html">2009</a></li>
+	<li><a href="/coaches-2008.html">2008</a></li>
+	<li><a href="/coaches-2007.html">2007</a></li>
+</ul>
+<table class="pure-table">
+	<thead>
+		<tr>
+			<td class="rank number not-sortable">#</td>
+			<td class="name sort-ascending">Coach</td>
+			<td class="gamesplayed">GP</td>
+			<!--td class="frequency">frequency</td-->
+			<td class="win-tie-loss">W-T-L</td>
+			<td class="winratio">W/GP</td>
+			<!--<td>W</td>
+			<td>D</td>
+			<td>L</td>-->
+			<td class="touchdown">TD</td>
+			<td class="casualty">Cas</td>
+			<td class="points current-sort reverse">P</td>
+			<td class="performance">P/GP</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% for coach in coaches %}
+		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+			<td class="number">{{loop.index }}</td>
+			<td class="name"><a href="/coach/{{coach.coachlink}}.html">{{coach.name}}</a></td>
+			<td class="gamesplayed">{{coach.gamesplayed}}</td>
+			<!--td class="frequency">{{coach.game_frequency}}</td-->
+			<td class="win-tie-loss">{{coach.win}}-{{coach.tie}}-{{coach.loss}}</td>
+			<td class="winratio">{{'%0.3f' % (coach.winratio)}}</td>
+		<!--	<td class="win">{{coach.win}}</td>
+			<td class="tie">{{coach.tie}}</td>
+			<td class="loss">{{coach.loss}}</td>-->
+			<td class="touchdown" title="{{coach.td_for}} - {{coach.td_against}}">{%if coach.td > 0 %}+{% endif %}{{coach.td}}</td>
+			<td class="casualty" title="{{coach.cas_for}}-{{coach.cas_against}}">{%if coach.cas > 0 %}+{% endif %}{{coach.cas}} </td>
+			<td class="points">{{coach.points}}</td>
+			<td class="performance">{{'%0.2f' % coach.performance}}%</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}

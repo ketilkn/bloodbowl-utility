@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="year">
+	<li><a href="/coaches.html">All time</a></li>
+	<li><a href="/coaches-2017.html">2017</a></li>
+	<li><a href="/coaches-2016.html">2016</a></li>
+	<li><a href="/coaches-2015.html">2015</a></li>
+	<li><a href="/coaches-2014.html">2014</a></li>
+	<li><a href="/coaches-2013.html">2013</a></li>
+	<li><a href="/coaches-2012.html">2012</a></li>
+	<li><a href="/coaches-2011.html">2011</a></li>
+	<li><a href="/coaches-2010.html">2010</a></li>
+	<li><a href="/coaches-2009.html">2009</a></li>
+	<li><a href="/coaches-2008.html">2008</a></li>
+	<li><a href="/coaches-2007.html">2007</a></li>
+</ul>
+<table class="pure-table">
+	<thead>
+		<tr>
+			<td class="rank number not-sortable">#</td>
+			<td class="name sort-ascending">Coach</td>
+			<td class="gamesplayed">GP</td>
+			<!--td class="frequency">frequency</td-->
+			<td class="win-tie-loss">W-T-L</td>
+			<td class="winratio">W/GP</td>
+			<!--<td>W</td>
+			<td>D</td>
+			<td>L</td>-->
+			<td class="touchdown">TD</td>
+			<td class="casualty">Cas</td>
+			<td class="points current-sort reverse">P</td>
+			<td class="performance">P/GP</td>
+			{% if display_rating %}
+			<td class="anbbl-rating">Elo</td>
+			{% endif %}
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% for coach in coaches %}
+		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+			<td class="number">{{loop.index }}</td>
+			<td class="name"><a href="/coach/{{coach.coachlink}}.html">{{coach.nick}}</a></td>
+			<td class="gamesplayed">{{coach.games.total.gamesplayed}}</td>
+			<!--td class="frequency">{#coach.game_frequency#}</td-->
+			<td class="win-tie-loss">{{coach.games.total.win}}-{{coach.games.total.tie}}-{{coach.games.total.loss}}</td>
+			<td class="winratio">{{'%0.3f' % (coach.games.total.win / coach.games.total.gamesplayed)}}</td>
+		<!--	<td class="win">{{coach.games.total.win}}</td>
+			<td class="tie">{{coach.games.total.tie}}</td>
+			<td class="loss">{{coach.games.total.loss}}</td>-->
+			<td class="touchdown" title="{{coach.games.total.td_for}} - {{coach.games.total.td_against}}">{%if coach.games.total.td > 0 %}+{% endif %}{{coach.games.total.td}}</td>
+			<td class="casualty" title="{{coach.games.total.cas_for}}-{{coach.games.total.cas_against}}">{%if coach.games.total.cas > 0 %}+{% endif %}{{coach.games.total.cas}} </td>
+			<td class="points">{{coach.games.total.points}}</td>
+			<td class="performance">{{'%0.2f' % coach.games.total.performance}}%</td>
+			{% if display_rating %}
+			<td class="anbbl-rating">{{'%0.2f' % (150 + coach.elo.rating)}}</td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
