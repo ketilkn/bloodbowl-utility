@@ -47,9 +47,6 @@ def main():
     """Run from commandline. Add --rsync to copy data to server"""
     import sys
     export_all_data()
-    if "--rsync" in sys.argv:
-        import os
-        os.system("rsync -avzc -e ssh --progress output/ ketilkn@99012099.no:anbbl/")
 
 
 if __name__ == "__main__":
