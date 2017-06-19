@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-from jinja2 import Template
-import jinja2
 from copy import deepcopy
 from match import match
 from team import team
 from coach import coach
 from stats.coach_list import list_all_games_by_coach2
-from stats.coach_list import coach_data, list_all_coaches, list_all_coaches_year, list_all_games_by_coach
+from stats.coach_list import coach_data
 from stats.coach_list import list_all_coaches2
-from stats.team_list import list_all_teams_by_points, list_all_games_by_race, list_all_teams_for_race
+from stats.team_list import list_all_teams_by_points, list_all_games_by_race
 from stats.team_list import format_for_total, format_for_average
 from stats.match_list import list_all_matches, format_for_matchlist
 from stats.match_list import we_are_coach

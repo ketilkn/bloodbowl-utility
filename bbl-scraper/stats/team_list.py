@@ -25,10 +25,6 @@ def matchresult(match, team1, team2):
             "result": match[team1]["result"]
             }
 
-def split_match(match):
-    return [matchresult(match, "home", "away"), matchresult(match, "away", "home")]
-
-
 def add_result(result, match):
     teamid = match["teamid"]
     if not teamid in result:
@@ -56,13 +52,6 @@ def rank(matches):
         add_result(result, matchresult(match, "away", "home"))
 
     return result
-
-
-def rank_list():
-    matches = all_matches()
-    
-    ranking = rank(matches)
-    return ranking
 
 def add_teamdata(ranking):
     all_teams = team.dict_teams()
@@ -152,11 +141,6 @@ def list_all_teams_by_points(games=None):
     if games == None:
         gamesplayed = match.match_list()
     return list(rank_teams(add_teamdata(rank(gamesplayed)).values()))
-
-def list_all_teams_for_race(race):
-    teams = list_all_teams_by_points()
-    #return [k for  k in teams if k["race"] == race]
-    return filter(lambda x: x["race"] == race, teams)
 
 def team_count_by_race(teams):
     team_count = {}

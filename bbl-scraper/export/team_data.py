@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from jinja2 import Template
-import jinja2
 from match import match
 from stats import team_list 
 from stats import match_list

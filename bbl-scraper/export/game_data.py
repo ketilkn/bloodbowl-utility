@@ -2,7 +2,7 @@
 """Write all game data to disk using jinja2 templates"""
 import datetime
 from team import team
-from stats.team_list import list_all_teams_by_points, list_all_games_by_race, list_all_teams_for_race, list_all_teams_by_year
+from stats.team_list import list_all_teams_by_points, list_all_games_by_race
 from stats.match_list import list_all_matches, list_all_games_by_year
 from stats.team_list import format_for_total, format_for_average
 from export import export, coach_data, race_data

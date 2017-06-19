@@ -4,7 +4,6 @@ from unicodedata import normalize
 import datetime
 import dateutil.parser as parser
 import re
-import list_teams_by_games
 import coach.coach
 #import team 
 import sys

@@ -70,7 +70,7 @@ def rate_all(data):
 
 
 def main():
-    from sys import argv, exit
+    from sys import argv
     import pprint
     from stats import collate
     from coach.coach import dict_coaches_by_uid

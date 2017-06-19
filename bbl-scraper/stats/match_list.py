@@ -61,19 +61,6 @@ def playstreak(games):
         return None
     return best_score
 
-
-def resultstreak(games, result):
-    longest_streak = 0
-    current_streak = 0
-    for g in games:
-        if g["us"]["result"] == result:
-            current_streak = current_streak + 1
-            if current_streak > longest_streak:
-                longest_streak = current_streak
-        else: 
-            current_streak = 0
-    return longest_streak
-
 def format_for_matchlist(match):
     return {"matchid": match["matchid"],
             "date": match["date"].split("T")[0],

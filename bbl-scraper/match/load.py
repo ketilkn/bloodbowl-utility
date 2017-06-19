@@ -83,10 +83,6 @@ def from_json():
     with open("input/json/match-all.json") as fp:
         return json.load(fp)
 
-def from_url():
-    pass
-
-
 def from_file(filename):
         matchid = filename[filename.find("match-")+6:filename.rfind(".html")]
         html = open(filename, "rb").read()
