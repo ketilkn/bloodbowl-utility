@@ -2,64 +2,64 @@
 <table class="pure-table pure-table-bordered">
 	<tbody>
 
-		{% if coach.gamestreak %}
+		{% if streaks.gamestreak %}
 		<tr>
 			<th>Game streak</th>
-			<td>played {{coach.gamestreak.count}} games in {{coach.gamestreak.days}} day{%if coach.gamestreak.days > 1 %}s{%endif%}</td>
+			<td>played {{streaks.gamestreak.count}} games in {{streaks.gamestreak.days}} day{%if streaks.gamestreak.days > 1 %}s{%endif%}</td>
 		</tr>
 		{% endif %}
-		{% if coach.nolosstreak %}
+		{% if streaks.nolosstreak %}
 		<tr>
 			<th>Win or tie streak</th>
-			<td>{{coach.nolosstreak}}</td>
+			<td>{{streaks.nolosstreak}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.winstreak %}
+		{% if streaks.winstreak %}
 		<tr>
 			<th>Win streak</th>
-			<td>{{coach.winstreak}}</td>
+			<td>{{streaks.winstreak}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.tiestreak %}
+		{% if streaks.tiestreak %}
 		<tr>
 			<th>Tie streak</th>
-			<td>{{coach.tiestreak}}</td>
+			<td>{{streaks.tiestreak}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.losstreak %}
+		{% if streaks.losstreak %}
 		<tr>
 			<th>Loss streak</th>
-			<td>{{coach.losstreak}}</td>
+			<td>{{streaks.losstreak}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.killstreak %}
+		{% if streaks.killstreak %}
 		<tr>
 			<th>Kill streak</th>
-			<td>{{coach.killstreak}}</td>
+			<td>{{streaks.killstreak}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.shutoutstreak %}
+		{% if streaks.shutoutstreak %}
 		<tr>
 			<th>No TDs against</th>
-			<td>{{coach.shutoutstreak}}</td>
+			<td>{{streaks.shutoutstreak}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.didnotscore %}
+		{% if streaks.didnotscore %}
 		<tr>
 			<th>No TDs for</th>
-			<td>{{coach.didnotscore}}</td>
+			<td>{{streaks.didnotscore}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.wonby2 %}
+		{% if streaks.wonby2 %}
 		<tr>
 			<th>Won by 2+</th>
-			<td>{{coach.wonby2}}</td>
+			<td>{{streaks.wonby2}}</td>
 		</tr>
 		{% endif %}
-		{% if coach.lostby2 %}
+		{% if streaks.lostby2 %}
 		<tr>
 			<th>Lostby 2+</th>
-			<td>{{coach.lostby2}}</td>
+			<td>{{streaks.lostby2}}</td>
 		</tr>
 		{% endif %}
 	</tbody>

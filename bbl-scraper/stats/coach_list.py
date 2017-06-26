@@ -27,8 +27,6 @@ def coach_data(coach, coach_games):
     coach["gamesplayed_time"] = 0
     coach["favorite_day"] = favorite_day(coach_games)
 
-    coach.update(match_list.game_streaks(coach_games))
-
     coach["anbbl_rating"] = "N/A"
     if "elo" in coach:
         coach["anbbl_rating"] = "{:.1f}".format(150 + coach["elo"]["rating"])

@@ -22,6 +22,7 @@ def all_teams_for_coach(coach, coach_teams, coach_games):
     return export.get_template("coach/coach.html").render(
         coach_name = coach["nick"],
         coach = coach_list.coach_data(coach, coach_games),
+        streaks = match_list.game_streaks(coach_games),
         more_games = len(coach_games) - 10,
         teams = coach_teams,
         stats_average = game_total["average"],
