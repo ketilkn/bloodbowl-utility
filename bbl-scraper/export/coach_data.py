@@ -1,18 +1,12 @@
 #!/usr/bin/env python3
 from copy import deepcopy
+
 from match import match
 from team import team
 from coach import coach
-from stats.coach_list import list_all_games_by_coach2
-from stats.coach_list import coach_data
-from stats.coach_list import list_all_coaches2
-from stats.team_list import list_all_teams_by_points, list_all_games_by_race
-from stats.team_list import format_for_total, format_for_average
-from stats.match_list import list_all_matches, format_for_matchlist
-from stats.match_list import we_are_coach
-from stats.match_list import games_for_teams
-from stats.match_list import sum_game
-from coach.coach import dict_coaches_by_uid
+from stats import coach_list
+from stats import team_list
+from stats import match_list
 import stats.elo
 
 from export import export
@@ -23,11 +17,11 @@ import datetime
 
 
 def all_teams_for_coach(coach, coach_teams, coach_games):
-    game_total = sum_game(coach_games) 
+    game_total = match_list.sum_game(coach_games) 
 #format_for_total(coach_teams),
     return export.get_template("coach/coach.html").render(
         coach_name = coach["nick"],
-        coach = coach_data(coach, coach_games),
+        coach = coach_list.coach_data(coach, coach_games),
         more_games = len(coach_games) - 10,
         teams = coach_teams,
         teams_average = game_total["average"],
@@ -38,7 +32,7 @@ def all_teams_for_coach(coach, coach_teams, coach_games):
 
 def teams_by_coach(data):
     coaches = coach.list_coaches()    
-    teams =  sorted(list_all_teams_by_points(data["game"].values()), key=lambda x: x["gamesplayed"], reverse=True)
+    teams =  sorted(team_list.list_all_teams_by_points(data["game"].values()), key=lambda x: x["gamesplayed"], reverse=True)
     
     add_elo(data)
     #games = list_all_games_by_coach()
@@ -50,11 +44,11 @@ def teams_by_coach(data):
         if name in data["coach"] and "elo" in data["coach"][name]:
             c["elo"] = data["coach"][name]["elo"]
            
-        cgames = list( sorted( list_all_games_by_coach2(data, name), key=lambda x: int(x["matchid"]), reverse=True))
+        cgames = list( sorted( coach_list.list_all_games_by_coach2(data, name), key=lambda x: int(x["matchid"]), reverse=True))
         cgames = list( sorted( cgames, key=lambda x: x["date"], reverse=True))
-        cgames = deepcopy(we_are_coach(cgames, c))
+        cgames = deepcopy(match_list.we_are_coach(cgames, c))
 
-        team_coach = list(sorted(games_for_teams(data, cgames).values(), key=lambda x: x["total"]["gamesplayed"], reverse=True))
+        team_coach = list(sorted(match_list.games_for_teams(data, cgames).values(), key=lambda x: x["total"]["gamesplayed"], reverse=True))
 
         with open("output/coach/{}.html".format(name.replace(" ","-")), "w") as fp:
             fp.write(all_teams_for_coach(c, team_coach, cgames))
@@ -69,7 +63,7 @@ def all_coaches_by_year(data, start = 2007, end = datetime.datetime.now().year+1
     import stats.collate
     #data = stats.collate.collate()
     for year in range(2007, end):
-        coaches = list_all_coaches2(data = data, year=year)
+        coaches = coach_list.list_all_coaches2(data = data, year=year)
         #print( "{} coaches {} ".format(year, len(coaches)))
         coaches = [c for c in coaches if c["games"]["total"]["gamesplayed"] > 0]
         coaches = sorted(coaches, key=lambda x: x["games"]["total"]["td"], reverse=True)
@@ -82,7 +76,7 @@ def all_coaches_by_year(data, start = 2007, end = datetime.datetime.now().year+1
 
 def add_elo(data):
     rating = stats.elo.rate_all(data)
-    coaches_by_uid = dict_coaches_by_uid()
+    coaches_by_uid = coach.dict_coaches_by_uid()
 
     for rate in rating.values():
         if rate["cid"] in coaches_by_uid:
@@ -92,7 +86,7 @@ def add_elo(data):
     return data
 
 def all_coaches(data):
-    coaches = list_all_coaches2(data)
+    coaches = coach_list.list_all_coaches2(data)
     add_elo(data)
     coaches = [c for c in coaches if c["games"]["total"]["gamesplayed"] > 0]
     coaches = sorted(coaches, key=lambda x: x["games"]["total"]["td"], reverse=True)
