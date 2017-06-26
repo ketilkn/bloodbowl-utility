@@ -25,7 +25,8 @@ def team_stats(data, teams, games, the_team):
     export.write_html(export.get_template("team/team.html").render(
             stats_average = game_total["average"],
             stats_total = game_total["total"], 
-            matches=team_games,
+            matches=games_for_team,
+            coaches=data["coach"],
             streaks = streaks,
             teamname = the_team["name"], 
             teamid = the_team["id"], 

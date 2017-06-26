@@ -4,7 +4,9 @@
 		<tr>
 			<td class="current-sort reverse">Date</td>
 			<td class="sort-ascending">Home</td>
-			<td class="sort-ascending">Away</td>
+			<td class="sort-ascending">Opponent</td>
+			<td class="sort-ascending">Race</td>
+			<td class="result">R</td>
 			<td>Score</td>
 			<td>Casualties</td>
 			<td class="sort-ascending">tournament</td>
@@ -16,14 +18,19 @@
 		{% for match in matches %}
 		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
 			<td class="date{% if match.date == previous_date %} repeated{% endif %}">{{match.date.split('T')[0]}}</td>
-			<td class="home team">{{match.home}}</td>
-			<td class="away team">{{match.away}}</td>
-			<td class="score">{{match.td_home}}-{{match.td_away}}</td>
-			<td class="casualties">{{match.cas_home}}-{{match.cas_away}}</td>
-			<td class="season{% if match.season == previous_season %} repeated{% endif %}">{{match.season}}</td>
+			<td class="home team">{{match.us.team.name}}</td>
+			<td class="away team">{{match.them.team.name}}</td>
+			<td class="race away">{{match.them.team.race}}</td>
+			<td class="result">{{match.us.result}}</td>
+			<td class="score">{{match.us.td}}-{{match.them.td}}</td>
+			<td class="casualties">{{match.us.casualties.total}}-{{match.them.casualties.total}}</td>
+			<td class="season{% if match.season == previous_season %} repeated{% endif %}">{{match.season.season}}</td>
 		</tr>
 		{% set previous_date = match.date %} 
 		{% set previous_season = match.season %} 
 		{% endfor %}
 	</tbody>
 </table>
+
+
+
