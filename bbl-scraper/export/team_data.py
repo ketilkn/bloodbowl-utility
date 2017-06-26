@@ -15,9 +15,8 @@ import datetime
 def team_stats(data, teams, games, the_team):
     #team_data = coach_list.coach_data(the_team, data)
 
-    team_games = list(filter(lambda x: x["home"] == the_team["name"] or x["away"] == the_team["name"] , games) )
 
-    games_for_team = match_list.we_are_team(list(data["game"].values()), the_team)
+    games_for_team = sorted(match_list.we_are_team(list(data["game"].values()), the_team), key=lambda g: g["date"], reverse=True)
 
     game_total = match_list.sum_game(games_for_team)
     streaks = match_list.game_streaks(games_for_team)
