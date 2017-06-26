@@ -24,8 +24,8 @@ def all_teams_for_coach(coach, coach_teams, coach_games):
         coach = coach_list.coach_data(coach, coach_games),
         more_games = len(coach_games) - 10,
         teams = coach_teams,
-        teams_average = game_total["average"],
-        teams_total = game_total["total"], 
+        stats_average = game_total["average"],
+        stats_total = game_total["total"], 
         games = coach_games[:10],
         title="{}".format(coach["nick"]) 
         )

@@ -44,7 +44,7 @@
 		</tr>
 		<tr>
 			<th>Win ratio</th>
-			<td>{{'%0.3f' % (teams_average.win)}}</td>
+			<td>{{'%0.3f' % (stats_average.win)}}</td>
 		</tr>
 
 		<tr>
@@ -76,67 +76,67 @@
 	<tr>
 		<th class="gamesplayed">Games played</th>
 		<td class="gamesplayed empty-column"></td>
-		<td class="gamesplayed">{{teams_total.gamesplayed}}</td>
+		<td class="gamesplayed">{{stats_total.gamesplayed}}</td>
 	</tr>
 	<tr>
 		<th class="win">win</th>
-		<td class="win">{{'%0.3f' % teams_average.win}}</td>
-		<td class="win">{{teams_total.win}}</td>
+		<td class="win">{{'%0.3f' % stats_average.win}}</td>
+		<td class="win">{{stats_total.win}}</td>
 	</tr>
 	<tr>
 		<th class="tie">tie</th>
-		<td class="tie">{{'%0.3f' % teams_average.tie}}</td>
-		<td class="tie">{{teams_total.tie}}</td>
+		<td class="tie">{{'%0.3f' % stats_average.tie}}</td>
+		<td class="tie">{{stats_total.tie}}</td>
 	</tr>
 	<tr>
 		<th class="loss">loss</th>
-		<td class="loss">{{'%0.3f' % teams_average.loss}}</td>
-		<td class="loss">{{teams_total.loss}}</td>
+		<td class="loss">{{'%0.3f' % stats_average.loss}}</td>
+		<td class="loss">{{stats_total.loss}}</td>
 	</tr>
 	<tr>
 		<th class="">Performance</th>
 		<td class="performance empty-column"></td>
-		<td class="performance">{{'%0.2f' % teams_total.performance}}%</td>
+		<td class="performance">{{'%0.2f' % stats_total.performance}}%</td>
 	</tr>
 	<tr>
 		<th class="">Touchdowns</th>
 		<td class="touchdown empty-column"></td>
-		<td class="touchdown" >{%if teams_total.td > 0 %}+{% endif %}{{teams_total.td}}</td>
+		<td class="touchdown" >{%if stats_total.td > 0 %}+{% endif %}{{stats_total.td}}</td>
 	</tr>
 	<tr>
 		<th class="">For</th>
-		<td class="touchdown">{{'%0.2f' % teams_average.td_for}}</td>
-		<td class="touchdown" >{{teams_total.td_for}}</td>
+		<td class="touchdown">{{'%0.2f' % stats_average.td_for}}</td>
+		<td class="touchdown" >{{stats_total.td_for}}</td>
 	</tr>
 	<tr>
 		<th class="">Against</th>
-		<td class="touchdown">{{'%0.2f' % teams_average.td_against}}</td>
-		<td class="touchdown" >{{teams_total.td_against}}</td>
+		<td class="touchdown">{{'%0.2f' % stats_average.td_against}}</td>
+		<td class="touchdown" >{{stats_total.td_against}}</td>
 	</tr>
 	<tr>
 		<th class="">Casualties</th>
 		<td class="casualty empty-column"></td>
-		<td class="casualty" >{%if teams_total.cas > 0 %}+{% endif %}{{teams_total.cas}}</td>
+		<td class="casualty" >{%if stats_total.cas > 0 %}+{% endif %}{{stats_total.cas}}</td>
 	</tr>
 	<tr>
 		<th class="">For</th>
-		<td class="casualty">{{'%0.2f' % teams_average.cas_for}}</td>
-		<td class="casualty" >{{teams_total.cas_for}}</td>
+		<td class="casualty">{{'%0.2f' % stats_average.cas_for}}</td>
+		<td class="casualty" >{{stats_total.cas_for}}</td>
 	</tr>
 	<tr>
 		<th class="">Against</th>
-		<td class="casualty">{{'%0.2f' % teams_average.cas_against}}</td>
-		<td class="casualty" >{{teams_total.cas_against}}</td>
+		<td class="casualty">{{'%0.2f' % stats_average.cas_against}}</td>
+		<td class="casualty" >{{stats_total.cas_against}}</td>
 	</tr>
 	<tr>
 		<th class="">Kills</th>
-		<td class="casualty">{{'%0.2f' % teams_average.dead_for}}-{{'%0.2f' % teams_average.dead_against}}</td>
-		<td class="casualty" >{{teams_total.dead_for}}-{{teams_total.dead_against}}</td>
+		<td class="casualty">{{'%0.2f' % stats_average.dead_for}}-{{'%0.2f' % stats_average.dead_against}}</td>
+		<td class="casualty" >{{stats_total.dead_for}}-{{stats_total.dead_against}}</td>
 	</tr>
 	<tr>
 		<th class="">Points</th>
-		<td class="points">{{'%0.2f' %teams_average.points}}</td>
-		<td class="points">{{teams_total.points}}</td>
+		<td class="points">{{'%0.2f' %stats_average.points}}</td>
+		<td class="points">{{stats_total.points}}</td>
 	</tr>
 	<tr>
 	</tr>
