@@ -12,6 +12,7 @@ from coach import coach
 from stats.match_list import list_all_matches
 from stats.match_list import games_for_year, we_are_coach, sum_game, favorite_day, eventstreak 
 from stats.match_list import playstreak
+from stats import match_list
 
 
 def list_all_games_by_coach2(data, the_coach):
@@ -26,16 +27,7 @@ def coach_data(coach, coach_games):
     coach["gamesplayed_time"] = 0
     coach["favorite_day"] = favorite_day(coach_games)
 
-    coach["gamestreak"] = playstreak(coach_games)
-    coach["winstreak"] = eventstreak(coach_games, event = lambda x: x["us"]["result"] == "W", minimum=2)
-    coach["losstreak"] = eventstreak(coach_games, event = lambda x: x["us"]["result"] == "L", minimum=2) 
-    coach["tiestreak"] = eventstreak(coach_games, event = lambda x: x["us"]["result"] == "T", minimum=2)
-    coach["nolosstreak"] = eventstreak(coach_games, event = lambda x: x["us"]["result"] == "T" or x["us"]["result"] == "W", minimum=coach["winstreak"]+1) 
-    coach["killstreak"] = eventstreak(coach_games, event = lambda x: x["us"]["casualties"]["dead"] > 0, minimum=1) 
-    coach["wonby2"] = eventstreak(coach_games, event = lambda x: x["us"]["td"] - x["them"]["td"] > 1, minimum=3) 
-    coach["lostby2"] = eventstreak(coach_games, event = lambda x: x["us"]["td"] - x["them"]["td"] < -1, minimum=3) 
-    coach["didnotscore"] = eventstreak(coach_games, event = lambda x: x["us"]["td"] == 0, minimum=2) 
-    coach["shutoutstreak"] = eventstreak(coach_games, event = lambda x: x["them"]["td"] == 0, minimum=2) 
+    coach.update(match_list.game_streaks(coach_games))
 
     coach["anbbl_rating"] = "N/A"
     if "elo" in coach:
