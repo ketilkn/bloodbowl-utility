@@ -16,7 +16,10 @@ def team_stats(data, teams, games, the_team):
     #team_data = coach_list.coach_data(the_team, data)
 
 
-    games_for_team = sorted(match_list.we_are_team(list(data["game"].values()), the_team), key=lambda g: g["date"], reverse=True)
+    games_for_team = match_list.we_are_team(list(data["game"].values()), the_team)
+
+    games_for_team = sorted(games_for_team, key=lambda g: int(g["matchid"]), reverse=True)
+    games_for_team = sorted(games_for_team, key=lambda g: g["date"], reverse=True)
 
     game_total = match_list.sum_game(games_for_team)
     streaks = match_list.game_streaks(games_for_team)
