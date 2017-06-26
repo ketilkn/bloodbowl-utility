@@ -17,12 +17,16 @@ def team_stats(data, teams, games, the_team):
 
     team_games = list(filter(lambda x: x["home"] == the_team["name"] or x["away"] == the_team["name"] , games) )
 
-    game_total = match_list.sum_game(match_list.we_are_team(list(data["game"].values()), the_team)) 
+    games_for_team = match_list.we_are_team(list(data["game"].values()), the_team)
+
+    game_total = match_list.sum_game(games_for_team)
+    streaks = match_list.game_streaks(games_for_team)
 
     export.write_html(export.get_template("team/team.html").render(
             stats_average = game_total["average"],
             stats_total = game_total["total"], 
             matches=team_games,
+            streaks = streaks,
             teamname = the_team["name"], 
             teamid = the_team["id"], 
             title="{}".format(the_team["name"],
