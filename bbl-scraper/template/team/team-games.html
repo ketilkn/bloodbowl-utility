@@ -19,7 +19,7 @@
 		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
 			<td class="date{% if match.date == previous_date %} repeated{% endif %}">{{match.date.split('T')[0]}}</td>
 			<td class="home team">{{match.us.team.name}}</td>
-			<td class="away team">{{match.them.team.name}}</td>
+			<td class="away team"><a href="/team/{{match.them.team.teamid}}.html">{{match.them.team.name}}</a></td>
 			<td class="race away">{{match.them.team.race}}</td>
 			<td class="result">{{match.us.result}}</td>
 			<td class="score">{{match.us.td}}-{{match.them.td}}</td>
