@@ -1,0 +1,66 @@
+
+<table class="pure-table pure-table-bordered">
+	<tbody>
+
+		{% if coach.gamestreak %}
+		<tr>
+			<th>Game streak</th>
+			<td>played {{coach.gamestreak.count}} games in {{coach.gamestreak.days}} day{%if coach.gamestreak.days > 1 %}s{%endif%}</td>
+		</tr>
+		{% endif %}
+		{% if coach.nolosstreak %}
+		<tr>
+			<th>Win or tie streak</th>
+			<td>{{coach.nolosstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.winstreak %}
+		<tr>
+			<th>Win streak</th>
+			<td>{{coach.winstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.tiestreak %}
+		<tr>
+			<th>Tie streak</th>
+			<td>{{coach.tiestreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.losstreak %}
+		<tr>
+			<th>Loss streak</th>
+			<td>{{coach.losstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.killstreak %}
+		<tr>
+			<th>Kill streak</th>
+			<td>{{coach.killstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.shutoutstreak %}
+		<tr>
+			<th>No TDs against</th>
+			<td>{{coach.shutoutstreak}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.didnotscore %}
+		<tr>
+			<th>No TDs for</th>
+			<td>{{coach.didnotscore}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.wonby2 %}
+		<tr>
+			<th>Won by 2+</th>
+			<td>{{coach.wonby2}}</td>
+		</tr>
+		{% endif %}
+		{% if coach.lostby2 %}
+		<tr>
+			<th>Lostby 2+</th>
+			<td>{{coach.lostby2}}</td>
+		</tr>
+		{% endif %}
+	</tbody>
+</table>
