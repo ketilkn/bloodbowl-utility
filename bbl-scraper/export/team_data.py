@@ -2,20 +2,39 @@
 from match import match
 from stats import team_list 
 from stats import match_list
+from stats import coach_list
 from export import export, coach_data, race_data
 from team import team
 
 from export import index
 import datetime
 
-def all_games_by_team():
+
+#coach = coach_list.coach_data(coach, coach_games),
+
+def team_stats(data, teams, games, the_team):
+    #team_data = coach_list.coach_data(the_team, data)
+
+    team_games = list(filter(lambda x: x["home"] == the_team["name"] or x["away"] == the_team["name"] , games) )
+
+    game_total = match_list.sum_game(match_list.we_are_team(list(data["game"].values()), the_team)) 
+
+    export.write_html(export.get_template("team/team.html").render(
+            stats_average = game_total["average"],
+            stats_total = game_total["total"], 
+            matches=team_games,
+            teamname = the_team["name"], 
+            teamid = the_team["id"], 
+            title="{}".format(the_team["name"],
+            subtitle="sorted by date")), 
+        "team/{}".format(the_team["id"]))
+
+
+def all_games_by_team(data):
     teams = team.list_teams()
     games = match_list.list_all_matches() 
     for t in teams:
-        team_games = list(filter(lambda x: x["home"] == t["name"] or x["away"] == t["name"] , games) )
-        export.write_html(export.get_template("team/team.html").render(
-            matches=team_games, teamname = t["name"], teamid = t["id"], title="All games by {}".format(t["name"],
-            subtitle="sorted by date")), "team/{}".format(t["id"]))
+        team_stats(data, teams, games, t)
 
 def all_teams_by_year(year):
     teams = team_list.list_all_teams_by_year(year) 
@@ -52,7 +71,7 @@ def main():
     collated_data = stats.collate.collate()
 
     print("Exporting all teams")
-    all_games_by_team()
+    all_games_by_team(collated_data)
 
     print("Exporting teams by points")
     with open("output/team.html", "w") as teams:

@@ -24,7 +24,7 @@ def export_all_data():
     game_data.games_by_year(2007, datetime.datetime.now().year+1)
 
     print("Exporting games by team")
-    team_data.all_games_by_team()
+    team_data.all_games_by_team(collated_data )
 
     print("Exporting races by performance")
     race_data.export_race_by_performance()
