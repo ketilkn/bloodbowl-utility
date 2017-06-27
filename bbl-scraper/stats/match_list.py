@@ -12,15 +12,26 @@ from coach import coach
 def game_streaks(games):
     streaks = {}
     streaks["gamestreak"] = playstreak(games)
-    streaks["winstreak"] = eventstreak(games, event = lambda x: x["us"]["result"] == "W", minimum=2)
-    streaks["losstreak"] = eventstreak(games, event = lambda x: x["us"]["result"] == "L", minimum=2) 
-    streaks["tiestreak"] = eventstreak(games, event = lambda x: x["us"]["result"] == "T", minimum=2)
-    streaks["nolosstreak"] = eventstreak(games, event = lambda x: x["us"]["result"] == "T" or x["us"]["result"] == "W", minimum=streaks["winstreak"]+1) 
-    streaks["killstreak"] = eventstreak(games, event = lambda x: x["us"]["casualties"]["dead"] > 0, minimum=1) 
-    streaks["wonby2"] = eventstreak(games, event = lambda x: x["us"]["td"] - x["them"]["td"] > 1, minimum=3) 
-    streaks["lostby2"] = eventstreak(games, event = lambda x: x["us"]["td"] - x["them"]["td"] < -1, minimum=3) 
-    streaks["didnotscore"] = eventstreak(games, event = lambda x: x["us"]["td"] == 0, minimum=2) 
-    streaks["shutoutstreak"] = eventstreak(games, event = lambda x: x["them"]["td"] == 0, minimum=2) 
+    streaks["winstreak"] = eventstreak(games, 
+            event = lambda x: x["us"]["result"] == "W", minimum=2)
+    streaks["losstreak"] = eventstreak(games, 
+            event = lambda x: x["us"]["result"] == "L", minimum=2) 
+    streaks["tiestreak"] = eventstreak(games, 
+            event = lambda x: x["us"]["result"] == "T", minimum=2)
+    streaks["nolosstreak"] = eventstreak(games, 
+            event = lambda x: x["us"]["result"] == "T" or x["us"]["result"] == "W", 
+            minimum=streaks["winstreak"]+1) 
+    streaks["killstreak"] = eventstreak(games, 
+            event = lambda x: x["us"]["casualties"]["dead"] > 0, minimum=1) 
+    streaks["wonby2"] = eventstreak(games, 
+            event = lambda x: x["us"]["td"] - x["them"]["td"] > 1, minimum=3) 
+    streaks["lostby2"] = eventstreak(games, 
+            event = lambda x: x["us"]["td"] - x["them"]["td"] < -1, minimum=3) 
+    streaks["didnotscore"] = eventstreak(games, 
+            event = lambda x: x["us"]["td"] == 0, minimum=2) 
+    streaks["shutoutstreak"] = eventstreak(games, 
+            event = lambda x: x["them"]["td"] == 0, minimum=2) 
+
     return streaks
 
 def eventstreak(games, event, minimum=0):
