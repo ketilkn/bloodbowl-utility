@@ -57,7 +57,6 @@ def favorite_day(games):
     best_day = days.index(max(days))
     days_of_week = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
     return "{}".format(days_of_week[best_day]) 
-    #return "{} for {}".format(days_of_week[best_day], days[best_day]) 
 
 def playstreak(games):
     if len(games) < 1:
@@ -206,20 +205,6 @@ def list_all_games_by_year(year):
     start_date = "{}-99-99".format(year-1)
     end_date = "{}-00-00".format(int(year)+1)
     return list(filter(lambda x: x["date"] > start_date and x["date"] < end_date, list_all_matches())) 
-
-
-#def game_to_result(the_game, the_coach=None, the_team=None):
-#    result = {"our": {"coach": None, "coachid": None, "team": None, "teamid": None, "race": None},
-#            "their": {"coach": None, "coachid": None, "team": None, "teamid": None, "race": None},
-#            "score": {"our": 0, "their": 0},
-#            "casualties" : {
-#                'our': {'bh': 0, 'dead': 0, 'si': 0, 'total': 0},
-#                'their': {'bh': 0, 'dead': 0, 'si': 0, 'total': 0}},
-#            "matchid": the_game["matchid"],
-#            'season': {'id': '31', 'round': 'One - Initiation', 'season': 'Season XII'}
-#              }
-#
-#    return result
 
 
 def main():
