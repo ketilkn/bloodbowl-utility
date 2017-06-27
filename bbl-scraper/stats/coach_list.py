@@ -21,6 +21,12 @@ def eventstreak(games, event, minimum=0):
     current_streak = 0
     previous_game = games[0]
     for g in games[1:]:
+        #if g["us"]["coachid"] == 74:
+            #print("\n====")
+            #print(g["date"])
+            #print(g["us"])
+            #print(g["them"])
+            #print("\n")
         if event(g, previous_game):
             if longest_streak == 0 and current_streak == 0:
                 current_streak = 1
@@ -38,17 +44,17 @@ def coach_streaks(games):
     streaks = {}
 
     streaks["sameteam"] = eventstreak(games, 
-            event = lambda x, y: x["us"]["team"]["teamid"] == y["us"]["team"]["teamid"], 
+            event = lambda x, y: y["us"]["team"]["teamid"] == x["us"]["team"]["teamid"], 
             minimum=2)
     streaks["differentteam"] = eventstreak(games, 
-            event = lambda x, y : x["us"]["team"]["teamid"] != y["us"]["team"]["teamid"], 
+            event = lambda x, y : y["us"]["team"]["teamid"] != x["us"]["team"]["teamid"], 
             minimum=2)
 
     streaks["sameopponent"] = eventstreak(games, 
-            event = lambda x, y: x["them"]["team"]["teamid"]== y["them"]["team"]["teamid"], 
+            event = lambda x, y: y["them"]["team"]["teamid"]== x["them"]["team"]["teamid"], 
             minimum=2)
     streaks["differentopponent"] = eventstreak(games, 
-            event = lambda x, y : x["them"]["team"]["teamid"] != y["them"]["team"]["teamid"], 
+            event = lambda x, y : y["them"]["team"]["teamid"] != x["them"]["team"]["teamid"], 
             minimum=2)
 
     streaks["sameopponentcoach"] = eventstreak(games, 
