@@ -66,5 +66,41 @@
 			<td>{{streaks.lostby2}}</td>
 		</tr>
 		{% endif %}
+		{% if streaks.sameteam %}
+		<tr>
+			<th>Same team</th>
+			<td>{{streaks.sameteam}}</td>
+		</tr>
+		{% endif %}
+		{% if streaks.differentteam %}
+		<tr class="hidden-data">
+			<th>Changed team</th>
+			<td>{{streaks.differentteam}}</td>
+		</tr>
+		{% endif %}
+		{% if streaks.sameopponent %}
+		<tr>
+			<th>Same opponent</th>
+			<td>{{streaks.sameopponent}}</td>
+		</tr>
+		{% endif %}
+		{% if streaks.differentopponent %}
+		<tr class="hidden-data">
+			<th>Changed opponent</th>
+			<td>{{streaks.differentopponent}}</td>
+		</tr>
+		{% endif %}
+		{% if streaks.sameopponentcoach %}
+		<tr>
+			<th>Same coach</th>
+			<td>{{streaks.sameopponent}}</td>
+		</tr>
+		{% endif %}
+		{% if streaks.differentopponentcoach %}
+		<tr class="hidden-data">
+			<th>Changed coach</th>
+			<td>{{streaks.differentopponentcoach}}</td>
+		</tr>
+		{% endif %}
 	</tbody>
 </table>

@@ -18,11 +18,13 @@ import datetime
 
 def all_teams_for_coach(coach, coach_teams, coach_games):
     game_total = match_list.sum_game(coach_games) 
+    streaks = match_list.game_streaks(coach_games)
+    streaks.update(coach_list.coach_streaks(coach_games))
 #format_for_total(coach_teams),
     return export.get_template("coach/coach.html").render(
         coach_name = coach["nick"],
         coach = coach_list.coach_data(coach, coach_games),
-        streaks = match_list.game_streaks(coach_games),
+        streaks = streaks,
         more_games = len(coach_games) - 10,
         teams = coach_teams,
         stats_average = game_total["average"],
