@@ -44,6 +44,7 @@ def collate_data(coaches, teams, games):
             "game": games}
 
     return {"coach": coaches,
+            "_coachid": coach.dict_coaches_by_uid(), 
             "team": collate_team(data),
             "game": collate_gamecoach(data)}
 

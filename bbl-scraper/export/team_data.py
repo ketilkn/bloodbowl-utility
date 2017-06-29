@@ -28,13 +28,10 @@ def team_stats(data, teams, games, the_team):
     games_by_race = match_list.sum_game_by_group(games_for_team, match_list.group_games_by_race)
 
     games_by_our_coach = match_list.sum_game_by_group(games_for_team, match_list.group_games_by_our_coach) 
-    #FIXME. group_games_by_coach should return proper coach
-    from coach.coach import dict_coaches_by_uid
-    coaches = dict_coaches_by_uid()
-
+    #FIXME, improve nick lookup
     for c in games_by_our_coach:
-        if c["title"] in coaches:
-            c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+        if c["title"] in data["_coachid"]:
+            c["title"] = data["_coachid"][c["title"]]["nick"] 
             c["link"] = "/coach/{}.html".format(c["title"].replace(" ","-"))
         else:
             c["title"] = "Unknown {}".format(c["title"])

@@ -17,7 +17,7 @@ from stats.collate import collate
 import datetime
 
 
-def all_teams_for_coach(coach, coach_teams, coach_games):
+def all_teams_for_coach(data, coach, coach_teams, coach_games):
     game_total = match_list.sum_game(coach_games) 
     streaks = match_list.game_streaks(coach_games)
     streaks.update(coach_list.coach_streaks(coach_games))
@@ -25,11 +25,9 @@ def all_teams_for_coach(coach, coach_teams, coach_games):
     games_by_coach = match_list.sum_game_by_group(coach_games, match_list.group_games_by_coach)
 
     #FIXME. group_games_by_coach should return proper coach
-    from coach.coach import dict_coaches_by_uid
-    coaches = dict_coaches_by_uid()
     for c in games_by_coach:
-        if c["title"] in coaches:
-            c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+        if c["title"] in data["_coachid"]:
+            c["title"] = data["_coachid"][c["title"]]["nick"] 
             c["link"] = "/coach/{}.html".format(c["title"].replace(" ","-"))
         else:
             c["title"] = "Unknown {}".format(c["title"])
@@ -73,7 +71,7 @@ def teams_by_coach(data):
         team_coach = sorted(team_coach, key=lambda x: x["total"]["gamesplayed"], reverse = True)
 
         with open("output/coach/{}.html".format(name.replace(" ","-")), "w") as fp:
-            fp.write(all_teams_for_coach(c, team_coach, cgames))
+            fp.write(all_teams_for_coach(data, c, team_coach, cgames))
 
         with open("output/coach/{}-games.html".format(name.replace(" ","-")), "w") as fp:
             fp.write(export.get_template("coach/coach-games.html").render(
