@@ -125,7 +125,40 @@ def games_for_teams(data, games):
             teams[teamid]["average"] = total["average"]
              
     return teams
+
+def sort_group_by_points(groups):
+    games_for_team = sorted(groups, key=lambda g: g["data"]["total"]["win"], reverse=True)
+    games_for_team = sorted(games_for_team, key=lambda g: g["data"]["total"]["gamesplayed"])
+    games_for_team = sorted(games_for_team, key=lambda g: g["data"]["total"]["points"], reverse=True)
     
+    return games_for_team
+
+
+def group_games_by_coach(games, who="them"):
+    by_coach = group_games(lambda x: x[who]["coachid"], games)
+    return by_coach
+
+def group_games_by_race(games, who="them"):
+    by_race = group_games(lambda x: x[who]["team"]["race"], games)
+    return by_race
+
+def group_games(group, games):
+    result = {}
+    for g in games:
+        grp = group(g)
+        if grp not in result:
+            result[grp] = []
+        result[grp].append(g)
+
+    return result
+
+def sum_game_by_race(games):
+    result = []
+    for rac, g in group_games_by_race(games).items():
+        result.append({"race": rac, "data": sum_game(g)})
+    return sort_group_by_points(result)
+
+
 def sum_game(games):
     total = {"gamesplayed": 0, "win":0, "tie":0, "loss": 0, 
                 "td": 0,"td_for": 0, "td_against": 0, 

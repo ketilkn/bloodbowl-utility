@@ -1,0 +1,43 @@
+{% block content %}
+<table class="pure-table">
+	<thead>
+		<tr>
+			<td class="rank number not-sortable">#</td>
+			<td class="race sort-ascending">Race</td>
+			<td class="gamesplayed">GP</td>
+			<td class="w-t-l">W-T-L</td>
+			<td class="performance current-sort reverse">P/GP</td>
+			<!--<td>W</td>
+			<td>D</td>
+			<td>L</td>-->
+			<td class="touchdown">TD</td>
+			<td class="touchdown-average">TD avg</td>
+			<td class="casualty">Cas</td>
+			<td class="casualty-average">Cas avg</td>
+			<td class="points">P</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% for team in games_by_race %}
+		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+			<td class="number">{{loop.index }}</td>
+			<td class="race"><a href="/race/{{team.race.replace(' ', '-')}}.html">{{team.race}}</a></td>
+			<td class="gamesplayed">{{team.data.total.gamesplayed}}</td>
+			<td class="win-tie-loss">{{team.data.total.win}}-{{team.data.total.tie}}-{{team.data.total.loss}}</td>
+			<td class="performance">{{'%0.2f' % team.data.total.performance}}%</td>
+		<!--	<td class="win">{{team.data.total.win}}</td>
+			<td class="tie">{{team.data.total.tie}}</td>
+			<td class="loss">{{team.data.total.loss}}</td>-->
+			<td class="touchdown" title="{{team.data.total.td_for}}-{{team.data.total.td_against}}">{% if team.data.total.td > 0 %}+{% endif %}{{team.data.total.td}}</td>
+			<td class="touchdown-average" title="">{{'%0.2f' %(team.data.total.td_for/team.data.total.gamesplayed)}} - {{'%0.2f' %(team.data.total.td_against/team.data.total.gamesplayed)}}</td>
+			<td class="casualty" title="{{team.data.total.cas_for}}-{{team.data.total.cas_against}}">{% if team.data.total.cas > 0 %}+{% endif %}{{team.data.total.cas}}</td>
+			<td class="casualty-average" title="">{{'%0.2f' %(team.data.total.cas_for/team.data.total.gamesplayed)}} - {{'%0.2f' %(team.data.total.cas_against/team.data.total.gamesplayed)}}</td>
+			<td class="points">{{team.data.total.points}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock %}
+

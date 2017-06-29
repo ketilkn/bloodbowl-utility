@@ -23,11 +23,15 @@ def team_stats(data, teams, games, the_team):
 
     game_total = match_list.sum_game(games_for_team)
     streaks = match_list.game_streaks(games_for_team)
+    
+
+    games_by_race = match_list.sum_game_by_race(games_for_team)
 
     export.write_html(export.get_template("team/team.html").render(
             stats_average = game_total["average"],
             stats_total = game_total["total"], 
             matches=games_for_team,
+            games_by_race = games_by_race,
             coaches=data["coach"],
             streaks = streaks,
             teamname = the_team["name"], 
