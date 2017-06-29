@@ -99,7 +99,7 @@ def all_coaches_by_year(data, start = 2007, end = datetime.datetime.now().year+1
 
 def add_elo(data):
     rating = stats.elo.rate_all(data)
-    coaches_by_uid = coach.dict_coaches_by_uid()
+    coaches_by_uid = data["_coachid"]()
 
     for rate in rating.values():
         if rate["cid"] in coaches_by_uid:
