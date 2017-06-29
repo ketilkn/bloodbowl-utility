@@ -28,7 +28,12 @@ def all_teams_for_coach(coach, coach_teams, coach_games):
     from coach.coach import dict_coaches_by_uid
     coaches = dict_coaches_by_uid()
     for c in games_by_coach:
-        c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+        if c["title"] in coaches:
+            c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+            c["link"] = "/coach/{}.html".format(c["title"].replace(" ","-"))
+        else:
+            c["title"] = "Unknown {}".format(c["title"])
+            c["link"] = "/coaches.html"
 
 
     return export.get_template("coach/coach.html").render(

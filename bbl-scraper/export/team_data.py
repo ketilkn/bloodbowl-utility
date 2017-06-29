@@ -31,8 +31,14 @@ def team_stats(data, teams, games, the_team):
     #FIXME. group_games_by_coach should return proper coach
     from coach.coach import dict_coaches_by_uid
     coaches = dict_coaches_by_uid()
+
     for c in games_by_our_coach:
-        c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+        if c["title"] in coaches:
+            c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+            c["link"] = "/coach/{}.html".format(c["title"].replace(" ","-"))
+        else:
+            c["title"] = "Unknown {}".format(c["title"])
+            c["link"] = "/coaches.html"
 
     export.write_html(export.get_template("team/team.html").render(
             stats_average = game_total["average"],
