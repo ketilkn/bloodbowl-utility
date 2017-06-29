@@ -73,6 +73,7 @@
 
 <p class="clearer"></p>
 
+
 <h2 class="content-subhead">Teams coached by {{title}}</h2>
 <table class="pure-table">
 	<thead>
@@ -114,6 +115,11 @@
 	</tbody>
 
 </table>
+<div class="not-hidden-data">
+<h2 class="content-subhead">Performance against race</h2>
+
+{% include 'race/race-performance.html' %}
+</div>
 
 {%if more_games > 0%}<h2 class="content-subhead">10 last games played by {{title}}</h2>
 {% else %}<h2 class="content-subhead">Games played by {{title}}</h2>{% endif %}
