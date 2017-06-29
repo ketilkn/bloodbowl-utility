@@ -63,7 +63,9 @@ def teams_by_coach(data):
         cgames = list( sorted( cgames, key=lambda x: x["date"], reverse=True))
         cgames = deepcopy(match_list.we_are_coach(cgames, c))
 
-        team_coach = list(sorted(match_list.games_for_teams(data, cgames).values(), key=lambda x: x["total"]["gamesplayed"], reverse=True))
+        team_coach = list(sorted(match_list.games_for_teams(data, cgames).values(), key=lambda x: x["name"]))
+        team_coach = sorted(team_coach, key=lambda x: x["total"]["performance"], reverse = True)
+        team_coach = sorted(team_coach, key=lambda x: x["total"]["gamesplayed"], reverse = True)
 
         with open("output/coach/{}.html".format(name.replace(" ","-")), "w") as fp:
             fp.write(all_teams_for_coach(c, team_coach, cgames))
@@ -81,7 +83,10 @@ def all_coaches_by_year(data, start = 2007, end = datetime.datetime.now().year+1
         coaches = coach_list.list_all_coaches2(data = data, year=year)
         #print( "{} coaches {} ".format(year, len(coaches)))
         coaches = [c for c in coaches if c["games"]["total"]["gamesplayed"] > 0]
+        coaches = sorted(coaches, key=lambda x: x["nick"])
+        coaches = sorted(coaches, key=lambda x: x["games"]["total"]["cas"], reverse=True)
         coaches = sorted(coaches, key=lambda x: x["games"]["total"]["td"], reverse=True)
+        coaches = sorted(coaches, key=lambda x: x["games"]["total"]["gamesplayed"], reverse=True)
         coaches = sorted(coaches, key=lambda x: x["games"]["total"]["performance"], reverse=True)
         coaches = sorted(coaches, key=lambda x: x["games"]["total"]["points"], reverse=True)
         #print( "{} coaches {} ".format(year, len(coaches)))
