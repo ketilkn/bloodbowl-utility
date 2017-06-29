@@ -127,7 +127,10 @@ def games_for_teams(data, games):
     return teams
 
 def sort_group_by_points(groups):
-    games_for_team = sorted(groups, key=lambda g: g["data"]["total"]["win"], reverse=True)
+    games_for_team = sorted(groups, key=lambda g: g["title"])
+    games_for_team = sorted(games_for_team, key=lambda g: g["data"]["total"]["cas_for"]+g["data"]["total"]["cas_against"], reverse=True)
+    games_for_team = sorted(games_for_team, key=lambda g: g["data"]["total"]["td_for"]+g["data"]["total"]["td_against"], reverse=True)
+    games_for_team = sorted(games_for_team, key=lambda g: g["data"]["total"]["win"], reverse=True)
     games_for_team = sorted(games_for_team, key=lambda g: g["data"]["total"]["gamesplayed"])
     games_for_team = sorted(games_for_team, key=lambda g: g["data"]["total"]["points"], reverse=True)
     
