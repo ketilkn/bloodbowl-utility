@@ -4,6 +4,7 @@ from copy import deepcopy
 from match import match
 from team import team
 from coach import coach
+
 from stats import coach_list
 from stats import team_list
 from stats import match_list
@@ -21,12 +22,21 @@ def all_teams_for_coach(coach, coach_teams, coach_games):
     streaks = match_list.game_streaks(coach_games)
     streaks.update(coach_list.coach_streaks(coach_games))
     games_by_race = match_list.sum_game_by_group(coach_games, match_list.group_games_by_race)
-#format_for_total(coach_teams),
+    games_by_coach = match_list.sum_game_by_group(coach_games, match_list.group_games_by_coach)
+
+    #FIXME. group_games_by_coach should return proper coach
+    from coach.coach import dict_coaches_by_uid
+    coaches = dict_coaches_by_uid()
+    for c in games_by_coach:
+        c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+
+
     return export.get_template("coach/coach.html").render(
         coach_name = coach["nick"],
         coach = coach_list.coach_data(coach, coach_games),
         streaks = streaks,
         games_by_race = games_by_race,
+        games_by_coach = games_by_coach,
         more_games = len(coach_games) - 10,
         teams = coach_teams,
         stats_average = game_total["average"],

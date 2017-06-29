@@ -115,9 +115,16 @@
 	</tbody>
 
 </table>
+
 <div class="not-hidden-data">
 <h2 class="content-subhead">Performance against race</h2>
 
+{% include 'race/race-performance.html' %}
+</div>
+
+<div class="not-hidden-data">
+<h2 class="content-subhead">Performance against coach</h2>
+{% set games_by_race = games_by_coach %}
 {% include 'race/race-performance.html' %}
 </div>
 
