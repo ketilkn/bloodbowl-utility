@@ -22,7 +22,7 @@
 		{% for team in games_by_race %}
 		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
 			<td class="number">{{loop.index }}</td>
-			<td class="race"><a href="/race/{{team.race.replace(' ', '-')}}.html">{{team.race}}</a></td>
+			<td class="race"><a href="/race/{{team.title.replace(' ', '-')}}.html">{{team.title}}</a></td>
 			<td class="gamesplayed">{{team.data.total.gamesplayed}}</td>
 			<td class="win-tie-loss">{{team.data.total.win}}-{{team.data.total.tie}}-{{team.data.total.loss}}</td>
 			<td class="performance">{{'%0.2f' % team.data.total.performance}}%</td>

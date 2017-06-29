@@ -152,10 +152,10 @@ def group_games(group, games):
 
     return result
 
-def sum_game_by_race(games):
+def sum_game_by_group(games, grouping):
     result = []
-    for rac, g in group_games_by_race(games).items():
-        result.append({"race": rac, "data": sum_game(g)})
+    for rac, g in grouping(games).items():
+        result.append({"title": rac, "data": sum_game(g)})
     return sort_group_by_points(result)
 
 
