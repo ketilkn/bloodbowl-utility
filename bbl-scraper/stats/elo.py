@@ -75,7 +75,6 @@ def main():
     from stats import collate
     from coach.coach import dict_coaches_by_uid
 
-    coaches_by_uid = dict_coaches_by_uid()
     pp = pprint.PrettyPrinter(indent=2)
     data = collate.collate()
 
@@ -84,8 +83,8 @@ def main():
     for r in sorted(rates.values(), key=lambda x: x["rating"]):
         #pp.pprint(r)
         uid = r["cid"]
-        if uid in coaches_by_uid:
-            print("{} {} {}".format( uid, coaches_by_uid[uid]["nick"], 150 + r["rating"]))
+        if uid in data["_coachid"]:
+            print("{} {} {}".format( uid, data["_coachid"][uid]["nick"], 150 + r["rating"]))
 
     if len(argv) > 1:
         pp.pprint(rates[int(argv[1])])
