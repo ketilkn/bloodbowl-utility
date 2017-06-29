@@ -23,6 +23,14 @@
 {% include 'race/race-performance.html' %}
 </div>
 
+{% if show_coaches %}
+<div class="not-hidden-data">
+<h2 class="content-subhead">Coaches</h2>
+{% set games_by_race = games_by_our_coach %}
+{% include 'race/race-performance.html' %}
+</div>
+{% endif %}
+
 <h2 class="content-subhead">All games played by {{teamname}}</h2>
 
 {% include 'team/team-games.html' %}

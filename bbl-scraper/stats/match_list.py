@@ -141,6 +141,9 @@ def group_games_by_coach(games, who="them"):
     by_coach = group_games(lambda x: x[who]["coachid"], games)
     return by_coach
 
+def group_games_by_our_coach(games):
+    return group_games_by_coach(games, who="us")
+
 def group_games_by_race(games, who="them"):
     by_race = group_games(lambda x: x[who]["team"]["race"], games)
     return by_race

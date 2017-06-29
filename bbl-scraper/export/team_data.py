@@ -27,11 +27,20 @@ def team_stats(data, teams, games, the_team):
 
     games_by_race = match_list.sum_game_by_group(games_for_team, match_list.group_games_by_race)
 
+    games_by_our_coach = match_list.sum_game_by_group(games_for_team, match_list.group_games_by_our_coach) 
+    #FIXME. group_games_by_coach should return proper coach
+    from coach.coach import dict_coaches_by_uid
+    coaches = dict_coaches_by_uid()
+    for c in games_by_our_coach:
+        c["title"] = coaches[c["title"]]["nick"] if c["title"] in coaches else "unknown {}".format(c["title"]) 
+
     export.write_html(export.get_template("team/team.html").render(
             stats_average = game_total["average"],
             stats_total = game_total["total"], 
             matches=games_for_team,
             games_by_race = games_by_race,
+            games_by_our_coach = games_by_our_coach,
+            show_coaches = len(games_by_our_coach) > 1,
             coaches=data["coach"],
             streaks = streaks,
             teamname = the_team["name"], 
