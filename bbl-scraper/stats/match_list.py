@@ -215,6 +215,22 @@ def we_are_team(games, team):
     return result
 
 
+def we_are(games, what):
+    result = []
+    for g in games:
+        if what(g["home"]):
+            g["us"] = g["home"]
+            g["them"] = g["away"]
+            result.append(g)
+        elif what(g["away"]):
+            g["us"] = g["away"]
+            g["them"] = g["home"]
+            result.append(g)
+    return result
+
+def we_are_race(games, race):
+    return we_are(games, lambda x: x["team"]["race"] == race)
+
 def we_are_coach(games, coach):
     result = []
     for g in games:

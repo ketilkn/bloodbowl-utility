@@ -30,7 +30,7 @@ def export_all_data():
     race_data.export_race_by_performance()
 
     print("Exporting teams by race")
-    race_data.teams_by_race()
+    race_data.teams_by_race(collated_data)
 
     print("Exporting coach")
     coach_data.teams_by_coach(collated_data)
