@@ -12,7 +12,7 @@ def create_index():
     games = list_all_matches()
     coaches = coach.list_coaches()
     teams = team.list_teams()
-    time_of_update = '{0:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
+    time_of_update = '{0:%Y-%m-%d %H:%M}'.format(datetime.datetime.now())
 
     return export.get_template("index.html").render(
         time_of_update=time_of_update,
