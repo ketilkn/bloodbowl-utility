@@ -1,5 +1,7 @@
 #!/bin/env python3
 """fetch all games from anarchy blood bowl league"""
+from os import path
+import sys
 import urllib.request
 from urllib.error import HTTPError
 from time import sleep
@@ -31,36 +33,50 @@ def download_to(url, target):
                 html = response.readlines()
                 try:
                     open(target, "wb").writelines(html)
-                    print("Wrote {} to {}".format(url, target))
+                    print(" Wrote {} to {}".format(url, target))
                 except OSError:
-                    print("Failed writing {} to {}".format(url, target))
+                    print(" Failed writing {} to {}".format(url, target))
             else:
-                print("Server redirect {} to {}".format(url, response.geturl()))
+                print(" Server redirect {} to {}".format(url, response.geturl()))
     except HTTPError as error:
         html = error.readlines()
         open(target, "wb").writelines(html)
-        print("Server error {} to {}".format(url, target))
+        print(" Server error {} to {}".format(url, target))
+
 def download_match(matchid):
-    download_to(DATA_URL.format(matchid), "input/matchdata-{}.html".format(matchid))
-    sleep(1)
-    download_to(BASE_URL.format(matchid), "input/match-{}.html".format(matchid))
-    sleep(3)
+        download_to(DATA_URL.format(matchid), "input/matchdata-{}.html".format(matchid))
+        sleep(1)
+        download_to(BASE_URL.format(matchid), "input/match-{}.html".format(matchid))
+        sleep(3)
+
+def is_match_downloaded(matchid):
+    return path.isfile("input/matchdata-{}.html".format(matchid)) \
+        and path.isfile("input/match-{}.html".format(matchid)) 
 
 def download_matches(from_match, to_match):
     for matchid in range(from_match, to_match):
-        download_match(matchid)
+            download_match(matchid)
 
+def force_download():
+    return "--force" in sys.argv
+  
 def main():
-    import sys
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 2 and type(sys.argv[1]) is int:
         download_match(sys.argv[1])
     elif len(sys.argv) == 3:
         from_match = int(sys.argv[1])
         to_match = int(sys.argv[2]) + 1
         download_matches(from_match, to_match)
     else:
-        for m in new_games():
-            download_match(m)
+        print("#Fetch recent games")
+        games = new_games()
+        print(" {} recent game{} {}".format(len(games), "s" if len(games)!=1 else "",  games))
+        for g in games:
+            if not is_match_downloaded(g) or force_download():
+                print("#Downloading game {}".format(g))
+                download_match(g)
+            else:
+                print("#Game {} already downloaded use --force to reload".format(g))
 
 if __name__ == "__main__":
     main()
