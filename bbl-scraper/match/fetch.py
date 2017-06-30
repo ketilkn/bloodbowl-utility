@@ -61,7 +61,8 @@ def force_download():
     return "--force" in sys.argv
   
 def main():
-    if len(sys.argv) == 2 and type(sys.argv[1]) is int:
+    print(sys.argv)
+    if len(sys.argv) == 2 and sys.argv[1].isnumeric():
         download_match(sys.argv[1])
     elif len(sys.argv) == 3:
         from_match = int(sys.argv[1])
