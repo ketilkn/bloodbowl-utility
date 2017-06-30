@@ -137,9 +137,19 @@ def sort_group_by_points(groups):
     return games_for_team
 
 
+def games_by_weekday(games):
+    games_by_weekday = sum_game_by_group(games, group_games_by_weekday)
+    for w in games_by_weekday:
+        w["order"] = w["title"]
+        w["title"] = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"][w["title"]-1]
+        w["link"] = None
+    return sorted(games_by_weekday, key=lambda x: x["order"])
+
+def group_games_by_weekday(games):
+    return group_games(lambda x: dateutil.parser.parse(x["date"]).isoweekday(), games)
+
 def group_games_by_coach(games, who="them"):
-    by_coach = group_games(lambda x: x[who]["coachid"], games)
-    return by_coach
+    return group_games(lambda x: x[who]["coachid"], games)
 
 def group_games_by_our_coach(games):
     return group_games_by_coach(games, who="us")

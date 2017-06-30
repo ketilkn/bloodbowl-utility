@@ -21,7 +21,9 @@ def all_teams_for_coach(data, coach, coach_teams, coach_games):
     game_total = match_list.sum_game(coach_games) 
     streaks = match_list.game_streaks(coach_games)
     streaks.update(coach_list.coach_streaks(coach_games))
+
     games_by_race = match_list.sum_game_by_group(coach_games, match_list.group_games_by_race)
+    games_by_weekday = match_list.games_by_weekday(coach_games)
     games_by_coach = match_list.sum_game_by_group(coach_games, match_list.group_games_by_coach)
 
     #FIXME. group_games_by_coach should return proper coach
@@ -34,12 +36,15 @@ def all_teams_for_coach(data, coach, coach_teams, coach_games):
             c["link"] = "/coaches.html"
 
 
+
+
     return export.get_template("coach/coach.html").render(
         coach_name = coach["nick"],
         coach = coach_list.coach_data(coach, coach_games),
         streaks = streaks,
         games_by_race = games_by_race,
         games_by_coach = games_by_coach,
+        games_by_weekday = games_by_weekday,
         more_games = len(coach_games) - 10,
         teams = coach_teams,
         stats_average = game_total["average"],

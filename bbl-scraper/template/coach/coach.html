@@ -116,17 +116,24 @@
 
 </table>
 
-<div class="not-hidden-data">
+<div class="hidden-data">
 <h2 class="content-subhead">Performance against race</h2>
 
 {% include 'race/race-performance.html' %}
 </div>
 
-<div class="not-hidden-data">
+<div class="hidden-data">
 <h2 class="content-subhead">Performance against coach</h2>
 {% set games_by_race = games_by_coach %}
 {% include 'race/race-performance.html' %}
 </div>
+
+<div class="hidden-data">
+<h2 class="content-subhead">Games by weekday</h2>
+{% set games_by_race = games_by_weekday %}
+{% include 'race/race-performance.html' %}
+</div>
+
 
 {%if more_games > 0%}<h2 class="content-subhead">10 last games played by {{title}}</h2>
 {% else %}<h2 class="content-subhead">Games played by {{title}}</h2>{% endif %}
