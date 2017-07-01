@@ -2,6 +2,24 @@
 import requests
 import sys
 
+
+
+
+
+def download_to(session, url, target):
+    response = session.get(url)
+    if not response.history and response.status_code==200: 
+        html = response.text
+        try:
+            open(target, "w").write(html)
+            print(" Wrote {} to {}".format(url, target))
+            return True
+        except OSError:
+            print(" Failed writing {} to {}".format(url, target))
+    else:
+        print(" Server error {} to {}".format(url, status_code))
+    return False
+
 def verify_session(session, response = None):
     #TODO check if session is logged in
     return response.status_code == 200
