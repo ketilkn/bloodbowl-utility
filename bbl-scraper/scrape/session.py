@@ -17,7 +17,7 @@ def download_to(session, url, target):
         except OSError:
             print(" Failed writing {} to {}".format(url, target))
     else:
-        print(" Server error {} to {}".format(url, status_code))
+        print(" Server error {} to {}".format(url, response.status_code))
     return False
 
 def verify_session(session, response = None):
