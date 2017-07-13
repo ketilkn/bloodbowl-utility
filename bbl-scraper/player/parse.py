@@ -44,6 +44,12 @@ def parse_upgrade(soup):
 def parse_characteristic(soup, characteristic): 
     return int(soup.select_one("select[name={}] option[selected]".format(characteristic))["value"])
 
+def parse_injury(soup): 
+    return  {"niggle": parse_niggle(soup)}
+
+def parse_niggle(soup):
+    return int(soup.select_one("select[name=n] option[selected]")["value"])
+
 def parse_spp(soup):
     return ["spp"]
 def parse_player(playerid, soup):
@@ -55,6 +61,7 @@ def parse_player(playerid, soup):
                     "playername": parse_playername(soup),
                     "position": parse_position(soup),
                     "upgrade": parse_upgrade(soup),
+                    "injury": parse_injury(soup),
                     "points": parse_spp(soup),
                     "bounty": parse_bounties(soup)
                     }
