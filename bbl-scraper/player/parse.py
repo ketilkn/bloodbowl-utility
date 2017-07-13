@@ -6,8 +6,6 @@ import dateutil.parser as parser
 import re
 #import team 
 import sys
-
-
 def parse_date(soup):
     return parser.parse(soup.select("input[name=indate]")[0]["value"]).isoformat()
 
@@ -25,7 +23,10 @@ def parse_position(soup):
     return soup.select("select option[selected]")[0]["value"]
 
 def parse_skills(soup):
-    return ["Skill"]
+    normal = soup.find_all("input", {"name": lambda x: x and x.startswith("upgr") and x!= "upgr7"})
+    extra = soup.select("input[name=upgr7]")[0]
+    return {"normal": [x["value"] for x in normal if x["value"]],
+            "extra": [x for x in extra["value"].split(',') if len(extra["value"]) > 0] }
 
 def parse_spp(soup):
     return ["spp"]
@@ -37,7 +38,7 @@ def parse_player(playerid, soup):
                     "date": player_date, 
                     "playername": parse_playername(soup),
                     "position": parse_position(soup),
-                    "skills": parse_skills(soup),
+                    "upgrade": parse_skills(soup),
                     "points": parse_spp(soup),
                     "bounty": parse_bounties(soup)
                     }
