@@ -20,10 +20,9 @@ def parse_games(player, soup):
 
 def parse_playername(soup):
     return soup.select("input[name=name]")[0]["value"]
-    return "Playername"
 
 def parse_position(soup):
-    return "the Position"
+    return soup.select("select option[selected]")[0]["value"]
 
 def parse_skills(soup):
     return ["Skill"]
