@@ -22,11 +22,17 @@ def parse_playername(soup):
 def parse_position(soup):
     return soup.select("select option[selected]")[0]["value"]
 
-def parse_skills(soup):
+def parse_normal(soup):
     normal = soup.find_all("input", {"name": lambda x: x and x.startswith("upgr") and x!= "upgr7"})
+    return  [x["value"] for x in normal if x["value"]]
+def parse_extra(soup):
     extra = soup.select("input[name=upgr7]")[0]
-    return {"normal": [x["value"] for x in normal if x["value"]],
-            "extra": [x for x in extra["value"].split(',') if len(extra["value"]) > 0] }
+    return  [x for x in extra["value"].split(',') if len(extra["value"]) > 0] 
+
+def parse_upgrade(soup):
+    extra = soup.select("input[name=upgr7]")[0]
+    return {"normal": parse_normal(soup),
+            "extra": parse_extra(soup)}
 
 def parse_spp(soup):
     return ["spp"]
@@ -38,7 +44,7 @@ def parse_player(playerid, soup):
                     "date": player_date, 
                     "playername": parse_playername(soup),
                     "position": parse_position(soup),
-                    "upgrade": parse_skills(soup),
+                    "upgrade": parse_upgrade(soup),
                     "points": parse_spp(soup),
                     "bounty": parse_bounties(soup)
                     }
