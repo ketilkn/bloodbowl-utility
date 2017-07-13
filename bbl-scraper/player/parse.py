@@ -9,7 +9,7 @@ import sys
 
 
 def parse_date(soup):
-    return "1977-01-01 00:00:01"
+    return parser.parse(soup.select("input[name=indate]")[0]["value"]).isoformat()
 
 def parse_bounties(soup):
     return -1
