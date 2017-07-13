@@ -27,13 +27,15 @@ def parse_position(soup):
 def parse_skills(soup):
     return ["Skill"]
 
+def parse_spp(soup):
+    return ["spp"]
 def parse_player(playerid, soup):
-    player_date = parse_player(soup)
+    player_date = parse_date(soup)
     if not player_date:
         return None
-    player = {"playerid": matchid,
+    player = {"playerid": playerid,
                     "date": player_date, 
-                    "playername": parse_season(soup),
+                    "playername": parse_playername(soup),
                     "position": parse_position(soup),
                     "skills": parse_skills(soup),
                     "points": parse_spp(soup)
@@ -54,7 +56,7 @@ def main():
     filename = sys.argv[1]
     playerid = filename[filename.find("adminplayer-")+6:filename.rfind(".html")]
 
-    player = parse_player(playerid, load.from_file(filename))
+    player = parse_player(playerid, soup=player.load.from_file(filename))
     #player = parse_games(player, load.from_file(spp))
     print(player)
 
