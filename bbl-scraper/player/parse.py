@@ -29,10 +29,20 @@ def parse_extra(soup):
     extra = soup.select("input[name=upgr7]")[0]
     return  [x for x in extra["value"].split(',') if len(extra["value"]) > 0] 
 
+def parse_modifier(soup):
+    return { "ma": parse_characteristic(soup, "ma"), 
+            "st": parse_characteristic(soup, "st"), 
+            "ag": parse_characteristic(soup, "ag"), 
+            "av": parse_characteristic(soup, "av")}
+
+    
 def parse_upgrade(soup):
     extra = soup.select("input[name=upgr7]")[0]
     return {"normal": parse_normal(soup),
-            "extra": parse_extra(soup)}
+            "extra": parse_extra(soup), 
+            "modifier": parse_modifier(soup)}
+def parse_characteristic(soup, characteristic): 
+    return int(soup.select_one("select[name={}] option[selected]".format(characteristic))["value"])
 
 def parse_spp(soup):
     return ["spp"]
