@@ -12,7 +12,7 @@ def parse_date(soup):
     return parser.parse(soup.select("input[name=indate]")[0]["value"]).isoformat()
 
 def parse_bounties(soup):
-    return -1
+    return {"total": int(soup.select("input[name=bounty]")[0]["value"])*1000}
 
 def parse_games(player, soup):
     player["spp"] =  {"interception":0, "td":0, "casualty": 0, "completion": 0, "mvp": 0} 
@@ -38,7 +38,8 @@ def parse_player(playerid, soup):
                     "playername": parse_playername(soup),
                     "position": parse_position(soup),
                     "skills": parse_skills(soup),
-                    "points": parse_spp(soup)
+                    "points": parse_spp(soup),
+                    "bounty": parse_bounties(soup)
                     }
     return player
 
