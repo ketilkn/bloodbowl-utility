@@ -55,9 +55,15 @@ def parse_halloffame(soup):
 def parse_permanent(soup):
     return soup.select_one("input[name=inj]")["value"]
 
+def parse_active(soup):
+    status = soup.select_one("select[name=status] option[selected]")
+    return {"active": True if status["value"] == "a" else False,
+            "reason": status.string if status["value"] != "a" else ""}
+
 def parse_status(soup): 
     return  {"niggle": parse_niggle(soup),
-            "injury": parse_permanent(soup)}
+            "injury": parse_permanent(soup),
+            "active": parse_active(soup)}
 
 def parse_niggle(soup):
     return int(soup.select_one("select[name=n] option[selected]")["value"])
