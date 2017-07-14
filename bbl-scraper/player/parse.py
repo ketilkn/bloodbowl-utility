@@ -53,7 +53,7 @@ def parse_halloffame(soup):
             "reason": hall_of_famer_reason.string if hall_of_famer_reason else ""} 
 
 def parse_permanent(soup):
-    return soup.select_one("input[name=inj]")["value"].split(",")
+    return list(filter(lambda x: len(x) > 0, soup.select_one("input[name=inj]")["value"].split(",")))
 
 def parse_active(soup):
     status = soup.select_one("select[name=status] option[selected]")
