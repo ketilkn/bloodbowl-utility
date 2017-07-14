@@ -53,7 +53,7 @@ def parse_halloffame(soup):
             "reason": hall_of_famer_reason.string if hall_of_famer_reason else ""} 
 
 def parse_permanent(soup):
-    return soup.select_one("input[name=inj]")["value"]
+    return soup.select_one("input[name=inj]")["value"].split(",")
 
 def parse_active(soup):
     status = soup.select_one("select[name=status] option[selected]")
@@ -61,7 +61,8 @@ def parse_active(soup):
             "reason": status.string if status["value"] != "a" else ""}
 
 def parse_status(soup): 
-    return  {"niggle": parse_niggle(soup),
+    return  {"entered_league": parse_date(soup),
+            "niggle": parse_niggle(soup),
             "injury": parse_permanent(soup),
             "active": parse_active(soup)}
 
@@ -75,7 +76,6 @@ def parse_player(playerid, soup):
     if not player_date:
         return None
     player = {"playerid": playerid,
-                    "date": player_date, 
                     "playername": parse_playername(soup),
                     "position": parse_position(soup),
                     "upgrade": parse_upgrade(soup),
