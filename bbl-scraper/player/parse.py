@@ -44,8 +44,12 @@ def parse_upgrade(soup):
 def parse_characteristic(soup, characteristic): 
     return int(soup.select_one("select[name={}] option[selected]".format(characteristic))["value"])
 
+def parse_permanent(soup):
+    return soup.select_one("input[name=inj]")["value"]
+
 def parse_injury(soup): 
-    return  {"niggle": parse_niggle(soup)}
+    return  {"niggle": parse_niggle(soup),
+            "permanent": parse_permanent(soup)}
 
 def parse_niggle(soup):
     return int(soup.select_one("select[name=n] option[selected]")["value"])
@@ -62,8 +66,6 @@ def parse_player(playerid, soup):
                     "position": parse_position(soup),
                     "upgrade": parse_upgrade(soup),
                     "injury": parse_injury(soup),
-                    "points": parse_spp(soup),
-                    "bounty": parse_bounties(soup)
                     }
     return player
 
