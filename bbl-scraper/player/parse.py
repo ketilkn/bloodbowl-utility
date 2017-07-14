@@ -55,9 +55,9 @@ def parse_halloffame(soup):
 def parse_permanent(soup):
     return soup.select_one("input[name=inj]")["value"]
 
-def parse_injury(soup): 
+def parse_status(soup): 
     return  {"niggle": parse_niggle(soup),
-            "permanent": parse_permanent(soup)}
+            "injury": parse_permanent(soup)}
 
 def parse_niggle(soup):
     return int(soup.select_one("select[name=n] option[selected]")["value"])
@@ -73,7 +73,7 @@ def parse_player(playerid, soup):
                     "playername": parse_playername(soup),
                     "position": parse_position(soup),
                     "upgrade": parse_upgrade(soup),
-                    "injury": parse_injury(soup),
+                    "status": parse_status(soup),
                     "hall_of_fame": parse_halloffame(soup)
                     }
     return player
