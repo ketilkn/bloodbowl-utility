@@ -44,6 +44,14 @@ def parse_upgrade(soup):
 def parse_characteristic(soup, characteristic): 
     return int(soup.select_one("select[name={}] option[selected]".format(characteristic))["value"])
 
+def parse_halloffame(soup):
+    hall_of_famer= soup.select_one("select[name=hof] option[selected]")
+    print(hall_of_famer)
+    hall_of_famer_reason = soup.select_one("textarea[name=hofreason]")
+    return {"hall_of_famer": True if hall_of_famer and hall_of_famer["value"]!=0 else False,
+            "season": hall_of_famer["value"] if hall_of_famer else 0,
+            "reason": hall_of_famer_reason.string if hall_of_famer_reason else ""} 
+
 def parse_permanent(soup):
     return soup.select_one("input[name=inj]")["value"]
 
@@ -66,6 +74,7 @@ def parse_player(playerid, soup):
                     "position": parse_position(soup),
                     "upgrade": parse_upgrade(soup),
                     "injury": parse_injury(soup),
+                    "hall_of_fame": parse_halloffame(soup)
                     }
     return player
 
