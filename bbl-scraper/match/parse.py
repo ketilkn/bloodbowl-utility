@@ -32,20 +32,28 @@ def parse_score(scoreboard):
     touchdowns = scoreboard.select("br")
     return len(touchdowns) 
 
+def parse_scoreboardelement(el):
+    print(el)
+    if el == "mercenary / star":
+        return "*"
+    elif el.has_attr("href") and el["href"].startswith("default.asp?p=pl&pid="):
+        return int(el["href"][el["href"].rfind("=")+1:])
+    return el.has_attr("href")
+
+def parse_scoreboard(scoreboard):
+    td = []
+    for c in list(scoreboard.children):
+        el = parse_scoreboardelement(c) 
+        print("--{}".format(el))
+        if el:
+            td.append(el)
+    return td
 
 def parse_td(soup):
-    td = []
-    scoreboard = soup.select('tr[style="background-color:#f4fff4"] td')[0]
-    #print("{}".format(scoreboard.contents[0]).split("<br>"))
-    #print(dir(scoreboard))
-    for br in scoreboard.find("br"):
-        #for el in br.next_sibling:
-            #print(el)
-        for s in br.stripped_strings:
-            print(s)
-        #print(br.stripped_strings)
+    scoreboard = soup.select('tr[style="background-color:#f4fff4"] td')
 
-    return td
+    return {"home": parse_scoreboard(scoreboard[0]),
+        "away": parse_scoreboard(scoreboard[2])}
 
 def parse_spp(soup):
     td = parse_td(soup)
@@ -118,7 +126,7 @@ def parse_match(matchid, soup):
                         "result": calculate_result(td_away, td_home),
                         "casualties": find_casualties(soup)["away"]
                     },
-                  #  "spp": parse_spp(soup)
+                    "spp": parse_spp(soup)
                 }
     return match
 
