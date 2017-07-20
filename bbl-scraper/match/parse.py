@@ -113,14 +113,16 @@ def parse_matchdata(data):
     return matchdata
 
 def main():
-        import match.load
+        import match.load as loader
+        import pprint
+        pp = pprint.PrettyPrinter(indent=2)
         if len(sys.argv) != 2 :
                 sys.exit("filename required")
         filename = sys.argv[1]
         matchid = filename[filename.find("match-")+6:filename.rfind(".html")]
 
-        match = parse_match(matchid, load.from_file(filename))
-        print(match)
+        match = parse_match(matchid, loader.from_file(filename))
+        pp.pprint(match)
 
 if __name__ == "__main__":
     main()
