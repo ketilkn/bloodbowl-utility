@@ -7,15 +7,11 @@ import re
 #import team 
 import sys
 
-def id_from_a(el):
-    a = el.parent.parent.parent
+def id_from_a(a):
     if a.has_attr("href"):
         return a["href"][a["href"].rfind("=")+1:]
     if a.parent and a.parent.has_attr("href"):
         return a.parent["href"][a.parent["href"].rfind("=")+1:]
-#    print(el)
-#    print("===")
-#    print(a)
     return "teamid not found {}".format(a.name)
 
 def parse_team(team):
@@ -37,6 +33,24 @@ def parse_score(scoreboard):
     return len(touchdowns) 
 
 
+def parse_td(soup):
+    td = []
+    scoreboard = soup.select('tr[style="background-color:#f4fff4"] td')[0]
+    #print("{}".format(scoreboard.contents[0]).split("<br>"))
+    #print(dir(scoreboard))
+    for br in scoreboard.find("br"):
+        #for el in br.next_sibling:
+            #print(el)
+        for s in br.stripped_strings:
+            print(s)
+        #print(br.stripped_strings)
+
+    return td
+
+def parse_spp(soup):
+    td = parse_td(soup)
+    return {"td": td}
+
 def find_score(soup):
     scoreboard = soup.select('tr[style="background-color:#f4fff4"]')[0]
     #print("\n{}\n".format(scoreboard.select(".td10")[0].prettify()))
@@ -57,6 +71,7 @@ def find_casualties(soup):
             "away": {"total": away, "bh": bh["away"], "si": si["away"], "dead": de["away"]}}
 
 def find_hometeam(soup):
+    #print("[[[{}]]]".format(soup.find_all("b")[2].parent))
     return parse_team(soup.find_all("b")[2])
 
 def find_awayteam(soup):
@@ -68,7 +83,7 @@ def find_awayteam(soup):
         return parse_team(el)
 
 def parse_season(soup):
-    season = soup.select_one("div[align=right] b")
+    season = soup.select_one("td[valign=top] div[align=center] b")
     season_name , round_name = season.text.split(",", 1)
     season_id = season.select_one("a")["href"].split("=")[-1] if season.select_one("a") else None
 
@@ -102,7 +117,9 @@ def parse_match(matchid, soup):
                         "td": td_away,
                         "result": calculate_result(td_away, td_home),
                         "casualties": find_casualties(soup)["away"]
-                    }}
+                    },
+                  #  "spp": parse_spp(soup)
+                }
     return match
 
 def parse_matchdata(data):

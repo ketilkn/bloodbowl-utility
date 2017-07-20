@@ -86,7 +86,7 @@ def from_json():
 def from_file(filename):
         matchid = filename[filename.find("match-")+6:filename.rfind(".html")]
         html = open(filename, "rb").read()
-        soup = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(html, "lxml")
         return soup
 
 def main():
