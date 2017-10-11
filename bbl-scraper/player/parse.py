@@ -93,14 +93,14 @@ def parse_matchdata(data):
 
 def main():
     import player.load
-    if len(sys.argv) != 2 :
-            sys.exit("filename required")
-    filename = sys.argv[1]
-    playerid = filename[filename.find("adminplayer-")+6:filename.rfind(".html")]
+    if len(sys.argv) != 3 :
+            sys.exit("path and playerid required")
+    path = sys.argv[1]
+    playerid = sys.argv[2]
 
-    player = parse_player(playerid, soup=player.load.from_file(filename))
-    #player = parse_games(player, load.from_file(spp))
-    print(player)
+    parsed_player = parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
+    parsed_player = parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+    print(parsed_player)
 
 if __name__ == "__main__":
     main()
