@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from bs4 import BeautifulSoup
+import bs4
 from unicodedata import normalize
 import datetime
 import dateutil.parser as parser
@@ -43,6 +44,9 @@ def parse_scoreboardelement(el):
 def parse_scoreboard(scoreboard):
     td = []
     for c in list(scoreboard.children):
+        if type(c) == bs4.NavigableString:
+            continue
+        print("c in list {} {}".format(c, type(c)))
         el = parse_scoreboardelement(c) 
         print("--{}".format(el))
         if el:
@@ -55,9 +59,16 @@ def parse_td(soup):
     return {"home": parse_scoreboard(scoreboard[0]),
         "away": parse_scoreboard(scoreboard[2])}
 
+def parse_casualtyspp(soup):
+    return {"home": [],
+            "away": [],
+            }
+
 def parse_spp(soup):
     td = parse_td(soup)
-    return {"td": td}
+    cas = parse_casualtyspp(soup)
+    return {"td": td,
+            "cas": cas,}
 
 def find_score(soup):
     scoreboard = soup.select('tr[style="background-color:#f4fff4"]')[0]
