@@ -34,7 +34,6 @@ def parse_score(scoreboard):
     return len(touchdowns) 
 
 def parse_scoreboardelement(el):
-    print(el)
     if el == "mercenary / star":
         return "*"
     elif el.has_attr("href") and el["href"].startswith("default.asp?p=pl&pid="):
@@ -46,9 +45,7 @@ def parse_scoreboard(scoreboard):
     for c in list(scoreboard.children):
         if type(c) == bs4.NavigableString:
             continue
-        print("c in list {} {}".format(c, type(c)))
         el = parse_scoreboardelement(c) 
-        print("--{}".format(el))
         if el:
             td.append(el)
     return td
