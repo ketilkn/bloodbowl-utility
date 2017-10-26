@@ -59,8 +59,8 @@ def rate_all(data):
         c1_score = 1 if g["home"]["result"] == "W" else 0.5 if g["home"]["result"] == "T" else 0 
         c2_score = 1 - c1_score
 
-        c1_newrating = elo(c1_rating, c1_expected, c1_score, c1_kfactor) if len(result) < 10 or c2_gamecount > 4 or (c1_gamecount < 5 and c2_gamecount < 5) else c1_rating 
-        c2_newrating = elo(c2_rating, c2_expected, c2_score, c2_kfactor) if len(result) < 10 or c1_gamecount > 4 or (c1_gamecount < 5 and c2_gamecount < 5) else c2_rating
+        c1_newrating = elo(c1_rating, c1_expected, c1_score, c1_kfactor) #if len(result) < 10 or c2_gamecount > 4 or (c1_gamecount < 5 and c2_gamecount < 5) else c1_rating 
+        c2_newrating = elo(c2_rating, c2_expected, c2_score, c2_kfactor) #if len(result) < 10 or c1_gamecount > 4 or (c1_gamecount < 5 and c2_gamecount < 5) else c2_rating
 
         add_game(result, c1_id, g["matchid"], c1_rating, c1_newrating, c1_score)
         add_game(result, c2_id, g["matchid"], c2_rating, c2_newrating, c2_score)
