@@ -10,8 +10,8 @@ from export import export
 
 def all_games_by_race():
     return export.get_template("race/races.html").render(
-        teams = filter(lambda x: x["gamesplayed"] > 25, list_all_games_by_race()),
-        teams_in_need = filter(lambda x: x["gamesplayed"] <= 25, list_all_games_by_race()),
+        teams = filter(lambda x: x["gamesplayed"] > 25, list_all_games_by_race(no_mirror=True)),
+        teams_in_need = filter(lambda x: x["gamesplayed"] <= 25, list_all_games_by_race(no_mirror=True)),
         title="All races",
         subtitle="sorted by performance")
 
@@ -27,10 +27,12 @@ def all_teams_for_race(race, race_teams, performance_by_race):
 def teams_by_race(data):
     race = team.list_race()    
     teams =  list_all_teams_by_points()
+    printed = False
     for r in race:
         team_race = filter(lambda x: x["race"] == r, teams)
         
         race_games = match_list.we_are_race(data["game"].values(), r)
+        race_games = filter(lambda m: m["them"]["team"]["race"] != r, race_games)
         performance_by_race = match_list.sum_game_by_group(race_games, match_list.group_games_by_race)
 
         with open("output/race/{}.html".format(r.replace(" ","-")), "w") as fp:

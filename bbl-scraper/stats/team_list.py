@@ -151,7 +151,7 @@ def team_count_by_race(teams):
     return team_count
 
 
-def list_all_games_by_race():
+def list_all_games_by_race(no_mirror=False):
 #    return list_all_teams_by_points()
     matches = match.match_list()
     teams = all_teams()
@@ -159,8 +159,8 @@ def list_all_games_by_race():
     for m in matches:
         m["home"]["team"]["teamid"] = teams[m["home"]["team"]["teamid"]]["race"]
         m["away"]["team"]["teamid"] = teams[m["away"]["team"]["teamid"]]["race"]
-
-    matches = rank(matches)
+    
+    matches = rank( filter(lambda m: m["home"]["team"]["teamid"] != m["away"]["team"]["teamid"], matches) if no_mirror else matches)
 
     for m in matches.values():
         m["team"] = {"coach": "-", "race": "{} ({})".format(m["teamid"], team_count[m["teamid"]]), "name": m["teamid"], "teamid": m["teamid"], "teamvalue": ""} 
