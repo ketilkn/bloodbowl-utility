@@ -92,6 +92,7 @@ def parse_matchdata(data):
     return matchdata
 
 def main():
+    import pprint
     import player.load
     if len(sys.argv) != 3 :
             sys.exit("path and playerid required")
@@ -100,7 +101,7 @@ def main():
 
     parsed_player = parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
     parsed_player = parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
-    print(parsed_player)
+    pprint.PrettyPrinter(indent=4).pprint(parsed_player)
 
 if __name__ == "__main__":
     main()
