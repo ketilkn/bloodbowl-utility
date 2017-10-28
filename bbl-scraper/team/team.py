@@ -4,6 +4,7 @@ from unicodedata import normalize
 import datetime
 import re
 from . import parse
+import collections
 
 def dict_teams():
     teams = list_teams()
@@ -20,11 +21,9 @@ def list_teams():
         return teams    
 
 def list_race():
-    race = {}
+    race = collections.defaultdict(set)
     teams = list_teams()
     for t in teams:
-        if t["race"] not in teams:
-            race[t["race"]] = set() 
         race[t["race"]].add(t["id"])
     return race
 
