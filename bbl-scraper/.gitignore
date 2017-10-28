@@ -1,6 +1,7 @@
 output/*
 !output/script.js
 !output/style.css
+!output/portrait.css
 input/*
 __pycache__
 *.swp
