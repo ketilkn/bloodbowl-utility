@@ -1,0 +1,17 @@
+
+table {
+	font-size: 50% !important;
+} 
+
+td.wide-data {
+  display: none;
+}
+
+td.narrow-data {
+  display: table-cell;
+}
+
+body {
+  background-color: pink;
+} 
+

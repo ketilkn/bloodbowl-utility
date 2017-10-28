@@ -31,6 +31,9 @@ table.pure-table tbody th , table.pure-table tbody td.empty-column {
  background-color: #e0e0e0;
  text-align: left;
 }
+.pure-table td, .pure-table th {
+  padding: 0.5em;
+}
 
 ul.year {
  	margin 0;
@@ -82,7 +85,9 @@ div.narrow-content {
 p.clearer {
 	clear: both;
 }
-
-.hidden-data {
+td.wide-data {
+  display: table-cell;
+} 
+td.narrow-data {
   display: none;
 }
