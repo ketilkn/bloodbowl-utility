@@ -73,13 +73,14 @@ def dict_teams():
     return result
 
 def list_teams():
-        html = open("output/teams-8.html", "r").read()
+        html = open("input/teams-8.html", "r").read()
         soup = BeautifulSoup(normalize("NFC", html), "html.parser")
 
         teams = parse_rows( find_rows(soup))
         return teams    
 
 def main():
-    print(list_teams())
+    import pprint
+    pprint.PrettyPrinter().pprint(list_teams())
 if __name__ == "__main__":
     main()
