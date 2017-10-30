@@ -20,14 +20,14 @@
 <div class="hidden-data">
 <h2 class="content-subhead">Performance against race</h2>
 
-{% include 'race/race-performance.html' %}
+{% include 'group-performance.html' %}
 </div>
 
 {% if show_coaches %}
 <div class="not-hidden-data">
 <h2 class="content-subhead">Coaches</h2>
 {% set games_by_race = games_by_our_coach %}
-{% include 'race/race-performance.html' %}
+{% include 'group-performance.html' %}
 </div>
 {% endif %}
 
