@@ -18,3 +18,10 @@ def race_link(input):
 def team_link(input):
     return "/team/{}.html".format(input.replace(' ', '-'))
 
+
+def load_filter(environment):
+    environment.filters["race_short"] = race_short
+    environment.filters["race_link"] = race_link
+    environment.filters["team_link"] = team_link
+    return environment
+
