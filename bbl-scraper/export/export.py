@@ -8,12 +8,14 @@ from stats.match_list import list_all_matches, list_all_games_by_year
 from stats.team_list import format_for_total, format_for_average
 from . import coach_data
 from . import index
+from . import filter
 import datetime
 
 def get_template(template_name):
     template_dir = 'template/'
     loader = jinja2.FileSystemLoader(template_dir)
     environment = jinja2.Environment(loader=loader)
+    environment.filters["race_short"] = filter.short_race
     return environment.get_template(template_name)
 
 def write_html(data, filename):
