@@ -127,19 +127,19 @@
 <div class="hidden-data">
 <h2 class="content-subhead">Performance against race</h2>
 
-{% include 'group-performance.html' %}
+{% from 'group-performance.html' import group_performance %}
+{{ group_performance(games_by_race) }}
+
 </div>
 
 <div class="hidden-data">
 <h2 class="content-subhead">Performance against coach</h2>
-{% set games_by_race = games_by_coach %}
-{% include 'group-performance.html' %}
+{{ group_performance(games_by_coach) }}
 </div>
 
 <div class="hidden-data">
 <h2 class="content-subhead">Games by weekday</h2>
-{% set games_by_race = games_by_weekday %}
-{% include 'group-performance.html' %}
+{{ group_performance(games_by_weekday) }}
 </div>
 
 
