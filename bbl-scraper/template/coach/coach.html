@@ -102,8 +102,8 @@
 		{% for team in teams %}
 		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
 			<td class="number">{{loop.index }}</td>
-			<td class="name"><a href="/team/{{team.id}}.html">{{team.name}}</a></td>
-			<td class="race"><a href="/race/{{team.race.replace(' ', '-')}}.html">{{team.race|short_race}}</a></td>
+			<td class="name"><a href="{{team.id | team_link}}">{{team.name}}</a></td>
+			<td class="race"><a href="{{team.race|race_link}}">{{team.race|race_short}}</a></td>
 			<td class="teamrating" title="{%if team.teamvalue%}{{'%0.0f' % team.teamvalue}} {%endif%}">{%if team.teamvalue%}{{'%0.0f' % (team.teamvalue/10000)}} {%else%}{{unknown}}{%endif%}</td>
 			<td class="gamesplayed">{{team.total.gamesplayed}}</td>
 			<td class="narrow-data win-tie-loss">{{team.total.win}}-{{team.total.tie}}-{{team.total.loss}}</td>

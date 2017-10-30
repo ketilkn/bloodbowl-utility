@@ -12,3 +12,9 @@ def race_short(input):
         return "{}lf".format(input[0])
     return input
 
+def race_link(input):
+    return "/race/{}.html".format(input.replace(' ', '-'))
+
+def team_link(input):
+    return "/team/{}.html".format(input.replace(' ', '-'))
+

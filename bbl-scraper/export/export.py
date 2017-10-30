@@ -15,7 +15,9 @@ def get_template(template_name):
     template_dir = 'template/'
     loader = jinja2.FileSystemLoader(template_dir)
     environment = jinja2.Environment(loader=loader)
-    environment.filters["race_short"] = filter.short_race
+    environment.filters["race_short"] = filter.race_short
+    environment.filters["race_link"] = filter.race_link
+    environment.filters["team_link"] = filter.team_link
     return environment.get_template(template_name)
 
 def write_html(data, filename):
