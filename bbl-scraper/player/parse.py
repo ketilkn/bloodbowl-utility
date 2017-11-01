@@ -6,14 +6,39 @@ import dateutil.parser as parser
 import re
 #import team 
 import sys
+
 def parse_date(soup):
     return parser.parse(soup.select("input[name=indate]")[0]["value"]).isoformat()
 
 def parse_bounties(soup):
     return {"total": int(soup.select("input[name=bounty]")[0]["value"])*1000}
 
+def parse_touchdown(achievements):
+    return achievements[2].text
+
+def parse_casualties(achievements):
+    return achievements[3].text
+
+def parse_completions(achievements):
+    return achievements[1].text
+
+def parse_interception(achievements):
+    return achievements[0].text
+
+def parse_total(achievements):
+    return achievements[5].text
+
+def parse_mvp(achievements):
+    return achievements[4].text
+
 def parse_games(player, soup):
-    player["spp"] =  {"interception":0, "td":0, "casualty": 0, "completion": 0, "mvp": 0} 
+    achievements = soup.select("table[style='background-color:#F0F0F0;border:1px solid #808080'] td[align=center]")
+    player["spp"] =  {"interception": parse_interception(achievements), 
+            "td":parse_touchdown(achievements), 
+            "casualty": parse_casualties(achievements), 
+            "completion": parse_completions(achievements), 
+            "mvp": parse_mvp(achievements),
+            "total": parse_total(achievements)} 
     return player
 
 def parse_playername(soup):
@@ -71,6 +96,18 @@ def parse_niggle(soup):
 
 def parse_spp(soup):
     return ["spp"]
+
+def parse_team(player, soup):
+    team = soup.select_one("a[style=font-size:11px]")
+    team_id = team["href"].split("=")[-1] if team and team.has_attr("href") else None
+    team_name = team.text if team else ""
+    player["team"] = team_id
+    player["teamname"] = team_name
+
+    return player
+
+
+
 def parse_player(playerid, soup):
     player_date = parse_date(soup)
     if not player_date:
@@ -101,6 +138,8 @@ def main():
 
     parsed_player = parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
     parsed_player = parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+    parsed_player = parse_team(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+
     pprint.PrettyPrinter(indent=4).pprint(parsed_player)
 
 if __name__ == "__main__":
