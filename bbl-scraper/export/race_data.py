@@ -5,13 +5,23 @@ from stats.match_list import list_all_matches, list_all_games_by_year
 from stats.team_list import format_for_total, format_for_average
 from stats import match_list
 import datetime
+import export.filter
 from export import export
 
 
+def add_title(races):
+    for race in races:
+        group={}
+        group["data"] = race
+        group["data"]["total"] = race
+        group["title"] = race["race"]
+        group["link"] = export.filter.race_link(race["teamid"])
+        yield group
+
 def all_games_by_race():
     return export.get_template("race/races.html").render(
-        teams = filter(lambda x: x["gamesplayed"] > 25, list_all_games_by_race(no_mirror=True)),
-        teams_in_need = filter(lambda x: x["gamesplayed"] <= 25, list_all_games_by_race(no_mirror=True)),
+        teams = filter(lambda x: x["data"]["gamesplayed"] > 25, add_title(list_all_games_by_race(no_mirror=True))),
+        teams_in_need = filter(lambda x: x["data"]["gamesplayed"] <= 25, add_title(list_all_games_by_race(no_mirror=True))),
         title="All races",
         subtitle="sorted by performance")
 
