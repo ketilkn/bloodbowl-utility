@@ -127,9 +127,14 @@ def rank_teams(matches):
     teams = sorted(teams, key=itemgetter("points"), reverse=True)
     return teams
 
+
 def list_all_teams_by_year(year):
     start_date = "{}-99-99".format(year-1)
     end_date = "{}-00-00".format(int(year)+1)
+    return list_all_teams_by_period(start_date, end_date)
+
+
+def list_all_teams_by_period(start_date, end_date):
     matches = filter(
                 lambda x: x["date"] > start_date and x["date"] < end_date, 
                 match.match_list())
@@ -177,8 +182,9 @@ def list_all_games_by_race(no_mirror=False):
 
 
 def main():
-    for t in list_all_teams_by_points():
-        print(t)
+    import pprint
+    for t in filter(lambda x: x["gamesplayed"] > 0, list_all_teams_by_year(2012)):
+        pprint.pprint(t, indent=4, width=250)
 
 
 if __name__ == "__main__":
