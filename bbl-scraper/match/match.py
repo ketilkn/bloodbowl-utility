@@ -9,8 +9,8 @@ def open_match(filename):
     return parse.parse_match( matchid, load.from_file(filename))
 
 
-def collate_gamedata(games):
-    return games[-1]
+def collate_gamedata(games, id=None):
+    return [m for m in games if m["matchid"] == id][0] if id else games[-1]
 
 
 def dict_games():
@@ -25,6 +25,9 @@ def match_list():
 
 
 def main():
-    print(collate_gamedata(match_list()))
+    import sys
+    import pprint
+    matchid = sys.argv[1] if len(sys.argv) > 1 else None
+    pprint.pprint(collate_gamedata(match_list(), matchid), indent=4, width=160)
 if __name__ == "__main__":
     main()
