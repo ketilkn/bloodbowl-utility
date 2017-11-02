@@ -30,6 +30,10 @@ def list_race():
 
 
 def main():
-    print(list_teams())
+    import sys
+    import pprint
+    for t in list_teams():
+        if len(sys.argv) < 2 or t["id"] in sys.argv[1:]:
+            pprint.pprint(t, indent=4, width=200)
 if __name__ == "__main__":
     main()
