@@ -184,6 +184,7 @@ def list_all_games_by_race(no_mirror=False):
 def main():
     import pprint
     for t in filter(lambda x: x["gamesplayed"] > 0, list_all_teams_by_year(2012)):
+        print("{}:".format(t["name"]))
         pprint.pprint(t, indent=4, width=250)
 
 
