@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from collections import Counter
 from operator import itemgetter
 from match import match
 from team import team
@@ -22,10 +23,14 @@ def matchresult(match, team1, team2):
             'cas_against': match[team2]["casualties"]["total"],
             'matchid': match["matchid"],
             'date': match["date"],
-            "result": match[team1]["result"]
+            "result": match[team1]["result"],
+            "coach": match[team1]["coachid"],
+            "coach_against": match[team2]["coachid"]
             }
 
 def add_result(result, match):
+    #import pprint
+    #pprint.pprint(match, indent=4, width=200)
     teamid = match["teamid"]
     if not teamid in result:
         result[teamid] = { "teamid": teamid,
@@ -35,13 +40,21 @@ def add_result(result, match):
             'cas_for': 0,
             'cas_against': 0,
 
-            'matches': []}
+            'matches': [],
+            'coaches': Counter(),
+            'first_match': None,
+            'last_match': None}
     result[teamid][match["result"]] = result[teamid][match["result"]] + 1
     result[teamid]["td_for"] = result[teamid]["td_for"] + match["td_for"]
     result[teamid]["td_against"] = result[teamid]["td_against"] + match["td_against"]
     result[teamid]["cas_for"] = result[teamid]["cas_for"] + match["cas_for"]
     result[teamid]["cas_against"] = result[teamid]["cas_against"] + match["cas_against"]
     result[teamid]["matches"].append(match["matchid"])
+    if result[teamid]["first_match"] == None or result[teamid]["first_match"] > match["date"]:
+        result[teamid]["first_match"] = match["date"] 
+    if result[teamid]["last_match"] == None or result[teamid]["last_match"] < match["date"]:
+        result[teamid]["last_match"] = match["date"] 
+    result[teamid]["coaches"][match["coach"]] += 1
 
 
 def rank(matches):
@@ -56,19 +69,33 @@ def rank(matches):
 def add_teamdata(ranking):
     all_teams = team.dict_teams()
     all_coaches = coach.dict_coaches()
+    coach_lookup = coach.dict_coaches_by_uid()
+
     result = []
     for rankedteam in ranking.values():
         rankedteam["team"] = all_teams[rankedteam["teamid"]]
         rankedteam["coach"] = all_coaches[rankedteam["team"]["coach"]] if rankedteam["team"]["coach"] else ""
+        #Retired team can have coach==None
+        if 0 in rankedteam["coaches"] and rankedteam["coach"]:
+            rankedteam["coaches"][rankedteam["coach"]["uid"]] += rankedteam["coaches"][0]
+            del rankedteam["coaches"][0]
+        rankedteam["coaches"] =  dict((coach_lookup[key]['nick'], value) for (key,value) in rankedteam["coaches"].items() if key in coach_lookup) 
+
     return ranking
 
 def format_for_teamlist(ranked_team):
+    #import pprint
+    #pprint.pprint(ranked_team, indent=4, width=200)
     return {"teamid": ranked_team["teamid"],
             "name": ranked_team["team"]["name"],
             "race": ranked_team["team"]["race"],
             "coach": ranked_team["team"]["coach"],
             "teamvalue": ranked_team["team"]["teamvalue"]/1000 if ranked_team["team"]["teamvalue"] else 0,
             "gamesplayed": len(ranked_team["matches"]),
+            "first_match": ranked_team["first_match"],
+            "last_match": ranked_team["last_match"],
+            "coach_count": len(ranked_team["coaches"]),
+            "coaches": ranked_team["coaches"],
             "win": ranked_team["W"],
             "tie": ranked_team["T"],
             "loss": ranked_team["L"],
@@ -183,8 +210,9 @@ def list_all_games_by_race(no_mirror=False):
 
 def main():
     import pprint
-    for t in filter(lambda x: x["gamesplayed"] > 0, list_all_teams_by_year(2012)):
-        print("{}:".format(t["name"]))
+    import sys 
+    for t in filter(lambda x: not "gamesplayed" in x or x["gamesplayed"] > 0, list_all_teams_by_year(int(sys.argv[1]) if len(sys.argv) > 1 else 2017)):
+        print("{}:".format(t["name"] if "name" in t else t["team"]["name"]))
         pprint.pprint(t, indent=4, width=250)
 
 
