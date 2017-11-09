@@ -1,10 +1,32 @@
 #!/usr/bin/env python3
+import os
 import sys
+import json
 from match import match
 from coach import coach
 from team import team
 
+def load_from_json():
+    data = open("input/json/data.json", "rb").read()
+    return json.loads(data.decode())
+
+
+def save_to_json(collated_data):
+    data = json.dumps(collated_data)
+    json_file = open("input/json/data.json", "wb")
+    json_file.write(data.encode())
+    json_file.close()
+    
+
 def collate():
+    if not os.path.isfile("input/json/data.json") or os.stat("input/json/data.json").st_mtime < os.stat("input/coaches-8.html").st_mtime:
+        collated_data = collate_data(coach.dict_coaches(), team.dict_teams(), match.dict_games())
+        save_to_json(collated_data)
+        return collated_data
+    return load_from_json()
+
+
+def collate2():
     coaches = coach.dict_coaches()
     teams = team.dict_teams()
     games = match.dict_games()
