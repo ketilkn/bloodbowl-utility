@@ -30,6 +30,18 @@ def collate_from_disk():
     return collate(True)
 
 def collate_team(data):
+    for team in data["team"].values():
+        team["games"]=[]
+
+    for match in data["game"].values():
+        if match["matchid"] in data["team"][match["home"]["team"]["teamid"]]["games"]:
+            print("Warning {} already exists in {}".format(match["matchid"], match["home"]["team"]))
+        data["team"][match["home"]["team"]["teamid"]]["games"].append(match["matchid"])
+
+        if match["matchid"] in data["team"][match["away"]["team"]["teamid"]]["games"]:
+            print("Warning {} already exists in {}".format(match["matchid"], match["away"]["team"]))
+        data["team"][match["away"]["team"]["teamid"]]["games"].append(match["matchid"])
+
     return data["team"]
 
 def add_team_race(data):
@@ -58,6 +70,20 @@ def fix_missing_coaches(data):
         
     return data["game"]
 
+def collate_coach(data):
+    for coach in data["coach"].values():
+        coach["games"]=[]
+    for match in data["game"].values():
+        if match["matchid"] in data["coach"][match["home"]["coach"]]["games"]:
+            print("Warning {} already exists in {}".format(match["matchid"], match["home"]["coach"]))
+        data["coach"][match["home"]["coach"]]["games"].append(match["matchid"])
+
+        if match["matchid"] in data["coach"][match["away"]["coach"]]["games"]:
+            print("Warning {} already exists in {}".format(match["matchid"], match["away"]["coach"]))
+        data["coach"][match["away"]["coach"]]["games"].append(match["matchid"])
+
+    return data["coach"]
+
 def collate_match(data):
     games2 = fix_missing_coaches(data)
     games2 = add_coach_nick(data)
@@ -69,10 +95,11 @@ def collate_data(coaches, teams, games):
             "team": teams,
             "game": games}
 
-    return {"coach": coaches,
-            "_coachid": coach.dict_coaches_by_uid(), 
+    return {"game": collate_match(data),
+            "coach": collate_coach(data),
             "team": collate_team(data),
-            "game": collate_match(data)}
+            "_coachid": coach.dict_coaches_by_uid() 
+            }
 
 def main():
     import pprint
