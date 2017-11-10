@@ -27,7 +27,7 @@ def export_all_data():
     team_data.all_games_by_team(collated_data )
 
     print("Exporting races by performance")
-    race_data.export_race_by_performance()
+    race_data.export_race_by_performance(collated_data)
 
     print("Exporting teams by race")
     race_data.teams_by_race(collated_data)

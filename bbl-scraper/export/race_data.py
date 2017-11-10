@@ -18,10 +18,10 @@ def add_title(races):
         group["link"] = export.filter.race_link(race["teamid"])
         yield group
 
-def all_games_by_race():
+def all_games_by_race(data=None):
     return export.get_template("race/races.html").render(
-        teams = filter(lambda x: x["data"]["gamesplayed"] > 25, add_title(list_all_games_by_race(no_mirror=True))),
-        teams_in_need = filter(lambda x: x["data"]["gamesplayed"] <= 25, add_title(list_all_games_by_race(no_mirror=True))),
+        teams = filter(lambda x: x["data"]["gamesplayed"] > 25, add_title(list_all_games_by_race(data, no_mirror=True))),
+        teams_in_need = filter(lambda x: x["data"]["gamesplayed"] <= 25, add_title(list_all_games_by_race(data, no_mirror=True))),
         title="All races",
         subtitle="sorted by performance")
 
@@ -49,7 +49,7 @@ def teams_by_race(data):
 
 def export_race_by_performance(data = None):
     with open("output/races.html", "w") as matches:
-        matches.write(all_games_by_race())
+        matches.write(all_games_by_race(data))
 
 def main():
     import stats.collate
@@ -57,7 +57,7 @@ def main():
 
     print("Exporting races by performance")
     with open("output/races.html", "w") as matches:
-        matches.write(all_games_by_race())
+        matches.write(all_games_by_race(collated_data))
 
     print("Exporting teams by race")
     teams_by_race(collated_data)
