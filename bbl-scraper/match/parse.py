@@ -141,8 +141,8 @@ def parse_match(matchid, soup):
 def parse_matchdata(data):
     coach = re.findall('coach[12]: \d*', data)
     matchdata = {
-            "coach1": int(coach[0][7:]),
-            "coach2": int(coach[1][7:])}
+            "coach1": coach[0][7:].strip(),
+            "coach2": coach[1][7:].strip()}
     return matchdata
 
 def main():

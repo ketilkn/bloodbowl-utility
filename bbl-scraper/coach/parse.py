@@ -29,7 +29,7 @@ def parse_uid(row):
     for div in found:
         if div.has_attr("onclick"):
             onclick = div["onclick"]
-            return int(onclick.split("&")[1][4:])
+            return onclick.split("&")[1][4:]
 
 def parse_naf(row):
     found = row.find_all("div")
