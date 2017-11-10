@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
 from collections import Counter
+import copy
 from operator import itemgetter
 from match import match
 from team import team
 from coach import coach
 
 
-
-def all_teams():
-    teams = team.dict_teams()
-    return teams
-
-def all_coaches():
-    coaches = coach.dict_coaches()
-    return coaches
 
 def matchresult(match, team1, team2):
     return {"teamid": match[team1]["team"]["teamid"], 
@@ -69,17 +62,13 @@ def rank(matches):
 def add_teamdata(ranking):
     all_teams = team.dict_teams()
     all_coaches = coach.dict_coaches()
-    coach_lookup = coach.dict_coaches_by_uid()
 
     result = []
     for rankedteam in ranking.values():
         rankedteam["team"] = all_teams[rankedteam["teamid"]]
         rankedteam["coach"] = all_coaches[rankedteam["team"]["coach"]] if rankedteam["team"]["coach"] else ""
         #Retired team can have coach==None
-        if 0 in rankedteam["coaches"] and rankedteam["coach"]:
-            rankedteam["coaches"][rankedteam["coach"]["uid"]] += rankedteam["coaches"][0]
-            del rankedteam["coaches"][0]
-        rankedteam["coaches"] =  dict((coach_lookup[key]['nick'], value) for (key,value) in rankedteam["coaches"].items() if key in coach_lookup) 
+        rankedteam["coaches"] = rankedteam["coaches"].items()
 
     return ranking
 
@@ -183,10 +172,10 @@ def team_count_by_race(teams):
     return team_count
 
 
-def list_all_games_by_race(no_mirror=False):
+def list_all_games_by_race(data, no_mirror=False):
 #    return list_all_teams_by_points()
-    matches = match.match_list()
-    teams = all_teams()
+    matches = copy.deepcopy(list(data["game"].values()))
+    teams = data["team"]
     team_count = team_count_by_race(teams.values())
     for m in matches:
         m["home"]["team"]["teamid"] = teams[m["home"]["team"]["teamid"]]["race"]
