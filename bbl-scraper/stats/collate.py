@@ -18,8 +18,8 @@ def save_to_json(collated_data):
     json_file.close()
     
 
-def collate():
-    if not os.path.isfile("input/json/data.json") or os.stat("input/json/data.json").st_mtime < os.stat("input/coaches-8.html").st_mtime:
+def collate(reload=False):
+    if reload or not os.path.isfile("input/json/data.json") or os.stat("input/json/data.json").st_mtime < os.stat("input/coaches-8.html").st_mtime:
         collated_data = collate_data(coach.dict_coaches(), team.dict_teams(), match.dict_games())
         save_to_json(collated_data)
         return collated_data
@@ -70,24 +70,32 @@ def collate_data(coaches, teams, games):
             "team": collate_team(data),
             "game": collate_gamecoach(data)}
 
-
-
-
 def main():
-    from sys import argv
     import pprint
-    pp = pprint.PrettyPrinter(indent=4)
-    the_coach = argv[1] if len(argv) > 1 else "Kyrre"
-    the_team = argv[2] if len(argv) > 2 else "tea2"
-    the_game = argv[3] if len(argv) > 3 else "1061"
+    import sys
+    def pretty(value):
+        pprint.pprint(value, indent=2)
 
-    data = collate()
-    print("Coach {}".format(the_coach))
-    pp.pprint(data["coach"][the_coach])
-    print("Team {}".format(the_team))
-    pp.pprint(data["team"][the_team])
-    print("Game {}".format(the_game))
-    pp.pprint(data["game"][the_game])
+    def search(data, display):
+        for t in data["team"].values():
+            if t["id"] in display:
+                yield t
+        for c in data["coach"].values():
+            if c["nick"] in display:
+                yield c
+        for g in data["game"].values():
+            if g["matchid"] in display:
+                yield g
+
+    force_reload = True if "--force" in sys.argv else False
+    search_terms = list(filter(lambda x: not x.startswith("--"), sys.argv[1:]))
+
+    data = collate(force_reload)
+
+    for found in search(data, search_terms if len(search_terms) > 0 else ["Kyrre", "tea2", "1061"]):
+        pretty(found)
+
+    print("Data count: {}".format([[key, len(data[key])] for key in data.keys()]))
 
 if __name__ == "__main__":
     main()
