@@ -28,6 +28,7 @@ def team_stats(data, teams, games, the_team):
     games_by_race = match_list.sum_game_by_group(games_for_team, match_list.group_games_by_race)
 
     games_by_our_coach = match_list.sum_game_by_group(games_for_team, match_list.group_games_by_our_coach) 
+
     #FIXME, improve nick lookup
     for c in games_by_our_coach:
         if c["title"] in data["_coachid"]:
@@ -38,6 +39,7 @@ def team_stats(data, teams, games, the_team):
             c["link"] = "/coaches.html"
 
     export.write_html(export.get_template("team/team.html").render(
+            team_data = team_list.team_data(the_team, games_for_team),
             stats_average = game_total["average"],
             stats_total = game_total["total"], 
             matches=games_for_team,

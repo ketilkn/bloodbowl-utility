@@ -6,7 +6,18 @@ from match import match
 from team import team
 from coach import coach
 
+def team_data(the_team, team_matches):
+    data_for_team = {}
+    data_for_team["head_coach"] = the_team["coach"]
+    data_for_team["co_coach"] = the_team["co-coach"]
+    data_for_team["retired_coach"] = set([match["us"]["coach"] for match in team_matches if match["us"]["coach"] not in [the_team["coach"], the_team["co-coach"]]])
 
+    data_for_team["last_game"] = team_matches[0]["date"] if len(team_matches) > 0 else "Never"
+    data_for_team["first_game"] = team_matches[-1]["date"] if len(team_matches) > 0 else None
+    data_for_team["gamesplayed"] = len(team_matches)
+    data_for_team["teamvalue"] = the_team["teamvalue"]
+
+    return data_for_team
 
 def matchresult(match, team1, team2):
     return {"teamid": match[team1]["team"]["teamid"], 

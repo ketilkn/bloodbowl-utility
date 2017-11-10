@@ -6,6 +6,48 @@
 </ul>
 
 <p class="clearer"></p>
+
+<h2 class="content-subhead"></h2>
+<table class="pure-table pure-table-bordered">
+	<tbody>
+		<tr>
+			<th>Head coach</th>
+			<td>{{team_data.head_coach | coach_anchor}}</td>
+		</tr>
+		<tr{%if not team_data.co_coach%}class="hidden-data"{%endif%}>
+			<th>Co-coach</th>
+			<td>{{team_data.co_coach | coach_anchor}}</td>
+		</tr>
+		{% for retired in team_data["retired_coach"] %}
+		<tr>
+			<th class="{%if loop.index > 1%}repeated{%endif%}">Retired</th>
+			<td>{{retired | coach_anchor}}</td>
+		</tr>
+		{% endfor %}
+		<tr>
+			<th>Team value</th>
+			<td>{{team_data.teamvalue | team_value}}</td>
+		</tr>
+		{% if team_data.gamesplayed > 1 and team_data.last_game%}
+		<tr>
+			<th>First game</th>
+			<td>{{team_data.first_game.split('T')[0]}}</th>
+		</tr>
+		{% endif %}
+		{% if team_data.last_game %}
+		<tr>
+			<th>Games played</th>
+			<td>{{team_data.gamesplayed}}</td>
+		</tr>
+		{% endif %}
+		{% if team_data.gamesplayed > 1 and team_data.last_game%}
+		<tr>
+			<th>Last game</th>
+			<td>{{team_data.last_game.split('T')[0]}}</td>
+		</tr>
+		{% endif %}
+	</tbody>
+</table>
 <div class="narrow-content">
 <h2 class="content-subhead">Statistics</h2>
 {% include "game/gamelist_stats.html"%}
