@@ -26,12 +26,8 @@ def collate(reload=False):
     return load_from_json()
 
 
-def collate2():
-    coaches = coach.dict_coaches()
-    teams = team.dict_teams()
-    games = match.dict_games()
-
-    return collate_data(coaches, teams, games)
+def collate_from_disk():
+    return collate(True)
 
 def collate_team(data):
     return data["team"]
