@@ -42,6 +42,13 @@ def add_team_race(data):
         g["away"]["team"]["race"] = data["team"][g["away"]["team"]["teamid"]]["race"]
     return data["game"]
 
+def add_coach_nick(data):
+    lookup = {c["uid"]:c["nick"] for c in data["coach"].values()}
+    for match in data["game"].values():
+        match["away"]["coach"] = lookup[match["away"]["coachid"]]
+        match["home"]["coach"] = lookup[match["home"]["coachid"]]
+    return data["game"]
+
 def fix_missing_coaches(data):
     def fix_coach(home_or_away, gam, coaches, teams):
         if gam[home_or_away]["coachid"] in ["0", None]:
@@ -55,8 +62,9 @@ def fix_missing_coaches(data):
         
     return data["game"]
 
-def collate_gamecoach(data):
+def collate_match(data):
     games2 = fix_missing_coaches(data)
+    games2 = add_coach_nick(data)
     games2 = add_team_race(data)
     return games2
 
@@ -68,7 +76,7 @@ def collate_data(coaches, teams, games):
     return {"coach": coaches,
             "_coachid": coach.dict_coaches_by_uid(), 
             "team": collate_team(data),
-            "game": collate_gamecoach(data)}
+            "game": collate_match(data)}
 
 def main():
     import pprint
@@ -95,7 +103,7 @@ def main():
     for found in search(data, search_terms if len(search_terms) > 0 else ["Kyrre", "tea2", "1061"]):
         pretty(found)
 
-    print("Data count: {}".format([[key, len(data[key])] for key in data.keys()]))
+    print("Data count: {}".format([[key, type(data[key]), len(data[key])] for key in data.keys()]))
 
 if __name__ == "__main__":
     main()
