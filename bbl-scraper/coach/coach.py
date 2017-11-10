@@ -44,8 +44,9 @@ def find_uid_for_nick(coaches, nick):
 def main():
     import sys
     coaches = list_coaches()
-    for coach in coaches:
-        if len(sys.argv) < 2 or coach["nick"]==" ".join(sys.argv[1:]) or "{}".format(coach["uid"])==sys.argv[1]:
+    coaches = dict_coaches_by_uid()
+    for coach in coaches.values():
+        if len(sys.argv) < 2 or coach["nick"]==" ".join(sys.argv[1:]) or coach["nick"] in sys.argv[1:] or coach["uid"] in sys.argv[1:]:
             print (coach)
     print("Total: {}".format(len(coaches)))
 
