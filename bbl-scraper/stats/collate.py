@@ -44,7 +44,7 @@ def add_team_race(data):
 
 def fix_missing_coaches(data):
     def fix_coach(home_or_away, gam, coaches, teams):
-        if gam[home_or_away]["coachid"] == 0:
+        if gam[home_or_away]["coachid"] in ["0", None]:
             team_coachnick = teams[gam[home_or_away]['team']['teamid']]['coach']
             uid = coach.find_uid_for_nick(data["coach"], team_coachnick) 
             gam[home_or_away]["coachid"] = uid if uid else -1
