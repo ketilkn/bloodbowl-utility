@@ -79,12 +79,11 @@ def main():
     data = collate.collate()
 
     rates = rate_all(data)
-    
+    print(pp.pprint(rates) ) 
+    pp.pprint(data["_coachid"])
     for r in sorted(rates.values(), key=lambda x: x["rating"]):
-        #pp.pprint(r)
+        pp.pprint(r)
         uid = r["cid"]
-        if uid in data["_coachid"]:
-            print("{} {} {}".format( uid, data["_coachid"][uid]["nick"], 150 + r["rating"]))
 
     if len(argv) > 1:
         pp.pprint(rates[int(argv[1])])
