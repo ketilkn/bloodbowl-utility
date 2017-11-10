@@ -35,9 +35,8 @@ def all_teams_for_race(race, race_teams, performance_by_race):
         subtitle="sorted by points")
 
 def teams_by_race(data):
-    race = team.list_race()    
-    teams =  list_all_teams_by_points()
-    printed = False
+    race = team.list_race(data)    
+    teams =  list_all_teams_by_points(data["game"].values())
     for r in race:
         team_race = filter(lambda x: x["race"] == r, teams)
         
