@@ -20,14 +20,20 @@ def list_teams():
         teams = parse.parse_rows( parse.find_rows(soup))
         return teams    
 
-def list_race():
+def list_race(collated_data=None):
     race = collections.defaultdict(set)
-    teams = list_teams()
+    teams = list_teams() if collated_data==None else collated_data["team"].values()
     for t in teams:
         race[t["race"]].add(t["id"])
     return race
 
-
+#Fix me. merge list_race, filter_race 
+def filter_race(collated_data):
+    race = collections.defaultdict(set)
+    for teamid, team in collated_data["team"].items():
+        print(team)
+        race[team["race"]].add(team["id"])
+    return race
 
 def main():
     import sys
