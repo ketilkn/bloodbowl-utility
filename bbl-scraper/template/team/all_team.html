@@ -83,7 +83,7 @@
 		<td class="coach">Total</td>
 		<!--<td>TV</td>-->
 		<td class="gamesplayed">{{'%0.0f' %(teams_total.gamesplayed/2)}}</td>
-		<td class="win-tie-loss" title="ties">{{'%0.3f' %(teams_total.tie/teams_total.gamesplayed)}}</td>
+		<td class="win-tie-loss" title="ties">{%if teams_total.gamesplayed > 0 %}{{'%0.3f' %(teams_total.tie/teams_total.gamesplayed)}}{%endif%}</td>
 		<td class="performance">{{'%0.2f' % teams_total.performance}}%</td>
 		<!--<td>W</td>
 		<td>D</td>
