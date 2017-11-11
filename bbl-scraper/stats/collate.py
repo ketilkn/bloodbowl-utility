@@ -19,7 +19,7 @@ def save_to_json(collated_data):
     
 
 def collate(reload=False):
-    if reload or not os.path.isfile("input/json/data.json") or os.stat("input/json/data.json").st_mtime < os.stat("input/coaches-8.html").st_mtime:
+    if reload or not os.path.isfile("input/json/data.json") or os.stat("input/json/data.json").st_mtime < os.stat("input/html/coach/coaches-8.html").st_mtime:
         collated_data = collate_data(coach.dict_coaches(), team.dict_teams(), match.dict_games())
         save_to_json(collated_data)
         return collated_data

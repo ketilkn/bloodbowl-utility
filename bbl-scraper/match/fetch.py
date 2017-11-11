@@ -12,7 +12,7 @@ DATA_URL = "http://www.anarchy.bloodbowlleague.com/matchdata.asp?m={}"
 
 def parse_index():
     result = set()
-    with open("input/index.html", "rb") as index_file:
+    with open("input/html/index.html", "rb") as index_file:
         soup = BeautifulSoup(index_file.read(), 'html.parser')
         for anchor in soup.find_all('a'):
             if anchor.has_attr("href") and anchor["href"].startswith("default.asp?p=m&m="):
@@ -21,7 +21,7 @@ def parse_index():
     return result
 
 def new_games():
-    download_to("http://www.anarchy.bloodbowlleague.com/", "input/index.html")
+    download_to("http://www.anarchy.bloodbowlleague.com/", "input/html/index.html")
     return parse_index()
 
 
@@ -44,14 +44,14 @@ def download_to(url, target):
         print(" Server error {} to {}".format(url, target))
 
 def download_match(matchid):
-        download_to(DATA_URL.format(matchid), "input/matchdata-{}.html".format(matchid))
+        download_to(DATA_URL.format(matchid), "input/html/match/matchdata-{}.html".format(matchid))
         sleep(1)
-        download_to(BASE_URL.format(matchid), "input/match-{}.html".format(matchid))
+        download_to(BASE_URL.format(matchid), "input/html/match/match-{}.html".format(matchid))
         sleep(3)
 
 def is_match_downloaded(matchid):
-    return path.isfile("input/matchdata-{}.html".format(matchid)) \
-        and path.isfile("input/match-{}.html".format(matchid)) 
+    return path.isfile("input/html/match/matchdata-{}.html".format(matchid)) \
+        and path.isfile("input/html/match/match-{}.html".format(matchid)) 
 
 def download_matches(from_match, to_match):
     for matchid in range(from_match, to_match):

@@ -79,7 +79,7 @@ def from_json():
     import os.path
     if create_cache("input/", "input/json/match-all.json"):
         print("Creating cache")
-        return create_json_cache("input/")
+        return create_json_cache("input/html/match/")
     with open("input/json/match-all.json") as fp:
         return json.load(fp)
 
@@ -94,7 +94,7 @@ def main():
         import pprint
         pp = pprint.PrettyPrinter(indent=4)
 
-        pp.pprint(process_match("input", "match-{}.html".format(sys.argv[1])))
+        pp.pprint(process_match("input/html/match/", "match-{}.html".format(sys.argv[1])))
 
 if __name__ == "__main__":
     main()

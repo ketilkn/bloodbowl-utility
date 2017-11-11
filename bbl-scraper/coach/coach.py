@@ -28,7 +28,7 @@ def save_to_json(coaches):
     
 
 def list_coaches():
-    if not os.path.isfile("input/json/coaches.json") or os.stat("input/json/coaches.json").st_mtime < os.stat("input/coaches-8.html").st_mtime:
+    if not os.path.isfile("input/json/coaches.json") or os.stat("input/json/coaches.json").st_mtime < os.stat("input/html/coach/coaches-8.html").st_mtime:
         coaches = parse.load()
         save_to_json(coaches)
         return coaches

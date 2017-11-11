@@ -88,7 +88,7 @@ def parse_rows(rows_of_coaches):
     return coaches
 
 def load():
-    html = open("input/coaches-8.html", "r").read()
+    html = open("input/html/coach/coaches-8.html", "r").read()
     soup = BeautifulSoup(normalize("NFC", html), "lxml")
     coaches = parse_rows( find_rows(soup))
     return coaches

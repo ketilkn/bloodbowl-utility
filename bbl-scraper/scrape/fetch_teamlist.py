@@ -8,7 +8,7 @@ teams_url = "http://www.anarchy.bloodbowlleague.com/default.asp?p=te"
 	
 def download_team_list():
     s = scrape.session.login(sys.argv[1], sys.argv[2])
-    scrape.session.download_to(s, teams_url, "input/teams-8.html")
+    scrape.session.download_to(s, teams_url, "input/html/team/teams-8.html")
 	
 def main():
     download_team_list()

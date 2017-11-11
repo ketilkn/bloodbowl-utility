@@ -14,7 +14,7 @@ def dict_teams():
     return result
 
 def list_teams():
-        html = open("input/teams-8.html", "r").read()
+        html = open("input/html/team/teams-8.html", "r").read()
         soup = BeautifulSoup(normalize("NFC", html), "html.parser")
 
         teams = parse.parse_rows( parse.find_rows(soup))
