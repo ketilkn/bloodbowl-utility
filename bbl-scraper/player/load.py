@@ -16,7 +16,7 @@ from player import parse
 def from_file(filename):
         plyerid = filename[filename.find("player-")+6:filename.rfind(".html")]
         html = open(filename, "rb").read()
-        soup = BeautifulSoup(html, "html.parser")
+        soup = BeautifulSoup(html.decode("utf-8", 'ignore'), "html.parser")
         return soup
 
 def parse_path(path):
