@@ -113,7 +113,8 @@ def parse_active(soup, pid=None):
     reason = status.string if status.has_attr("value") and status["value"] != "a" else ""
 
     if not selected_option:
-        LOG.warn("No selected_option for %s", pid)
+        LOG.debug("No selected_option for %s", pid)
+    LOG.debug("active: %s %s", active, reason)
     return {"active": active,
             "reason": reason if selected_option else "no status"}
 
