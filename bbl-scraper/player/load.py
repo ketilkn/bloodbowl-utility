@@ -10,6 +10,7 @@ import re
 import sys
 from os import listdir
 import os.path
+import json
 
 from player import parse
 
@@ -38,15 +39,20 @@ def setup_log(level):
     ch.setFormatter(formatter)
     logging.addHandler(ch)
 
-def main():
-    print(__package__)
-    print(__name__)
+def write_json(player, path="input/json/player"):
+    filename = "player-{}.json".format(player["playerid"])
+    with open(os.path.join(path, filename), "w") as outfile:
+        json.dump(player, outfile)
+    
 
+
+def main():
     if "--debug" in sys.argv[1:]:
         logging.basicConfig(level=logging.DEBUG)
         logging.debug("Log level debug")
 
     do_print = True if "--no-print" not in sys.argv[1:] else False
+    do_json = True if "--json" in sys.argv[1:] else False
 
     logging.basicConfig(level=logging.INFO)
 
@@ -64,8 +70,11 @@ def main():
     pp = pprint.PrettyPrinter(indent=4)
 
     for player in parse_path(path):
-        if do_print and (not interesting or player["playerid"] in interesting):
-            pp.pprint(player)
+        if not interesting or player["playerid"] in interesting:
+            if do_print:
+                pp.pprint(player)
+            if do_json:
+                write_json(player=player, path="input/json/player/")                
 
 if __name__ == "__main__":
     main()
