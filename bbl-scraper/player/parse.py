@@ -108,10 +108,14 @@ def parse_active(soup, pid=None):
     LOG.debug("")
     status = soup.select_one("select[name=status]")
     selected_option = status.select_one("option[selected]")
+
+    active = True if selected_option and selected_option["value"] == "a" else False
+    reason = status.string if status.has_attr("value") and status["value"] != "a" else ""
+
     if not selected_option:
         LOG.warn("No selected_option for %s", pid)
-    return {"active": True if selected_option and selected_option["value"] == "a" else False,
-            "reason": status.string if "value" in status and status["value"] != "a" else "no status"}
+    return {"active": active,
+            "reason": reason if selected_option else "no status"}
 
 def parse_status(soup, pid="Unknown"): 
     LOG.debug("")
