@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+""" Python libraries for Dr.Tide"""
+import logging
+LOG = logging.getLogger(__package__)
 from bs4 import BeautifulSoup
 from unicodedata import normalize
 import datetime
@@ -71,7 +74,7 @@ def parse_characteristic(soup, characteristic):
 
 def parse_halloffame(soup):
     hall_of_famer= soup.select_one("select[name=hof] option[selected]")
-    print(hall_of_famer)
+    #print(hall_of_famer)
     hall_of_famer_reason = soup.select_one("textarea[name=hofreason]")
     return {"hall_of_famer": True if hall_of_famer and hall_of_famer["value"]!=0 else False,
             "season": hall_of_famer["value"] if hall_of_famer else 0,
@@ -128,17 +131,25 @@ def parse_matchdata(data):
             "coach2": int(coach[1][7:])}
     return matchdata
 
-def main():
-    import pprint
+def parse_fromfile(path, playerid):
+    print("parse_from_file")
+    LOG.debug(path, playerid)
     import player.load
+    parsed_player = parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
+    parsed_player = parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+    parsed_player = parse_team(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+    return parsed_player
+
+
+def main():
+    logging.basicConfig(level=logging.DEBUG)
+    import pprint
     if len(sys.argv) != 3 :
             sys.exit("path and playerid required")
     path = sys.argv[1]
     playerid = sys.argv[2]
 
-    parsed_player = parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
-    parsed_player = parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
-    parsed_player = parse_team(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+    parsed_player = parse_fromfile(path, playerid)
 
     pprint.PrettyPrinter(indent=4).pprint(parsed_player)
 
