@@ -5,6 +5,7 @@ import json
 from match import match
 from coach import coach
 from team import team
+from player import player
 
 def load_from_json():
     data = open("input/json/data.json", "rb").read()
@@ -20,7 +21,7 @@ def save_to_json(collated_data):
 
 def collate(reload=False):
     if reload or not os.path.isfile("input/json/data.json") or os.stat("input/json/data.json").st_mtime < os.stat("input/html/coach/coaches-8.html").st_mtime:
-        collated_data = collate_data(coach.dict_coaches(), team.dict_teams(), match.dict_games())
+        collated_data = collate_data(coach.dict_coaches(), team.dict_teams(), match.dict_games(), player.dict_players())
         save_to_json(collated_data)
         return collated_data
     return load_from_json()
@@ -90,14 +91,19 @@ def collate_match(data):
     games2 = add_team_race(data)
     return games2
 
-def collate_data(coaches, teams, games):
+def collate_players(players):
+    return players
+
+def collate_data(coaches, teams, games, players):
     data = {"coach": coaches,
             "team": teams,
-            "game": games}
+            "game": games,
+	    "players": players}
 
     return {"game": collate_match(data),
             "coach": collate_coach(data),
             "team": collate_team(data),
+	    "players": collate_players(players),
             "_coachid": coach.dict_coaches_by_uid() 
             }
 
