@@ -43,7 +43,23 @@ def write_json(player, path="input/json/player"):
     filename = "player-{}.json".format(player["playerid"])
     with open(os.path.join(path, filename), "w") as outfile:
         json.dump(player, outfile)
-    
+
+
+
+
+
+def load_player(path, filename):
+    with open(os.path.join(path, filename), "r") as infile:
+        return json.load(infile)
+
+
+def load(path="input/json/player"):
+    files = os.listdir(path)
+    for playerfile in filter(lambda f: f.startswith("player-") and f.endswith(".json"), files):
+        yield load_player(path, playerfile)
+
+def load_all():
+    return load()
 
 
 def main():
@@ -53,6 +69,11 @@ def main():
 
     do_print = True if "--no-print" not in sys.argv[1:] else False
     do_json = True if "--json" in sys.argv[1:] else False
+    
+    if "--load-all" in sys.argv[1:]:
+        players = load_all()
+        print("found {} players".format(sum(1 for x in players)) )
+        sys.exit()
 
     logging.basicConfig(level=logging.INFO)
 
