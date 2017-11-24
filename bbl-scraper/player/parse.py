@@ -156,12 +156,19 @@ def parse_spp(soup):
 
 
 def parse_team(player, soup):
-    LOG.debug("parse player with id %s", player)
+    LOG.debug("parse player with id %s", player["playerid"])
     team = soup.select_one("a[style=font-size:11px]")
+    LOG.debug("team   el %s", "{}".format(team))
+
     team_id = team["href"].split("=")[-1] if team and team.has_attr("href") else None
     team_name = team.text if team else ""
+
+    number = soup.select_one('td[style="max-height:20px;font-size:10px"]')
+    LOG.debug("number el %s", "{}".format(number))
+
     player["team"] = team_id
     player["teamname"] = team_name
+    player["number"] = number.text.split('\xa0')[-1] if number else ""
 
     return player
 

@@ -1,29 +1,24 @@
 #!/usr/bin/env python3
-""" Python libraries for Dr.Tide"""
-import logging
-from bs4 import BeautifulSoup
-from unicodedata import normalize
-import datetime
-import dateutil.parser as parser
-import re
-#import team 
+"""  Parse players from HTML"""
 import sys
-from os import listdir
 import os.path
 import json
+import logging
+from bs4 import BeautifulSoup
 
 from player import parse
 
+
 def from_file(filename):
-        plyerid = filename[filename.find("player-")+6:filename.rfind(".html")]
-        html = open(filename, "rb").read()
-        soup = BeautifulSoup(html.decode("utf-8", 'ignore'), "html.parser")
-        return soup
+    html = open(filename, "rb").read()
+    soup = BeautifulSoup(html.decode("utf-8", 'ignore'), "html.parser")
+    return soup
+
 
 def parse_path(path):
     files = os.listdir(path)
     for player_file in filter(lambda f: f.startswith("player-"), files):
-        playerid = player_file.replace("player-","").replace(".html","")
+        playerid = player_file.replace("player-", "").replace(".html", "")
         yield parse.parse_fromfile(path, playerid)
 
 
@@ -39,13 +34,11 @@ def setup_log(level):
     ch.setFormatter(formatter)
     logging.addHandler(ch)
 
+
 def write_json(player, path="input/json/player"):
     filename = "player-{}.json".format(player["playerid"])
     with open(os.path.join(path, filename), "w") as outfile:
         json.dump(player, outfile)
-
-
-
 
 
 def load_player(path, filename):
@@ -58,6 +51,7 @@ def load(path="input/json/player"):
     for playerfile in filter(lambda f: f.startswith("player-") and f.endswith(".json"), files):
         yield load_player(path, playerfile)
 
+
 def load_all():
     return load()
 
@@ -69,10 +63,10 @@ def main():
 
     do_print = True if "--no-print" not in sys.argv[1:] else False
     do_json = True if "--json" in sys.argv[1:] else False
-    
+
     if "--load-all" in sys.argv[1:]:
         players = load_all()
-        print("found {} players".format(sum(1 for x in players)) )
+        print("found {} players".format(sum(1 for x in players)))
         sys.exit()
 
     logging.basicConfig(level=logging.INFO)
@@ -81,7 +75,7 @@ def main():
     interesting = arguments if len(arguments) > 0 else None
     logging.info("program started")
     logging.debug("debug")
-    #setup_log(logging.DEBUG)
+    # setup_log(logging.DEBUG)
 
     path = "input/html/player/"
     logging.info("Loading players from %s", path)
@@ -95,7 +89,8 @@ def main():
             if do_print:
                 pp.pprint(player)
             if do_json:
-                write_json(player=player, path="input/json/player/")                
+                write_json(player=player, path="input/json/player/")
+
 
 if __name__ == "__main__":
     main()
