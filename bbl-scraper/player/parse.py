@@ -9,48 +9,64 @@ LOG = logging.getLogger(__package__)
 
 
 def parse_date(soup):
-    LOG.debug("")
-    return parser.parse(soup.select("input[name=indate]")[0]["value"]).isoformat()
+    LOG.debug("CREATION DATE >==-")
+    indates = soup.select("input[name=indate]")
+    LOG.debug("Search len %s", len(indates))
+    indate = indates[0]
+    LOG.debug("indate el %s", "{}".format(indate))
+    return parser.parse(indate["value"]).isoformat()
 
 
 def parse_bounties(soup):
-    LOG.debug("")
-    return {"total": int(soup.select("input[name=bounty]")[0]["value"]) * 1000}
+    LOG.debug("-==< Parsing BOUNTY >==-")
+    bounties = soup.select("input[name=bounty]")
+    LOG.debug("Search len %s", len(bounties))
+    bounty = bounties[0]
+    Log.debug("bounty el: %s", bounty)
+    return {"total": int(bounty["value"]) * 1000}
 
 
 def parse_touchdown(achievements):
-    LOG.debug("")
+    LOG.debug("-==< parse TOUCHDOWN >==-")
+    LOG.debug("achievement el %s", achievements[2])
     return achievements[2].text
 
 
 def parse_casualties(achievements):
-    LOG.debug("")
+    LOG.debug("-==< parse CASUALTIES >==-")
+    LOG.debug("achievement el %s", achievements[3])
     return achievements[3].text
 
 
 def parse_completions(achievements):
-    LOG.debug("")
+    LOG.debug("-==< parse COMPLETIONS >==-")
+    LOG.debug("achievement el %s", achievements[1])
     return achievements[1].text
 
 
 def parse_interception(achievements):
-    LOG.debug("")
+    LOG.debug("-==< parse INTERCEPTION >==-")
+    LOG.debug("achievement el %s", achievements[0])
     return achievements[0].text
 
 
 def parse_total(achievements):
-    LOG.debug("")
+    LOG.debug("-==< parse TOTAL >==-")
+    LOG.debug("achievement el %s", achievements[5])
     return achievements[5].text
 
 
+
 def parse_mvp(achievements):
-    LOG.debug("")
+    LOG.debug("MVP >=========-")
+    LOG.debug("achievement el %s", achievements[4])
     return achievements[4].text
 
 
 def parse_games(player, soup):
-    LOG.debug("parse player with id %s", player)
+    LOG.debug("-==< parse player with id %s >==-", player["playerid"])
     achievements = soup.select("table[style='background-color:#F0F0F0;border:1px solid #808080'] td[align=center]")
+    LOG.debug("achievements len %s", len(achievements))
     player["spp"] = {"interception": parse_interception(achievements),
                      "td": parse_touchdown(achievements),
                      "casualty": parse_casualties(achievements),
@@ -61,34 +77,47 @@ def parse_games(player, soup):
 
 
 def parse_journeyman(soup):
-    LOG.debug("")
+    LOG.debug("JOURNEYMAN >=========-")
     return parse_playername(soup).strip() == "journeyman"
 
 
 def parse_playername(soup):
-    LOG.debug("")
-    return soup.select("input[name=name]")[0]["value"]
+    LOG.debug("PLAYER NAME >=========-")
+    search = soup.select("input[name=name]")
+    LOG.debug("Search len %s", len(search))
+    playername = search[0]
+    LOG.debug("playername el %s", playername)
+    return playername["value"]
 
 
 def parse_position(soup):
-    LOG.debug("")
-    return soup.select("select option[selected]")[0]["value"]
+    LOG.debug("POSITION >=========-")
+    search = soup.select("select option[selected]")
+    LOG.debug("Search len %s", len(search))
+    position = search[0]
+    LOG.debug("position el %s", position)
+    return position["value"]
 
 
 def parse_normal(soup):
-    LOG.debug("")
+    LOG.debug("NORMAL >=========-")
     normal = soup.find_all("input", {"name": lambda x: x and x.startswith("upgr") and x != "upgr7"})
+    LOG.debug("search len %s", len(normal))
+    for el in normal:
+        LOG.debug("normal el %s", el)
     return [x["value"] for x in normal if x["value"]]
 
 
 def parse_extra(soup):
-    LOG.debug("")
-    extra = soup.select("input[name=upgr7]")[0]
+    LOG.debug("EXTRA >=========-")
+    extra = soup.select_one("input[name=upgr7]")
+    LOG.debug("extra el %s", extra)
+
     return [x for x in extra["value"].split(',') if len(extra["value"]) > 0]
 
 
 def parse_modifier(soup):
-    LOG.debug("")
+    LOG.debug("MODIFIER >=========-")
     return {"ma": parse_characteristic(soup, "ma"),
             "st": parse_characteristic(soup, "st"),
             "ag": parse_characteristic(soup, "ag"),
@@ -96,21 +125,30 @@ def parse_modifier(soup):
 
 
 def parse_upgrade(soup):
-    LOG.debug("")
-    extra = soup.select("input[name=upgr7]")[0]
+    LOG.debug("EXTRA UPGRADE >=========-")
+
+    search = soup.select("input[name=upgr7]")
+    LOG.debug("Search len %s", len(search))
+
+    extra = search[0]
+    LOG.debug("extra el %s", extra)
+
     return {"normal": parse_normal(soup),
             "extra": parse_extra(soup),
             "modifier": parse_modifier(soup)}
 
 
 def parse_characteristic(soup, characteristic):
-    LOG.debug("")
-    return int(soup.select_one("select[name={}] option[selected]".format(characteristic))["value"])
+    LOG.debug("CHARACTERISTIC %s >=========-", characteristic)
+    element = soup.select_one("select[name={}] option[selected]".format(characteristic))
+    LOG.debug("characteristic el %s", element)
+    return int(element["value"])
 
 
 def parse_halloffame(soup):
-    LOG.debug("")
+    LOG.debug("HALL_OF_FAME >=========-")
     hall_of_famer = soup.select_one("select[name=hof] option[selected]")
+    LOG.debug("h-o-f el  %s", hall_of_famer)
     # print(hall_of_famer)
     hall_of_famer_reason = soup.select_one("textarea[name=hofreason]")
     return {"hall_of_famer": True if hall_of_famer and hall_of_famer["value"] != 0 else False,
@@ -119,14 +157,21 @@ def parse_halloffame(soup):
 
 
 def parse_permanent(soup):
-    LOG.debug("")
-    return list(filter(lambda x: len(x) > 0, soup.select_one("input[name=inj]")["value"].split(",")))
+    LOG.debug("PERMANENT injuries >=========-")
+    permanent = soup.select_one("input[name=inj]")
+    LOG.debug("permanent el %s", permanent)
+    return list(filter(lambda x: len(x) > 0, permanent["value"].split(",")))
 
 
 def parse_active(soup, pid=None):
-    LOG.debug("")
+    LOG.debug("ACTIVE >=========-")
     status = soup.select_one("select[name=status]")
+    LOG.debug("status len %s", len(status))
+    for el in status:
+        LOG.debug(f"option el {el}".strip())
+
     selected_option = status.select_one("option[selected]")
+    LOG.debug("selected el %s", selected_option)
 
     active = True if selected_option and selected_option["value"] == "a" else False
     reason = status.string if status.has_attr("value") and status["value"] != "a" else ""
@@ -139,7 +184,7 @@ def parse_active(soup, pid=None):
 
 
 def parse_status(soup, pid="Unknown"):
-    LOG.debug("")
+    LOG.debug("PARSE STATUS")
     return {"entered_league": parse_date(soup),
             "niggle": parse_niggle(soup),
             "injury": parse_permanent(soup),
@@ -147,8 +192,10 @@ def parse_status(soup, pid="Unknown"):
 
 
 def parse_niggle(soup):
-    LOG.debug("")
-    return int(soup.select_one("select[name=n] option[selected]")["value"])
+    LOG.debug("NIGGLE >=========-")
+    niggle =soup.select_one("select[name=n] option[selected]")
+    LOG.debug("niggle el %s", niggle)
+    return int(niggle["value"])
 
 
 def parse_spp(soup):
@@ -212,7 +259,8 @@ def parse_fromfile(path, playerid):
 
 def main():
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
-    logging.basicConfig(level=logging.DEBUG, format=log_format)
+    #logging.basicConfig(level=logging.DEBUG, format=log_format)
+    logging.basicConfig(level=logging.DEBUG)
     import pprint
     if len(sys.argv) < 2:
         sys.exit("path and playerid required")
