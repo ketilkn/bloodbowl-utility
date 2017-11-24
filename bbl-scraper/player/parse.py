@@ -207,6 +207,12 @@ def parse_niggle(soup):
 def parse_spp(soup):
     return ["spp"]
 
+def parse_profile(player, soup):
+    profile = soup.select_one('div[style="vertical-align:top;background-color:#F0F0F0;font-size:10px;border:1px solid #808080;width:300px;min-height:80px;text-align:justify;padding:3px"]')
+    LOG.debug("profile len %s", len(profile.text) if profile else "NOT FOUND!!")
+    player["profile"] = profile.text if profile and "----empty----" not in profile.text else ""
+    return player
+
 
 def parse_team(player, soup):
     LOG.debug("parse player with id %s", player["playerid"])
@@ -220,15 +226,12 @@ def parse_team(player, soup):
     number = soup.select_one('td[style="max-height:20px;font-size:10px"]')
     LOG.debug("number el %s", "{}".format(number))
 
-    profile = soup.select_one('div[style="vertical-align:top;background-color:#F0F0F0;font-size:10px;border:1px solid #808080;width:300px;min-height:80px;text-align:justify;padding:3px"]')
-    LOG.debug("profile len %s", len(profile.text) if profile else "NOT FOUND!!")
 
     player["team"] = team_id
     player["teamname"] = team_name
     player["number"] = number.text.split('\xa0')[-1] if number else ""
-    player["profile"] = profile.text if profile else ""
 
-    return player
+    return parse_profile(player, soup)
 
 
 def parse_player(playerid, soup):
