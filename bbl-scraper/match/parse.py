@@ -49,11 +49,15 @@ def parse_scoreboardelement(el):
 
 
 def parse_scoreboard(scoreboard):
+    LOG.debug("Parsing scoreboard")
     td = []
     for c in list(scoreboard.children):
+        LOG.debug(f"Found {c}")
         if type(c) == bs4.NavigableString:
+            LOG.debug("NavigatableString")
             continue
         el = parse_scoreboardelement(c)
+        LOG.debug(f"scoreboard el {el}")
         if el:
             td.append(el)
     return td
@@ -70,6 +74,34 @@ def parse_casualtyspp(soup):
     return {"home": [],
             "away": [],
             }
+
+
+def parse_injury_column(column):
+    LOG.debug(f"injury el {column}")
+
+    return parse_scoreboard(column)
+
+def parse_injury_row(soup, search):
+    LOG.debug(f"Searching for {search}")
+    found = soup.select(search)
+    LOG.debug("found len %s", len(found))
+    injuries = []
+    for row in found:
+        LOG.debug("row el %s", row)
+        injuries.extend(parse_injury_column(row.select("td")[0]))
+        LOG.debug("injury type: %s", row.select("td")[1].text)
+        injuries.extend(parse_injury_column(row.select("td")[2]))
+
+    return [injured for injured in injuries if injured]
+
+def parse_injuries(soup):
+    LOG.debug("INJURIES")
+
+    dead = parse_injury_row(soup, "tr[style='background-color:#f4d2d2']")
+    mng = parse_injury_row(soup, "tr[style='background-color:#f2e2da']")
+    niggle = parse_injury_row(soup, "tr[style='background-color:#f0d8d4']")
+    return {"dead": dead,
+            "seriousinjuries": mng + niggle}
 
 
 def parse_spp(soup):
@@ -154,7 +186,8 @@ def parse_match(matchid, soup):
                  "result": calculate_result(td_away, td_home),
                  "casualties": find_casualties(soup)["away"]
              },
-             "spp": parse_spp(soup)
+             "spp": parse_spp(soup),
+             "injuries": parse_injuries(soup)
              }
     return match
 
