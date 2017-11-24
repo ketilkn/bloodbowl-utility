@@ -2,6 +2,7 @@
 	color: #ddd;
 }
 body {
+	padding: 2% 9%;
 	font-size: 100%;
 }
 sub {
@@ -33,6 +34,7 @@ table.pure-table tbody th , table.pure-table tbody td.empty-column {
 }
 .pure-table td, .pure-table th {
   padding: 0.5em;
+  bacground-color: white;
 }
 
 ul.year {
