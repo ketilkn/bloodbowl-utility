@@ -163,7 +163,7 @@ def parse_notes(soup):
     notes = soup.select_one("td[style='width:460px;text-align:justify;']")
     LOG.debug("notes len %s", len(notes.text) if notes else "Not found!")
 
-    return notes.text
+    return notes.text.replace('\xa0', ' ')
 
 def parse_match(matchid, soup):
     def calculate_result(us, them):

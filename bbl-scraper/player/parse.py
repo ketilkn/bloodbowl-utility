@@ -160,7 +160,7 @@ def parse_note(soup):
     note = soup.select_one("textarea[name=remarks]")
     LOG.debug("Note len %s", len(note.text))
 
-    return note.text
+    return note.text.replace('\xa0', ' ')
 
 def parse_permanent(soup):
     LOG.debug("PERMANENT injuries >=========-")
@@ -210,7 +210,7 @@ def parse_spp(soup):
 def parse_profile(player, soup):
     profile = soup.select_one('div[style="vertical-align:top;background-color:#F0F0F0;font-size:10px;border:1px solid #808080;width:300px;min-height:80px;text-align:justify;padding:3px"]')
     LOG.debug("profile len %s", len(profile.text) if profile else "NOT FOUND!!")
-    player["profile"] = profile.text if profile and "----empty----" not in profile.text else ""
+    player["profile"] = profile.text.replace('\xa0', ' ') if profile and "----empty----" not in profile.text else ""
     return player
 
 
