@@ -210,6 +210,7 @@ def parse_spp(soup):
 
 def parse_team(player, soup):
     LOG.debug("parse player with id %s", player["playerid"])
+    LOG.debug("TEAM >========-")
     team = soup.select_one("a[style=font-size:11px]")
     LOG.debug("team   el %s", "{}".format(team))
 
@@ -219,9 +220,13 @@ def parse_team(player, soup):
     number = soup.select_one('td[style="max-height:20px;font-size:10px"]')
     LOG.debug("number el %s", "{}".format(number))
 
+    profile = soup.select_one('div[style="vertical-align:top;background-color:#F0F0F0;font-size:10px;border:1px solid #808080;width:300px;min-height:80px;text-align:justify;padding:3px"]')
+    LOG.debug("profile len %s", len(profile.text) if profile else "NOT FOUND!!")
+
     player["team"] = team_id
     player["teamname"] = team_name
     player["number"] = number.text.split('\xa0')[-1] if number else ""
+    player["profile"] = profile.text if profile else ""
 
     return player
 
