@@ -157,6 +157,14 @@ def parse_season(soup):
     return {"id": season_id, "season": season_name.strip(), "round": round_name.strip()}
 
 
+def parse_notes(soup):
+    LOG.debug("parsing notes")
+
+    notes = soup.select_one("td[style='width:460px;text-align:justify;']")
+    LOG.debug("notes len %s", len(notes.text) if notes else "Not found!")
+
+    return notes.text
+
 def parse_match(matchid, soup):
     def calculate_result(us, them):
         if us > them:
@@ -187,7 +195,8 @@ def parse_match(matchid, soup):
                  "casualties": find_casualties(soup)["away"]
              },
              "spp": parse_spp(soup),
-             "injuries": parse_injuries(soup)
+             "injuries": parse_injuries(soup),
+             "notes": parse_notes(soup)
              }
     return match
 
