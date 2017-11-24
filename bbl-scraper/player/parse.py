@@ -182,10 +182,10 @@ def main():
     FORMAT = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=FORMAT)
     import pprint
-    if len(sys.argv) != 3 :
+    if len(sys.argv) < 2 :
             sys.exit("path and playerid required")
-    path = sys.argv[1]
-    playerid = sys.argv[2]
+    path = sys.argv[1] if not sys.argv[1].isdigit() else "input/html/player/"
+    playerid = sys.argv[1] if sys.argv[1].isdigit() else sys.argv[2]
 
     parsed_player = parse_fromfile(path, playerid)
 
