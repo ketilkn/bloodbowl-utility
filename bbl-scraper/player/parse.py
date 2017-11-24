@@ -198,7 +198,7 @@ def parse_fromfile(path, playerid):
     parsed_player = parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
     parsed_player = parse_team(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
     if not parsed_player["journeyman"] and parsed_player["status"]["active"]["reason"] == "no status":
-        LOG.warn("%s %s %s %s has no status", parsed_player["team"], playerid, parsed_player["playername"],
+        LOG.warning("%s %s %s %s has no status", parsed_player["team"], playerid, parsed_player["playername"],
                  parsed_player["position"])
     return parsed_player
 
