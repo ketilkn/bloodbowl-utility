@@ -155,6 +155,12 @@ def parse_halloffame(soup):
             "season": hall_of_famer["value"] if hall_of_famer else 0,
             "reason": hall_of_famer_reason.string if hall_of_famer_reason else ""}
 
+def parse_note(soup):
+    LOG.debug("NOTE >========>")
+    note = soup.select_one("textarea[name=remarks]")
+    LOG.debug("Note len %s", len(note.text))
+
+    return note.text
 
 def parse_permanent(soup):
     LOG.debug("PERMANENT injuries >=========-")
@@ -231,7 +237,8 @@ def parse_player(playerid, soup):
               "upgrade": parse_upgrade(soup),
               "status": parse_status(soup, pid=playerid),
               "hall_of_fame": parse_halloffame(soup),
-              "journeyman": parse_journeyman(soup)
+              "journeyman": parse_journeyman(soup),
+              "note": parse_note(soup)
               }
     return player
 
