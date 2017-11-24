@@ -185,11 +185,12 @@ def main():
     if len(sys.argv) < 2 :
             sys.exit("path and playerid required")
     path = sys.argv[1] if not sys.argv[1].isdigit() else "input/html/player/"
-    playerid = sys.argv[1] if sys.argv[1].isdigit() else sys.argv[2]
+    players = sys.argv[1:] if sys.argv[1].isdigit() else sys.argv[2:]
 
-    parsed_player = parse_fromfile(path, playerid)
-
-    pprint.PrettyPrinter(indent=4).pprint(parsed_player)
+    for player_id in players:
+        if player_id.isdigit():
+            parsed_player = parse_fromfile(path, player_id)
+            pprint.PrettyPrinter(indent=4).pprint(parsed_player)
 
 if __name__ == "__main__":
     main()
