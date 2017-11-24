@@ -180,7 +180,7 @@ def parse_active(soup, pid=None):
     LOG.debug("selected el %s", selected_option)
 
     active = True if selected_option and selected_option["value"] == "a" else False
-    reason = status.string if status.has_attr("value") and status["value"] != "a" else ""
+    reason = selected_option.text if selected_option else ""
 
     if not selected_option:
         LOG.debug("No selected_option for %s", pid)
