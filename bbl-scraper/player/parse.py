@@ -3,12 +3,30 @@
 import logging
 LOG = logging.getLogger(__package__)
 from bs4 import BeautifulSoup
+from bs4.element import NavigableString
 from unicodedata import normalize
 import datetime
 import dateutil.parser as parser
 import re
 #import team 
 import sys
+
+def row_with_heading(table, heading):
+    LOG.debug("Searching for heading {}".format(heading))
+    for row in table.select("tr"):
+        if isinstance(row, NavigableString):
+            continue
+        LOG.debug("raden: {}".format(row))
+        columns = list(row.select("td"))
+        LOG.debug("{} children {}".format(len(columns), columns))
+        if columns[0] and heading in columns[0].text:
+            LOG.debug("Found {} with content '{}'".format(heading, columns[1].text))
+            if columns[1].select_one("a"):
+                return columns[1].select_one("a")["href"] if columns[1].select_one("a").has_attr("href") else columns[1].text
+            return columns[1].text
+    LOG.debug("{} not found".format(heading))
+    return None
+
 
 def parse_date(soup):
     LOG.debug("")
@@ -36,7 +54,7 @@ def parse_interception(achievements):
 
 def parse_total(achievements):
     LOG.debug("")
-    return achievements[5].text
+    return achievements[-3].text
 
 def parse_mvp(achievements):
     LOG.debug("")
@@ -45,12 +63,13 @@ def parse_mvp(achievements):
 def parse_games(player, soup):
     LOG.debug("parse player with id %s", player)
     achievements = soup.select("table[style='background-color:#F0F0F0;border:1px solid #808080'] td[align=center]")
+    spp_table = soup.select_one("table[style='background-color:#F0F0F0;border:1px solid #808080'] table")
     player["spp"] =  {"interception": parse_interception(achievements), 
             "td":parse_touchdown(achievements), 
             "casualty": parse_casualties(achievements), 
             "completion": parse_completions(achievements), 
             "mvp": parse_mvp(achievements),
-            "total": parse_total(achievements)} 
+            "total": row_with_heading(spp_table, "Star Player Points")} 
     return player
 def parse_journeyman(soup):
     LOG.debug("")
