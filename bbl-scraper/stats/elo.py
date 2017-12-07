@@ -9,7 +9,7 @@ def expected(A, B):
     :param A: Elo rating for player A
     :param B: Elo rating for player B
     """
-    return 1 / (1 + 10 ** ((B - A) / 400))
+    return 1 / (1 + 10 ** ((B - A) / 150))
 
 
 def elo(old, exp, score, k=10):
@@ -50,10 +50,10 @@ def rate_all(data):
         c1_rating = result[c1_id]["rating"] if c1_id in result else START_RATING
         c2_rating = result[c2_id]["rating"] if c2_id in result else START_RATING
 
-        c1_kfactor = 2 if c1_gamecount > 9 else 10
+        c1_kfactor = 2 if c1_gamecount > 6 else 10
         c1_expected = expected(c1_rating, c2_rating) 
 
-        c2_kfactor = 2 if c2_gamecount > 9 else 10
+        c2_kfactor = 2 if c2_gamecount > 6 else 10
         c2_expected = expected(c2_rating, c1_rating) 
 
         c1_score = 1 if g["home"]["result"] == "W" else 0.5 if g["home"]["result"] == "T" else 0 
