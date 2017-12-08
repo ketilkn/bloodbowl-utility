@@ -127,15 +127,16 @@ def parse_active(soup, pid=None):
     LOG.debug("")
     status = soup.select_one("select[name=status]")
     selected_option = status.select_one("option[selected]")
+    LOG.debug("option->selected {}".format(selected_option))
 
     active = True if selected_option and selected_option["value"] == "a" else False
-    reason = status.string if status.has_attr("value") and status["value"] != "a" else ""
+    reason = selected_option.text if not active and selected_option else ""
 
     if not selected_option:
         LOG.debug("No selected_option for %s", pid)
     LOG.debug("active: %s %s", active, reason)
     return {"active": active,
-            "reason": reason if selected_option else "no status"}
+            "reason": reason if selected_option else ""}
 
 def parse_status(soup, pid="Unknown"): 
     LOG.debug("")
