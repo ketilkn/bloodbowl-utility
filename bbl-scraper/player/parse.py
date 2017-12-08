@@ -5,7 +5,26 @@ import re
 import dateutil.parser as parser
 import logging
 
+from bs4 import BeautifulSoup
+from bs4.element import NavigableString
+
 LOG = logging.getLogger(__package__)
+
+def row_with_heading(table, heading):
+    LOG.debug("Searching for heading {}".format(heading))
+    for row in table.select("tr"):
+        if isinstance(row, NavigableString):
+            continue
+        LOG.debug("raden: {}".format(row))
+        columns = list(row.select("td"))
+        LOG.debug("{} children {}".format(len(columns), columns))
+        if columns[0] and heading in columns[0].text:
+            LOG.debug("Found {} with content '{}'".format(heading, columns[1].text))
+            if columns[1].select_one("a"):
+                return columns[1].select_one("a")["href"] if columns[1].select_one("a").has_attr("href") else columns[1].text
+            return columns[1].text
+    LOG.debug("{} not found".format(heading))
+    return None
 
 
 def parse_date(soup):
@@ -53,7 +72,7 @@ def parse_interception(achievements):
 def parse_total(achievements):
     LOG.debug("-==< parse TOTAL >==-")
     LOG.debug("achievement el %s", achievements[5])
-    return achievements[5].text
+    return achievements[-3].text
 
 
 
@@ -65,14 +84,18 @@ def parse_mvp(achievements):
 
 def parse_games(player, soup):
     LOG.debug("-==< parse player with id %s >==-", player["playerid"])
+
     achievements = soup.select("table[style='background-color:#F0F0F0;border:1px solid #808080'] td[align=center]")
+    spp_table = soup.select_one("table[style='background-color:#F0F0F0;border:1px solid #808080'] table")
+
     LOG.debug("achievements len %s", len(achievements))
-    player["spp"] = {"interception": parse_interception(achievements),
-                     "td": parse_touchdown(achievements),
-                     "casualty": parse_casualties(achievements),
-                     "completion": parse_completions(achievements),
-                     "mvp": parse_mvp(achievements),
-                     "total": parse_total(achievements)}
+    
+    player["spp"] =  {"interception": parse_interception(achievements), 
+            "td":parse_touchdown(achievements), 
+            "casualty": parse_casualties(achievements), 
+            "completion": parse_completions(achievements), 
+            "mvp": parse_mvp(achievements),
+            "total": row_with_heading(spp_table, "Star Player Points")} 
     return player
 
 
@@ -177,16 +200,16 @@ def parse_active(soup, pid=None):
         LOG.debug(f"option el {el}".strip())
 
     selected_option = status.select_one("option[selected]")
-    LOG.debug("selected el %s", selected_option)
+    LOG.debug("option->selected {}".format(selected_option))
 
     active = True if selected_option and selected_option["value"] == "a" else False
-    reason = selected_option.text if selected_option else ""
+    reason = selected_option.text if not active and selected_option else ""
 
     if not selected_option:
         LOG.debug("No selected_option for %s", pid)
     LOG.debug("active: %s %s", active, reason)
     return {"active": active,
-            "reason": reason if selected_option else "no status"}
+            "reason": reason if selected_option else ""}
 
 
 def parse_status(soup, pid="Unknown"):
