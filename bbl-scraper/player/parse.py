@@ -197,7 +197,7 @@ def parse_active(soup, pid=None):
     status = soup.select_one("select[name=status]")
     LOG.debug("status len %s", len(status))
     for el in status:
-        LOG.debug(f"option el {el}".strip())
+        LOG.debug("option el {}".format(el).strip())
 
     selected_option = status.select_one("option[selected]")
     LOG.debug("option->selected {}".format(selected_option))
