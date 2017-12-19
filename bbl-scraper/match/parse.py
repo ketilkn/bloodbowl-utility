@@ -52,12 +52,12 @@ def parse_scoreboard(scoreboard):
     LOG.debug("Parsing scoreboard")
     td = []
     for c in list(scoreboard.children):
-        LOG.debug(f"Found {c}")
+        LOG.debug("Found {}".format(c))
         if type(c) == bs4.NavigableString:
             LOG.debug("NavigatableString")
             continue
         el = parse_scoreboardelement(c)
-        LOG.debug(f"scoreboard el {el}")
+        LOG.debug("scoreboard el {}".format(el))
         if el:
             td.append(el)
     return td
@@ -77,12 +77,12 @@ def parse_casualtyspp(soup):
 
 
 def parse_injury_column(column):
-    LOG.debug(f"injury el {column}")
+    LOG.debug("injury el {}".format(column))
 
     return parse_scoreboard(column)
 
 def parse_injury_row(soup, search):
-    LOG.debug(f"Searching for {search}")
+    LOG.debug("Searching for {}".format(search))
     found = soup.select(search)
     LOG.debug("found len %s", len(found))
     injuries = []
