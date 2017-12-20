@@ -76,15 +76,16 @@ def create_cache(directory="input", filename="input/json/match-all.json"):
         return True
     json_mtime = os.path.getmtime(filename)
     for checkfile in listdir(directory):
-        LOG.debug("Checking ", checkfile)
+        LOG.debug("Checking %s", checkfile)
         if checkfile.startswith("match") and os.path.getmtime(os.path.join(directory, checkfile)) > json_mtime:
+            LOG.debug("Modified since %s", json_mtime)
             return True
     return False
 
 
 def from_json():
     LOG.debug("From json input/json/match-all.json")
-    if create_cache("input/", "input/json/match-all.json"):
+    if create_cache("input/html/match/", "input/json/match-all.json"):
         print("Creating cache")
         return create_json_cache("input/html/match/")
     with open("input/json/match-all.json") as fp:
