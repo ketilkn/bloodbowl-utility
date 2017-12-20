@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """  Create list of coaches from team list for use when actual coach list is missing. """
 import sys
+import os.path
 import logging
 
 from . import parse
@@ -12,7 +13,7 @@ def create_coach(nick, uid):
     coach = {'nick': nick,
              'email': nick,
              'naf': "no naf",
-             'role': "unknown",
+             'role': "coach",
              'phone': "no phone",
              'location': "Old World",
              'login': parse.NEVER_LOGGED_IN,
@@ -36,6 +37,10 @@ def parse_teams(teams):
             coaches.add(team["co-coach"])
 
     return [create_coach(coach, index+10000) for index, coach in enumerate(coaches)]
+
+
+def data_exists():
+    return os.path.isfile("input/html/team/teams-8.html")
 
 
 def list_coaches():

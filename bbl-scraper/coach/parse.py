@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os.path
 from bs4 import BeautifulSoup
 from unicodedata import normalize
 import datetime
@@ -86,6 +87,10 @@ def parse_rows(rows_of_coaches):
     for row in rows_of_coaches:
         coaches.append(parse_coach_row(row))
     return coaches
+
+def data_exists():
+    return os.path.isfile("input/html/coach/coaches-8.html")
+
 
 def load():
     html = open("input/html/coach/coaches-8.html", "r").read()
