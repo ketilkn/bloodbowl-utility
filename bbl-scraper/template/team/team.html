@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <ul>
-	<li><a href="http://www.anarchy.bloodbowlleague.com/default.asp?p=tm&t={{teamid}}">{{teamname}} on AnBBL</a></li>
-	<li><a href="http://www.anarchy.bloodbowlleague.com/default.asp?p=ro&t={{teamid}}">Roster</a></li>
+	<li><a href="{{ baseurl }}/default.asp?p=tm&t={{teamid}}">{{teamname}} on {{league_name_short}}</a></li>
+	<li><a href="{{ baseurl }}/default.asp?p=ro&t={{teamid}}">Roster</a></li>
 </ul>
 
 <p class="clearer"></p>

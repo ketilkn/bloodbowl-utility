@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Stats for AnBBL. {{title}} {{subtitle}}">
+    <meta name="description" content="Stats for {{league_name_short}}. {{title}} {{subtitle}}">
     <title>{{title}}</title>
     
     <link rel="stylesheet" href="http://bbscrape.99012099.no/pure-min.css" >
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="http://bbscrape.99012099.no/style.css">
     <link rel="stylesheet" media="all and (orientation:portrait)" href="http://bbscrape.99012099.no/portrait.css">
 
-    <base href="{%if baseurl %}{{ baseurl }}{% else %}/{% endif %}">
+    <base href="{%if basehref %}{{ basehref }}{% else %}/{% endif %}">
 	<script src="/script.js"></script>
 </head>
 <body>

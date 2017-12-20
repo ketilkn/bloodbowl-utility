@@ -15,6 +15,9 @@ def get_template(template_name):
     template_dir = 'template/'
     loader = jinja2.FileSystemLoader(template_dir)
     environment = jinja2.Environment(loader=loader)
+    environment.globals["basehref"] = "/regina/"
+    environment.globals["baseurl"] = "http://reginaflatland.bloodbowlleague.com/"
+    environment.globals["league_name_short"] = "RFBBL"
     filter.load_filter(environment)
     return environment.get_template(template_name)
 
