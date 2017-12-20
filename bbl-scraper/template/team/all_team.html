@@ -24,15 +24,17 @@
 			<td class="coach sort-ascending">Coach</td>
 			<td>TV</td>
 			<td class="gamesplayed">GP</td>
-			<td class="win-tie-loss">W-T-L</td>
+			<td class="win-tie-loss hidden-data">W-T-L</td>
 			<td class="performance">P/GP</td>
 			<td>W</td>
 			<td>D</td>
 			<td>L</td>
 			<td class="touchdown">TD</td>
+			<td class="touchdown wide-data for">+</td>
+			<td class="touchdown wide-data against">-</td>
 			<td class="casualty">Cas</td>
-			<td class="touchdown">TD+</td>
-			<td class="casualty">Cas+</td>
+			<td class="casualty wide-data for">+</td>
+			<td class="casualty wide-data against">-</td>
 			<td class="points current-sort reverse">P</td>
 		</tr>
 	</thead>
@@ -46,15 +48,17 @@
 			<td class="coach">{%if team.coach%}<a href="/coach/{{team.coach.replace(' ', '-')}}.html">{% endif %}{{team.coach}}</a></td>
 			<td class="teamvalue">{{'%0.0f' % team.teamvalue}}</td>
 			<td class="gamesplayed">{{team.gamesplayed}}</td>
-			<td class="win-tie-loss">{{team.win}}-{{team.tie}}-{{team.loss}}</td>
+			<td class="win-tie-loss hidden-data">{{team.win}}-{{team.tie}}-{{team.loss}}</td>
 			<td class="performance">{{'%0.2f' % team.performance}}%</td>
 			<td class="win">{{team.win}}</td>
 			<td class="tie">{{team.tie}}</td>
 			<td class="loss">{{team.loss}}</td>
-			<td class="touchdown" title="{{team.td_for}} - {{team.td_against}}">{{ team.td_for }}</td>
-			<td class="casualty" title="{{team.cas_for}}-{{team.cas_against}}">{{team.cas_for}} </td>
-			<td class="touchdown" title="{{team.td_for}} - {{team.td_against}}">{%if team.td > 0 %}+{% endif %}{{team.td}}</td>
-			<td class="casualty" title="{{team.cas_for}}-{{team.cas_against}}">{%if team.cas > 0 %}+{% endif %}{{team.cas}} </td>
+			<td class="touchdown wide-data " title="{{team.td_for}} - {{team.td_against}}">{{ team.td_for }}</td>
+			<td class="touchdown for wide-data" title="{{team.td_for}} - {{team.td_against}}">{{ team.td_against }}</td>
+			<td class="touchdown against wide-data" title="{{team.cas_for}}-{{team.cas_against}}">{{team.cas_for}} </td>
+			<td class="casualty" title="{{team.cas_for}}-{{team.cas_against}}">{{team.cas_against}} </td>
+			<td class="casualty wide-data" title="{{team.td_for}} - {{team.td_against}}">{%if team.td > 0 %}+{% endif %}{{team.td}}</td>
+			<td class="casualty wide-data" title="{{team.cas_for}}-{{team.cas_against}}">{%if team.cas > 0 %}+{% endif %}{{team.cas}} </td>
 			<td class="points">{{team.points}}</td>
 		</tr>
 		{% endfor %}
@@ -66,14 +70,14 @@
 		<td class="rank number"></td>
 		<td class="name"></td>
 		<td class="race"></td>
-		<!--<td>TV</td>-->
+		<td>TV</td>
 		<td class="coach">Average</td>
 		<td class="gamesplayed">{{'%0.0f' %teams_average.gamesplayed}}</td>
-		<td class="win-tie-loss">{{'%0.1f' % teams_average.win}}-{{'%0.1f' % teams_average.tie}}-{{'%0.1f' % teams_average.loss}}</td>
+		<td class="win-tie-loss hidden-data">{{'%0.1f' % teams_average.win}}-{{'%0.1f' % teams_average.tie}}-{{'%0.1f' % teams_average.loss}}</td>
 		<td class="performance">-</td>
-		<!--<td>W</td>
+		<td>W</td>
 		<td>D</td>
-		<td>L</td>-->
+		<td>L</td>
 		<td class="touchdown">{{'%0.2f' % teams_average.td_for}}</td>
 		<td class="casualty">{{'%0.2f' % teams_average.cas_for}}</td>
 		<td class="points">-</td>
