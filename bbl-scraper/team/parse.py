@@ -8,12 +8,15 @@ LOG = logging.getLogger(__package__)
 
 
 def find_rows(soup):
+    LOG.debug("Find rows")
     teams = []
     rows = soup.find_all("tr")
+    LOG.debug("Found {} rows".format(len(rows)))
     for row in rows:
         if row.has_attr("height") and row['height'] == "30":
             teams.append(row)
 
+    LOG.debug("Returning {} teams".format(len(teams)))
     return teams
 
 
@@ -54,23 +57,36 @@ def parse_teamvalue(row):
 
 
 def parse_cocoach(row):
-    coach = row.find_all(lambda tag: tag.name == "td" and tag.get('class') == ['td10'])[1].text
-    return coach.split("&")[1] if len(coach.split("&")) == 2 else None
+    LOG.debug("Parsing co-coach")
+    column = row.find_all(lambda tag: tag.name == "td" and tag.get('class') == ['td10'])[1].text
+    LOG.debug(column)
+    co_coach_name = column.split("&")[1] if len(column.split("&")) == 2 else None
+    return co_coach_name
 
 
 def parse_coach(row):
-    coach = row.find_all(lambda tag: tag.name == "td" and tag.get('class') == ['td10'])[1].text
-    return coach.split("&")[0] if coach != "?" else None
+    LOG.debug("Parsing coach")
+    column = row.find_all(lambda tag: tag.name == "td" and tag.get('class') == ['td10'])[1].text
+    LOG.debug(column)
+    coach_name = column.split("&")[0] if column != "?" else None
+    return coach_name
 
 
 def parse_team_row(row):
-    team = {"id": parse_id(row),
-            "name": parse_name(row),
-            "coach": parse_coach(row),
-            "co-coach": parse_cocoach(row),
-            "race": parse_race(row),
-            "teamvalue": parse_teamvalue(row)}
-    return team
+    LOG.debug("Parse team row {}".format(row))
+    team_id = parse_id(row)
+    name = parse_name(row)
+    coach_name = parse_coach(row)
+    co_coach_name = parse_cocoach(row)
+    race = parse_race(row)
+    team_value = parse_teamvalue(row)
+
+    return {"id": team_id,
+            "name": name,
+            "coach": coach_name,
+            "co-coach": co_coach_name,
+            "race": race,
+            "teamvalue": team_value}
 
 
 def parse_rows(rows_of_teams):
@@ -98,12 +114,15 @@ def list_teams():
 
 
 def main():
+    import sys
     import pprint
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
     LOG.info("Parsing teamlist")
 
-    pprint.PrettyPrinter().pprint(list_teams())
+    teams = list_teams()
+    if not "--no-print" in sys.argv:
+        pprint.PrettyPrinter().pprint(teams)
 
 
 if __name__ == "__main__":
