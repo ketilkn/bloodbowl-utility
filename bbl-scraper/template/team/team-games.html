@@ -20,7 +20,7 @@
 			<td class="date{% if match.date == previous_date %} repeated{% endif %}">{{match.date.split('T')[0]}}</td>
 			<td class="home team">{{match.them.coach | coach_anchor}}</td>
 			<td class="race away">{{match.them.team.race}}</td>
-			<td class="away team"><a href="/team/{{match.them.team.teamid}}.html">{{match.them.team.name}}</a></td>
+			<td class="away team"><a href="team/{{match.them.team.teamid}}.html">{{match.them.team.name}}</a></td>
 			<td class="result">{{match.us.result}}</td>
 			<td class="score">{{match.us.td}}-{{match.them.td}}</td>
 			<td class="casualties">{{match.us.casualties.total}}-{{match.them.casualties.total}}</td>

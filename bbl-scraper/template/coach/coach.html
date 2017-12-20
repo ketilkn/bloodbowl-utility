@@ -177,5 +177,5 @@
 		{% endfor %}
 	</tbody>
 </table>
-{%if more_games > 0%}<a href="/coach/{{coach_name.replace(' ','-')}}-games.html">+{{more_games}} more game{%if more_games > 1%}s{%endif%}..</a>{% endif %}
+{%if more_games > 0%}<a href="coach/{{coach_name.replace(' ','-')}}-games.html">+{{more_games}} more game{%if more_games > 1%}s{%endif%}..</a>{% endif %}
 {% endblock %}

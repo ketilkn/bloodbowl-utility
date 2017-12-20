@@ -22,15 +22,17 @@
 			<td class="name sort-ascending">Team</td>
 			<td class="race sort-ascending">Race</td>
 			<td class="coach sort-ascending">Coach</td>
-			<!--<td>TV</td>-->
+			<td>TV</td>
 			<td class="gamesplayed">GP</td>
 			<td class="win-tie-loss">W-T-L</td>
 			<td class="performance">P/GP</td>
-			<!--<td>W</td>
+			<td>W</td>
 			<td>D</td>
-			<td>L</td>-->
+			<td>L</td>
 			<td class="touchdown">TD</td>
 			<td class="casualty">Cas</td>
+			<td class="touchdown">TD+</td>
+			<td class="casualty">Cas+</td>
 			<td class="points current-sort reverse">P</td>
 		</tr>
 	</thead>
@@ -39,16 +41,18 @@
 		{% for team in teams %}
 		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
 			<td class="number">{{loop.index }}</td>
-			<td class="name"><a href="/team/{{team.teamid}}.html">{{team.name}}</a></td>
-			<td class="race"><a href="/race/{{team.race.replace(' ', '-')}}.html">{{team.race}}</a></td>
+			<td class="name"><a href="team/{{team.teamid}}.html">{{team.name}}</a></td>
+			<td class="race"><a href="race/{{team.race.replace(' ', '-')}}.html">{{team.race}}</a></td>
 			<td class="coach">{%if team.coach%}<a href="/coach/{{team.coach.replace(' ', '-')}}.html">{% endif %}{{team.coach}}</a></td>
-			<!-- <td class="teamvalue">{{'%0.0f' % team.teamvalue}}</td>-->
+			<td class="teamvalue">{{'%0.0f' % team.teamvalue}}</td>
 			<td class="gamesplayed">{{team.gamesplayed}}</td>
 			<td class="win-tie-loss">{{team.win}}-{{team.tie}}-{{team.loss}}</td>
 			<td class="performance">{{'%0.2f' % team.performance}}%</td>
-		<!--	<td class="win">{{team.win}}</td>
+			<td class="win">{{team.win}}</td>
 			<td class="tie">{{team.tie}}</td>
-			<td class="loss">{{team.loss}}</td>-->
+			<td class="loss">{{team.loss}}</td>
+			<td class="touchdown" title="{{team.td_for}} - {{team.td_against}}">{{ team.td_for }}</td>
+			<td class="casualty" title="{{team.cas_for}}-{{team.cas_against}}">{{team.cas_for}} </td>
 			<td class="touchdown" title="{{team.td_for}} - {{team.td_against}}">{%if team.td > 0 %}+{% endif %}{{team.td}}</td>
 			<td class="casualty" title="{{team.cas_for}}-{{team.cas_against}}">{%if team.cas > 0 %}+{% endif %}{{team.cas}} </td>
 			<td class="points">{{team.points}}</td>

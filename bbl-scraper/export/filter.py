@@ -2,7 +2,7 @@ def coach_anchor(input):
     #return input
     if not input:
         return "None"
-    return "<a href='/coach/{}.html'>{}</a>".format(input.replace(' ','-'), input)
+    return "<a href='coach/{}.html'>{}</a>".format(input.replace(' ','-'), input)
 
 def team_value(input):
     if not input:
@@ -22,10 +22,10 @@ def race_short(input):
     return input
 
 def race_link(input):
-    return "/race/{}.html".format(input.replace(' ', '-'))
+    return "race/{}.html".format(input.replace(' ', '-'))
 
 def team_link(input):
-    return "/team/{}.html".format(input.replace(' ', '-'))
+    return "team/{}.html".format(input.replace(' ', '-'))
 
 
 def load_filter(environment):

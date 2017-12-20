@@ -27,7 +27,7 @@
 			{% if team.link %}
 			<td class="race"><a href="{{team.link}}">{{team.title}}</a></td>
 			{% else %}
-			<td class="race"><a href="/race/{{team.title.replace(' ', '-')}}.html">{{team.title}}</a></td>
+			<td class="race"><a href="race/{{team.title.replace(' ', '-')}}.html">{{team.title}}</a></td>
 			{% endif %}
 			<td class="gamesplayed">{{team.data.total.gamesplayed}}</td>
 			<td class="narrow-data win-tie-loss">{{team.data.total.win}}-{{team.data.total.tie}}-{{team.data.total.loss}}</td>
