@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from bs4 import BeautifulSoup
+import logging
 from unicodedata import normalize
 import datetime
 import dateutil.parser as parser
@@ -10,6 +11,9 @@ from os import listdir
 import os.path
 
 from match import parse
+
+LOG = logging.getLogger(__package__)
+
 
 def parse_match(filename):
     if(filename.startswith("match")):
@@ -90,11 +94,15 @@ def from_file(filename):
         return soup
 
 def main():
-        #import parse
-        import pprint
-        pp = pprint.PrettyPrinter(indent=4)
+    log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
+    logging.basicConfig(level=logging.DEBUG, format=log_format)
+    LOG.info("Parsing teamlist for coaches")
 
-        pp.pprint(process_match("input/html/match/", "match-{}.html".format(sys.argv[1])))
+    #import parse
+    import pprint
+    pp = pprint.PrettyPrinter(indent=4)
+
+    pp.pprint(process_match("input/html/match/", "match-{}.html".format(sys.argv[1])))
 
 if __name__ == "__main__":
     main()
