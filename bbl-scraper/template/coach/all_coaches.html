@@ -37,7 +37,7 @@
 		{% for coach in coaches %}
 		<tr class="team {{ loop.cycle('pure-table-odd','pure-table-even') }}">
 			<td class="number">{{loop.index }}</td>
-			<td class="name"><a href="/coach/{{coach.coachlink}}.html">{{coach.name}}</a></td>
+			<td class="name"><a href="coach/{{coach.coachlink}}.html">{{coach.name}}</a></td>
 			<td class="gamesplayed">{{coach.gamesplayed}}</td>
 			<!--td class="frequency">{{coach.game_frequency}}</td-->
 			<td class="win-tie-loss">{{coach.win}}-{{coach.tie}}-{{coach.loss}}</td>
