@@ -124,7 +124,7 @@ def all_coaches(data):
 
     with open("output/coaches.html", "w") as fp:
         fp.write(export.get_template("coach/all_coaches2.html").render(
-            display_rating=True, coaches=coaches, title="All AnBBL coaches through all time"))
+            display_rating=True, coaches=coaches, title="All coaches through all time"))
 
 
 def doExport():
