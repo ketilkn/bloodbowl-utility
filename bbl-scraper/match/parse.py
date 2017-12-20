@@ -28,10 +28,14 @@ def convert_to_isodate(text):
 
 
 def parse_date(soup):
+    LOG.debug("Parsing date")
     found = soup.find_all("div")
+    LOG.debug("Found {} potential divs".format(len(found)))
     for div in found:
-        if div.has_attr("align") and div.text.startswith("Result added"):
+        if "Result added" in div.text:
+            LOG.debug("Found Result added")
             return convert_to_isodate(div.text.strip()[13:])
+    LOG.debug("Did not find date location.")
     return None
 
 
@@ -172,9 +176,10 @@ def parse_match(matchid, soup):
         elif us < them:
             return "L"
         return "T"
-
+    LOG.debug("Parse match {}".format(matchid))
     game_date = parse_date(soup)
     if not game_date:
+        LOG.warning("No game_date in file")
         return None
     td_home = find_score(soup)["home"]
     td_away = find_score(soup)["away"]
@@ -209,19 +214,27 @@ def parse_matchdata(data):
     return matchdata
 
 
+def load_from_file(filename):
+    import match.load as loader
+    LOG.info("Parsing {}".format(filename))
+    match_id = filename[filename.find("match-") + 6:filename.rfind(".html")]
+    LOG.debug("match_id: {}".format(match_id))
+
+    match = parse_match(match_id, loader.from_file(filename))
+    return match
+
+
 def main():
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
-    import match.load as loader
     import pprint
     pp = pprint.PrettyPrinter(indent=2)
     if len(sys.argv) != 2:
         sys.exit("filename required")
     filename = sys.argv[1]
-    match_id = filename[filename.find("match-") + 6:filename.rfind(".html")]
 
-    match = parse_match(match_id, loader.from_file(filename))
+    match = load_from_file(filename)
     pp.pprint(match)
 
 
