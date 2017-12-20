@@ -12,15 +12,15 @@ LOG = logging.getLogger(__package__)
 def create_coach(nick, uid):
     coach = {'nick': nick,
              'email': nick,
-             'naf': "no naf",
+             'naf': "",
              'role': "coach",
-             'phone': "no phone",
+             'phone': "",
              'location': "Old World",
              'login': parse.NEVER_LOGGED_IN,
              'loggedin': True,
              'uid': str(uid)}
 
-    if(coach["login"] != parse.NEVER_LOGGED_IN):
+    if coach["login"] != parse.NEVER_LOGGED_IN:
         coach["loggedin"] = True
 
     return coach
