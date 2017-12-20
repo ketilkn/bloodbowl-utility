@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 from bs4 import BeautifulSoup
 import logging
-from unicodedata import normalize
-import datetime
-import dateutil.parser as parser
-import re
-# import team
+import json
 import sys
 from os import listdir
 import os.path
@@ -86,8 +82,7 @@ def create_cache(directory="input", filename="input/json/match-all.json"):
 
 
 def from_json():
-    import json
-    import os.path
+    LOG.debug("From json input/json/match-all.json")
     if create_cache("input/", "input/json/match-all.json"):
         print("Creating cache")
         return create_json_cache("input/html/match/")
