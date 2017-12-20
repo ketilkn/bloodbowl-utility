@@ -7,8 +7,8 @@ from urllib.error import HTTPError
 from time import sleep
 from bs4 import BeautifulSoup
 
-BASE_URL = "http://reginaflatland.bloodbowlleague.com/default.asp?p=m&m={}"
-DATA_URL = "http://reginaflatland.bloodbowlleague.com/matchdata.asp?m={}"
+BASE_URL = "http://www.anarchy.bloodbowlleague.com/default.asp?p=m&m={}"
+DATA_URL = "http://www.anarchy.bloodbowlleague.com/matchdata.asp?m={}"
 
 def parse_index():
     result = set()
