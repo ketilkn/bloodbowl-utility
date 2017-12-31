@@ -59,7 +59,21 @@ def download_matches(from_match, to_match):
 
 def force_download():
     return "--force" in sys.argv
-  
+
+
+def recent_matches(force=force_download()):
+    """Download recent matches from host. If force is True existing matches will be downloaded again"""
+    print("#Fetch recent games")
+    games = new_games()
+    print(" {} recent game{} {}".format(len(games), "s" if len(games)!=1 else "",  games))
+    for g in games:
+        if not is_match_downloaded(g) or force:
+            print("#Downloading game {}".format(g))
+            download_match(g)
+        else:
+            print("#Game {} already downloaded use --force to reload".format(g))
+
+
 def main():
     print(sys.argv)
     if len(sys.argv) == 2 and sys.argv[1].isnumeric():
@@ -69,15 +83,8 @@ def main():
         to_match = int(sys.argv[2]) + 1
         download_matches(from_match, to_match)
     else:
-        print("#Fetch recent games")
-        games = new_games()
-        print(" {} recent game{} {}".format(len(games), "s" if len(games)!=1 else "",  games))
-        for g in games:
-            if not is_match_downloaded(g) or force_download():
-                print("#Downloading game {}".format(g))
-                download_match(g)
-            else:
-                print("#Game {} already downloaded use --force to reload".format(g))
+        recent_matches()
+
 
 if __name__ == "__main__":
     main()
