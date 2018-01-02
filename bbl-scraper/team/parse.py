@@ -108,8 +108,8 @@ def dict_teams():
 
 def list_teams(basepath = BASEPATH):
     filepath = basepath + "html/team/teams-8.html"
-    LOG.info("list teams from %s %s", basepath, filepath)
-    html = open("{}{}".format(basepath, filepath), "r").read()
+    LOG.info("list teams from %s ", filepath)
+    html = open(filepath, "r").read()
     soup = BeautifulSoup(normalize("NFC", html), "html.parser")
 
     teams = parse_rows(find_rows(soup))

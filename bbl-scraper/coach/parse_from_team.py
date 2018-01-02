@@ -4,7 +4,7 @@ import sys
 import os.path
 import logging
 
-from . import parse
+from .coach import parse
 import team.parse
 from importer.bloodbowlleague.defaults import BASEPATH
 
@@ -67,7 +67,8 @@ def main():
     logging.basicConfig(level=logging.DEBUG, format=log_format)
     LOG.info("Parsing teamlist for coaches")
 
-    coaches = list_coaches()
+    path = sys.argv[1] if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]) else BASEPATH
+    coaches = list_coaches(path)
 
     if "--no-print" not in sys.argv:
         pprint(coaches, indent=2)
