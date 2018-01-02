@@ -5,6 +5,7 @@ import json
 import logging
 from coach import parse
 import coach.parse_from_team
+from importer.bloodbowlleague.defaults import BASEPATH
 
 LOG = logging.getLogger(__package__)
 
@@ -22,13 +23,13 @@ def dict_coaches_by_uid():
     return dict_coaches("uid")
 
 
-def load_from_json(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+def load_from_json(basepath = BASEPATH):
     LOG.debug("Loading %sjson/coaches.json", basepath)
     data = open(basepath + "json/coaches.json", "rb").read()
     return json.loads(data.decode())
 
 
-def save_to_json(coaches, basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+def save_to_json(coaches, basepath = BASEPATH):
     LOG.debug("Saving %s/json/coaches.json", basepath)
     data = json.dumps(coaches)
     json_file = open(basepath+"json/coaches.json", "wb")
@@ -36,7 +37,7 @@ def save_to_json(coaches, basepath = "input/bloodbowlleague/anarchy.bloodbowllea
     json_file.close()
 
 
-def load_from_parser(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+def load_from_parser(basepath = BASEPATH):
     LOG.debug("Loading from parser")
     if parse.data_exists(basepath):
         LOG.debug("Found data for parse")
@@ -47,7 +48,7 @@ def load_from_parser(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.c
     LOG.error("Found no usable coach data")
 
 
-def list_coaches(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+def list_coaches(basepath = BASEPATH):
     if not os.path.isfile(basepath + "json/coaches.json") or (
             os.path.isfile(basepath + "html/coach/coaches-8.html") and os.stat(basepath + "json/coaches.json").st_mtime < os.stat(
             basepath + "html/coach/coaches-8.html").st_mtime):
@@ -69,13 +70,13 @@ def parse_options():
     LOG.debug("Options: %s ", sys.argv)
     if len(sys.argv) < 2:
         LOG.debug("Less than 2 options")
-        return ("input/bloodbowlleague/anarchy.bloodbowlleague.com/", None)
+        return BASEPATH, None
     if os.path.isdir(sys.argv[1]):
         LOG.debug("Argument 1 is a directory")
-        return (sys.argv[1], sys.argv[2:] if len(sys.argv) > 2 else None)
+        return sys.argv[1], sys.argv[2:] if len(sys.argv) > 2 else None
     LOG.debug("Argument 1 is not a directory")
 
-    return ("input/bloodbowlleague/anarchy.bloodbowlleague.com/", sys.argv[1:])
+    return BASEPATH, sys.argv[1:]
 
     #= sys.argv[1] if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]) else "input/bloodbowlleague/anarchy.bloodbowlleague.com/"
     #search_options = sys.argv[1:] if not os.path.isdir(sys.argv[1]) else sys.argv[2:]

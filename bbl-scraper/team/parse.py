@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from unicodedata import normalize
 import re
 import logging
+from importer.bloodbowlleague.defaults import BASEPATH
 
 LOG = logging.getLogger(__package__)
 
@@ -105,7 +106,7 @@ def dict_teams():
 
 
 
-def list_teams(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+def list_teams(basepath = BASEPATH):
     filepath = basepath + "html/team/teams-8.html"
     LOG.info("list teams from %s %s", basepath, filepath)
     html = open("{}{}".format(basepath, filepath), "r").read()
@@ -122,7 +123,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG, format=log_format)
     LOG.info("Parsing teamlist")
 
-    teams = list_teams(sys.argv[1] if len(sys.argv) > 1 else "input/bloodbowlleague/anarchy.bloodbowlleague.com/")
+    teams = list_teams(sys.argv[1] if len(sys.argv) > 1 else BASEPATH)
 
     if "--no-print" not in sys.argv:
         pprint.PrettyPrinter().pprint(teams)

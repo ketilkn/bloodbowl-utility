@@ -6,8 +6,11 @@ import logging
 
 from . import parse
 import team.parse
+from importer.bloodbowlleague.defaults import BASEPATH
 
 LOG = logging.getLogger(__package__)
+
+
 
 def create_coach(nick, uid):
     coach = {'nick': nick,
@@ -47,9 +50,9 @@ def data_exists():
     return os.path.isfile("input/html/team/teams-8.html")
 
 
-def list_coaches():
+def list_coaches(basepath = BASEPATH):
     LOG.debug("Retrieving coaches from team list")
-    teams = team.parse.list_teams()
+    teams = team.parse.list_teams(basepath)
     LOG.debug("Found {} teams".format(len(teams)))
     coaches = parse_teams(teams)
 

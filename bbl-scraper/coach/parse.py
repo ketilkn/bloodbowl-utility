@@ -5,6 +5,8 @@ import logging
 from bs4 import BeautifulSoup
 from unicodedata import normalize
 import datetime
+from importer.bloodbowlleague.defaults import BASEPATH
+
 #import dateutil.parser as parser
 NEVER_LOGGED_IN = "2000-01-01T00:00:01"
 
@@ -95,11 +97,11 @@ def parse_rows(rows_of_coaches):
         coaches.append(parse_coach_row(row))
     return coaches
 
-def data_exists(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+def data_exists(basepath = BASEPATH):
     return os.path.isfile(basepath + "html/coach/coaches-8.html")
 
 
-def load(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+def load(basepath = BASEPATH):
     filepath = basepath + "html/coach/coaches-8.html"
     LOG.debug("Opening file %s", filepath)
     LOG.debug("exists: %s", os.path.isfile(filepath))
@@ -112,7 +114,7 @@ def load(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
 def main():
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
-    basepath = sys.argv[1] if len(sys.argv) > 1 else "input/bloodbowlleague/anarchy.bloodbowlleague.com/"
+    basepath = sys.argv[1] if len(sys.argv) > 1 else BASEPATH
     coaches = load(basepath)
     for coach in coaches:
         print(coach)
