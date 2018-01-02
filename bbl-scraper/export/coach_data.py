@@ -15,6 +15,11 @@ import dateutil.parser
 from datetime import date
 from stats.collate import collate
 import datetime
+from importer.bbleague.defaults import BASEPATH
+
+import logging
+
+LOG = logging.getLogger(__package__)
 
 
 def all_teams_for_coach(data, coach, coach_teams, coach_games):
@@ -138,7 +143,12 @@ def doExport():
     print("Export year by coach")
     all_coaches_by_year(collated_data)
 
+
 def main():
+    log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
+    logging.basicConfig(level=logging.DEBUG, format=log_format)
+
     doExport()
+
 if __name__ == "__main__":
     main()
