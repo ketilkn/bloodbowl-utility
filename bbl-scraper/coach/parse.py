@@ -98,7 +98,10 @@ def parse_rows(rows_of_coaches):
     return coaches
 
 def data_exists(basepath = BASEPATH):
-    return os.path.isfile(basepath + "html/coach/coaches-8.html")
+    file_path = basepath + "html/coach/coaches-8.html"
+    exists = os.path.isfile(file_path)
+    LOG.debug("%s that %s isfile", exists, file_path)
+    return exists
 
 
 def load(basepath = BASEPATH):

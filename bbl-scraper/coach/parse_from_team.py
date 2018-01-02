@@ -46,8 +46,11 @@ def parse_teams(teams):
     return [create_coach(coach, index+10000) for index, coach in enumerate(coaches)]
 
 
-def data_exists():
-    return os.path.isfile("input/html/team/teams-8.html")
+def data_exists(basepath = BASEPATH):
+    file_path = basepath + "html/team/teams-8.html"
+    exists = os.path.isfile(file_path)
+    LOG.debug("%s that %s isfile", exists, file_path)
+    return exists
 
 
 def list_coaches(basepath = BASEPATH):
