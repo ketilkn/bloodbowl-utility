@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import sys
 import os
 import json
 import logging
@@ -21,38 +22,39 @@ def dict_coaches_by_uid():
     return dict_coaches("uid")
 
 
-def load_from_json():
-    LOG.debug("Loading input/json/coaches.json")
-    data = open("input/json/coaches.json", "rb").read()
+def load_from_json(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+    LOG.debug("Loading %sjson/coaches.json", basepath)
+    data = open(basepath + "json/coaches.json", "rb").read()
     return json.loads(data.decode())
 
 
-def save_to_json(coaches):
+def save_to_json(coaches, basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+    LOG.debug("Saving %s/json/coaches.json", basepath)
     data = json.dumps(coaches)
-    json_file = open("input/json/coaches.json", "wb")
+    json_file = open(basepath+"json/coaches.json", "wb")
     json_file.write(data.encode())
     json_file.close()
 
 
-def load_from_parser():
+def load_from_parser(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
     LOG.debug("Loading from parser")
-    if parse.data_exists():
+    if parse.data_exists(basepath):
         LOG.debug("Found data for parse")
-        return parse.load()
-    elif coach.parse_from_team.data_exists():
+        return parse.load(basepath)
+    elif coach.parse_from_team.data_exists(basepath):
         LOG.debug("Found data for parse_from_team")
-        return coach.parse_from_team.list_coaches()
-    LOG.error("Found no useable coach data")
+        return coach.parse_from_team.list_coaches(basepath)
+    LOG.error("Found no usable coach data")
 
 
-def list_coaches():
-    if not os.path.isfile("input/json/coaches.json") or (
-            os.path.isfile("input/html/coach/coaches-8.html") and os.stat("input/json/coaches.json").st_mtime < os.stat(
-            "input/html/coach/coaches-8.html").st_mtime):
-        coaches = load_from_parser()
-        save_to_json(coaches)
+def list_coaches(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+    if not os.path.isfile(basepath + "json/coaches.json") or (
+            os.path.isfile(basepath + "html/coach/coaches-8.html") and os.stat(basepath + "json/coaches.json").st_mtime < os.stat(
+            basepath + "html/coach/coaches-8.html").st_mtime):
+        coaches = load_from_parser(basepath)
+        save_to_json(coaches, basepath)
         return coaches
-    return load_from_json()
+    return load_from_json(basepath)
 
 
 def find_uid_for_nick(coaches, nick):
@@ -63,18 +65,34 @@ def find_uid_for_nick(coaches, nick):
     # return [key for key, value in coaches if value["nick"] == nick]
 
 
-def main():
-    import sys
+def parse_options():
+    LOG.debug("Options: %s ", sys.argv)
+    if len(sys.argv) < 2:
+        LOG.debug("Less than 2 options")
+        return ("input/bloodbowlleague/anarchy.bloodbowlleague.com/", None)
+    if os.path.isdir(sys.argv[1]):
+        LOG.debug("Argument 1 is a directory")
+        return (sys.argv[1], sys.argv[2:] if len(sys.argv) > 2 else None)
+    LOG.debug("Argument 1 is not a directory")
 
+    return ("input/bloodbowlleague/anarchy.bloodbowlleague.com/", sys.argv[1:])
+
+    #= sys.argv[1] if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]) else "input/bloodbowlleague/anarchy.bloodbowlleague.com/"
+    #search_options = sys.argv[1:] if not os.path.isdir(sys.argv[1]) else sys.argv[2:]
+
+
+def main():
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
-    LOG.info("Loading coaches ")
+    basepath, search_options = parse_options()
+    LOG.debug("%s :: %s", basepath, search_options)
 
-    coaches = dict_coaches_by_uid()
-    for coach in coaches.values():
-        if len(sys.argv) < 2 or coach["nick"] == " ".join(sys.argv[1:]) or coach["nick"] in sys.argv[1:] or coach[
-            "uid"] in sys.argv[1:]:
+    LOG.info("Loading coaches")
+
+    coaches = list_coaches(basepath)
+    for coach in coaches:
+        if not search_options or coach["nick"] == " ".join(search_options) or coach["nick"] in search_options or coach[ "uid"] in search_options:
             print(coach)
     print("Total: {}".format(len(coaches)))
 

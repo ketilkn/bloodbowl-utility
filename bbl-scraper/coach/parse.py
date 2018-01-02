@@ -1,13 +1,20 @@
 #!/usr/bin/env python
+import sys
 import os.path
+import logging
 from bs4 import BeautifulSoup
 from unicodedata import normalize
 import datetime
-import dateutil.parser as parser
+#import dateutil.parser as parser
 NEVER_LOGGED_IN = "2000-01-01T00:00:01"
+
+LOG = logging.getLogger(__package__)
+
+
 def find_rows(soup):
     coaches = []
     rows = soup.find_all("tr")
+    LOG.debug("Found %s rows", len(rows))
     for row in rows:
         if row.has_attr("height") and row['height'] == "27":
             coaches.append(row)
@@ -88,20 +95,27 @@ def parse_rows(rows_of_coaches):
         coaches.append(parse_coach_row(row))
     return coaches
 
-def data_exists():
-    return os.path.isfile("input/html/coach/coaches-8.html")
+def data_exists(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+    return os.path.isfile(basepath + "html/coach/coaches-8.html")
 
 
-def load():
-    html = open("input/html/coach/coaches-8.html", "r").read()
+def load(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+    filepath = basepath + "html/coach/coaches-8.html"
+    LOG.debug("Opening file %s", filepath)
+    LOG.debug("exists: %s", os.path.isfile(filepath))
+    html = open(filepath, "r").read()
     soup = BeautifulSoup(normalize("NFC", html), "lxml")
-    coaches = parse_rows( find_rows(soup))
+    print(soup)
+    coaches = parse_rows(find_rows(soup))
     return coaches
 
 def main():
-    coaches = list_coaches()
+    log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
+    logging.basicConfig(level=logging.DEBUG, format=log_format)
+    basepath = sys.argv[1] if len(sys.argv) > 1 else "input/bloodbowlleague/anarchy.bloodbowlleague.com/"
+    coaches = load(basepath)
     for coach in coaches:
-        print (coach)
+        print(coach)
     print("Total: {}".format(len(coaches)))
 
 if __name__ == "__main__":

@@ -104,9 +104,11 @@ def dict_teams():
     return result
 
 
-def list_teams():
-    LOG.info("list teams from input/html/team/teams-8.html")
-    html = open("input/html/team/teams-8.html", "r").read()
+
+def list_teams(basepath = "input/bloodbowlleague/anarchy.bloodbowlleague.com/"):
+    filepath = basepath + "html/team/teams-8.html"
+    LOG.info("list teams from %s %s", basepath, filepath)
+    html = open("{}{}".format(basepath, filepath), "r").read()
     soup = BeautifulSoup(normalize("NFC", html), "html.parser")
 
     teams = parse_rows(find_rows(soup))
@@ -120,8 +122,9 @@ def main():
     logging.basicConfig(level=logging.DEBUG, format=log_format)
     LOG.info("Parsing teamlist")
 
-    teams = list_teams()
-    if not "--no-print" in sys.argv:
+    teams = list_teams(sys.argv[1] if len(sys.argv) > 1 else "input/bloodbowlleague/anarchy.bloodbowlleague.com/")
+
+    if "--no-print" not in sys.argv:
         pprint.PrettyPrinter().pprint(teams)
 
 
