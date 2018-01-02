@@ -39,6 +39,7 @@ def save_to_json(coaches, basepath = BASEPATH):
 
 def load_from_parser(basepath = BASEPATH):
     LOG.debug("Loading from parser")
+    LOG.debug("Data root is %s", basepath)
     if parse.data_exists(basepath):
         LOG.debug("Found data for parse")
         return parse.load(basepath)
@@ -46,6 +47,7 @@ def load_from_parser(basepath = BASEPATH):
         LOG.debug("Found data for parse_from_team")
         return coach.parse_from_team.list_coaches(basepath)
     LOG.error("Found no usable coach data")
+    sys.exit(1)
 
 
 def list_coaches(basepath = BASEPATH):
