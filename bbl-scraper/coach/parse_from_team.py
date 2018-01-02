@@ -6,7 +6,7 @@ import logging
 
 from .coach import parse
 import team.parse
-from importer.bloodbowlleague.defaults import BASEPATH
+from importer.bbleague.defaults import BASEPATH
 
 LOG = logging.getLogger(__package__)
 

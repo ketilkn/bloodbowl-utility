@@ -5,7 +5,7 @@ import logging
 from bs4 import BeautifulSoup
 from unicodedata import normalize
 import datetime
-from importer.bloodbowlleague.defaults import BASEPATH
+from importer.bbleague.defaults import BASEPATH
 
 #import dateutil.parser as parser
 NEVER_LOGGED_IN = "2000-01-01T00:00:01"

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from unicodedata import normalize
 import re
 import logging
-from importer.bloodbowlleague.defaults import BASEPATH
+from importer.bbleague.defaults import BASEPATH
 
 LOG = logging.getLogger(__package__)
 
