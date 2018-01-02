@@ -7,6 +7,7 @@ import logging
 from bs4 import BeautifulSoup
 
 from player import parse
+from importer.bbleague.defaults import BASEPATH
 
 
 def from_file(filename):
@@ -46,7 +47,8 @@ def load_player(path, filename):
         return json.load(infile)
 
 
-def load(path="input/json/player"):
+def load(basepath=BASEPATH):
+    path = os.path.join(basepath, "json/player/")
     files = os.listdir(path)
     for playerfile in filter(lambda f: f.startswith("player-") and f.endswith(".json"), files):
         yield load_player(path, playerfile)
@@ -77,7 +79,7 @@ def main():
     logging.debug("debug")
     # setup_log(logging.DEBUG)
 
-    path = "input/html/player/"
+    path = os.path.join(BASEPATH, "html/player/")
     logging.info("Loading players from %s", path)
     import pprint
     if interesting:
@@ -89,7 +91,7 @@ def main():
             if do_print:
                 pp.pprint(player)
             if do_json:
-                write_json(player=player, path="input/json/player/")
+                write_json(player=player, path=os.path.join(BASEPATH, "json/player/"))
 
 
 if __name__ == "__main__":

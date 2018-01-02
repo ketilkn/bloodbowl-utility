@@ -7,22 +7,25 @@ import collections
 import logging
 import json
 import player.load
+from importer.bbleague.defaults import BASEPATH
 
 
-def load_fromjson(path="input/json/players.json"):
+def load_fromjson(basepath = BASEPATH, filepath="json/players.json"):
+    path = os.path.join(basepath, filepath)
     with open(path, "r") as infile:
         return json.load(infile)
 
 
 
-def dict_players():
-    if os.path.isfile("input/json/players.json"):
+def dict_players(basepath = BASEPATH, filepath="json/players.json"):
+    path = os.path.join(basepath, filepath)
+    if os.path.isfile(path):
         return load_fromjson()
     players = {}
     for p in list(player.load.load_all()):
         players[p["playerid"]] = p
     
-    with open("input/json/players.json", "w") as outfile:
+    with open(path, "w") as outfile:
         json.dump(players, outfile)
 
     return players

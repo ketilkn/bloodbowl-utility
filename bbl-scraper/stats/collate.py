@@ -6,21 +6,27 @@ from match import match
 from coach import coach
 from team import team
 from player import player
+from importer.bbleague.defaults import BASEPATH
 
-def load_from_json():
-    data = open("input/json/data.json", "rb").read()
+
+def load_from_json(basepath = BASEPATH):
+    path = os.path.join(basepath, "json/data.json")
+    data = open(path, "rb").read()
     return json.loads(data.decode())
 
 
-def save_to_json(collated_data):
+def save_to_json(collated_data, basepath = BASEPATH):
+    path = os.path.join(basepath, "json/data.json")
     data = json.dumps(collated_data)
-    json_file = open("input/json/data.json", "wb")
+    json_file = open(path, "wb")
     json_file.write(data.encode())
     json_file.close()
     
 
-def collate(reload=False):
-    if reload or not os.path.isfile("input/json/data.json") or os.stat("input/json/data.json").st_mtime < os.stat("input/html/coach/coaches-8.html").st_mtime:
+def collate(reload=False, basepath = BASEPATH):
+    path = os.path.join(basepath, "json/data.json")
+    coaches8 = os.path.join(basepath, "html/coach/coaches-8.html")
+    if reload or not os.path.isfile(path) or os.stat(path).st_mtime < os.stat(coaches8).st_mtime:
         collated_data = collate_data(coach.dict_coaches(), team.dict_teams(), match.dict_games(), player.dict_players())
         save_to_json(collated_data)
         return collated_data
