@@ -7,6 +7,7 @@ from os import listdir
 import os.path
 
 from match import parse
+from importer.bbleague.defaults import BASEPATH
 
 LOG = logging.getLogger(__package__)
 
@@ -18,7 +19,7 @@ def parse_match(filename):
 
 
 def process_matchdata(match, directory):
-    matchdatafile = os.path.join(directory, "matchdata-{}.html".format(match["matchid"]))
+    matchdatafile = os.path.join(directory, "html/match/", "matchdata-{}.html".format(match["matchid"]))
 
     # print(match["matchid"])
     with open(matchdatafile, "rb") as fp:
@@ -32,8 +33,9 @@ def process_matchdata(match, directory):
 
 
 def process_match(directory, filename):
+    LOG.debug("Process single match %s %s", directory, filename)
     matchid = filename[filename.find("match-") + 6:filename.rfind(".html")]
-    match = parse.parse_match(matchid, from_file("{}/{}".format(directory, filename)))
+    match = parse.parse_match(matchid, from_file("{}/html/match/{}".format(directory, filename)))
     # print(match)
     if match:
         if "date" in match and match["date"]:
@@ -57,43 +59,61 @@ def process_matches(directory, files):
 
 
 def from_files(directory):
-    return process_matches(directory, listdir(directory))
+    match_path = os.path.join(directory, "html/match/")
+    LOG.debug("listing files in %s", directory)
+    return process_matches(directory, listdir(match_path))
 
 
-def create_json_cache(directory):
+def create_json_cache(basepath = BASEPATH):
+    LOG.debug("Creating json cache using %s", basepath)
     import json
+    filepath = os.path.join(basepath, "json/match-all.json")
+    match_html_directory = os.path.join(basepath, "html/match/")
+    matches = from_files(basepath)
 
-    matches = from_files(directory)
-    with open("input/json/match-all.json", "w") as fp:
+    LOG.debug("Dump %s matches into %s", len(matches), filepath)
+    if len(matches) == 0:
+        LOG.warning("No matches found in %s", basepath)
+    with open(filepath, "w") as fp:
         json.dump(matches, fp, indent=4)
 
     return matches
 
 
-def create_cache(directory="input", filename="input/json/match-all.json"):
+def create_cache(directory=BASEPATH, filename="json/match-all.json"):
     import os.path
-    if not os.path.isfile(filename):
+    match_all_filename = os.path.join(directory, filename)
+    match_html_directory = os.path.join(directory, "html/match")
+
+    if not os.path.isfile(match_all_filename):
+        LOG.debug("%s does not exist", match_all_filename)
         return True
-    json_mtime = os.path.getmtime(filename)
-    for checkfile in listdir(directory):
+    LOG.debug("Found %s", match_all_filename)
+
+    json_mtime = os.path.getmtime(match_all_filename)
+    for checkfile in listdir(match_html_directory):
         LOG.debug("Checking %s", checkfile)
-        if checkfile.startswith("match") and os.path.getmtime(os.path.join(directory, checkfile)) > json_mtime:
+        if checkfile.startswith("match") and os.path.getmtime(os.path.join(directory,"html/match", checkfile)) > json_mtime:
             LOG.debug("Modified since %s", json_mtime)
             return True
     return False
 
 
-def from_json():
-    LOG.debug("From json input/json/match-all.json")
-    if create_cache("input/html/match/", "input/json/match-all.json"):
+def from_json(basepath = BASEPATH):
+    LOG.debug("From json %s json/match-all.json", basepath)
+    if create_cache(basepath, "json/match-all.json"):
         print("Creating cache")
-        return create_json_cache("input/html/match/")
-    with open("input/json/match-all.json") as fp:
+        return create_json_cache(basepath)
+    with open(basepath + "json/match-all.json") as fp:
         return json.load(fp)
 
 
 def from_file(filename):
+    LOG.debug("From file %s", filename)
+    if not os.path.isfile(filename):
+        LOG.warning("File %s does not exist", filename)
     matchid = filename[filename.find("match-") + 6:filename.rfind(".html")]
+    LOG.debug("match id: %s", matchid)
     html = open(filename, "rb").read()
     soup = BeautifulSoup(html, "lxml")
     return soup
@@ -108,7 +128,7 @@ def main():
     import pprint
     pp = pprint.PrettyPrinter(indent=4)
 
-    pp.pprint(process_match("input/html/match/", "match-{}.html".format(sys.argv[1])))
+    pp.pprint(process_match(sys.argv[1] if len(sys.argv) > 1 else BASEPATH, "match-{}.html".format(sys.argv[2])))
 
 
 if __name__ == "__main__":

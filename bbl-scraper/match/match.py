@@ -13,6 +13,7 @@ def open_match(filename):
 
 
 def collate_gamedata(games, id=None):
+    LOG.debug("collate %s gamedata looking for %s", len(games), id if id else "last entry")
     return [m for m in games if m["matchid"] in id] if id else [games[-1]]
 
 

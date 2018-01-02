@@ -5,6 +5,8 @@ import datetime
 import re
 from . import parse
 import collections
+from importer.bbleague.defaults import BASEPATH
+
 
 def dict_teams():
     teams = list_teams()
@@ -13,8 +15,8 @@ def dict_teams():
         result[team["id"]] = team
     return result
 
-def list_teams():
-        html = open("input/html/team/teams-8.html", "r").read()
+def list_teams(basepath = BASEPATH):
+        html = open(BASEPATH + "html/team/teams-8.html", "r").read()
         soup = BeautifulSoup(normalize("NFC", html), "html.parser")
 
         teams = parse.parse_rows( parse.find_rows(soup))
