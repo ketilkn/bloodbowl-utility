@@ -179,7 +179,7 @@ def parse_match(matchid, soup):
     LOG.debug("Parse match {}".format(matchid))
     game_date = parse_date(soup)
     if not game_date:
-        LOG.warning("No game_date in file")
+        LOG.warning("No game_date in file with match id: %s", matchid)
         return None
     td_home = find_score(soup)["home"]
     td_away = find_score(soup)["away"]
