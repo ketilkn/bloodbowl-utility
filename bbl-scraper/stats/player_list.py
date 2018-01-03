@@ -31,6 +31,7 @@ def all_players(data, include_journeymen=False):
 
 
 def main():
+    import player.display
     from pprint import pprint
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
@@ -39,10 +40,8 @@ def main():
     players = all_players(data)
     LOG.debug("Player count is %s", len(players))
 
-    for p in players[0:1]:
-        pprint(p, indent=4)
-
-
+    for idx, p in enumerate(players[0:75]):
+        print("{:>4}".format(idx + 1), player.display.plformat(p))
 
 
 if __name__ == "__main__":
