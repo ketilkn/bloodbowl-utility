@@ -104,12 +104,12 @@ def collate_data(coaches, teams, games, players):
     data = {"coach": coaches,
             "team": teams,
             "game": games,
-	    "players": players}
+	    "player": players}
 
     return {"game": collate_match(data),
             "coach": collate_coach(data),
             "team": collate_team(data),
-	    "players": collate_players(players),
+	    "player": collate_players(players),
             "_coachid": coach.dict_coaches_by_uid() 
             }
 
@@ -129,13 +129,16 @@ def main():
         for g in data["game"].values():
             if g["matchid"] in display:
                 yield g
+        for p in data["player"].values():
+            if "p"+p["playerid"] in display:
+                yield p
 
     force_reload = True if "--force" in sys.argv else False
     search_terms = list(filter(lambda x: not x.startswith("--"), sys.argv[1:]))
 
     data = collate(force_reload)
 
-    for found in search(data, search_terms if len(search_terms) > 0 else ["Kyrre", "tea2", "1061"]):
+    for found in search(data, search_terms if len(search_terms) > 0 else ["Kyrre", "tea2", "1061", "p2804"]):
         pretty(found)
 
     print("Data count: {}".format([[key, type(data[key]), len(data[key])] for key in data.keys()]))
