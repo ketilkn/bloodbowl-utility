@@ -9,6 +9,8 @@ import json
 import player.load
 from importer.bbleague.defaults import BASEPATH
 
+LOG = logging.getLogger(__package__)
+
 
 def load_fromjson(basepath = BASEPATH, filepath="json/players.json"):
     path = os.path.join(basepath, filepath)
