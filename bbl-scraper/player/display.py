@@ -3,20 +3,25 @@ import sys
 import player.player
 from .load import load_all
 
-def plprint(p):
-    print("{:>4} {:>32} {:>18} t:{:<4} c:{:>2} p:{:>3} i:{:>2} m:{:>2} g:{:>2} *:{:>3} {} {}".format(
-        p["playerid"], 
+
+def plformat(p):
+    return "{:>4} {:>32} {:>18} t:{:<4} c:{:>2} p:{:>3} i:{:>2} m:{:>2} g:{:>2} *:{:>3} {} {}".format(
+        p["playerid"],
         p["playername"],
-        p["position"], 
-        p["team"] if p["team"] else "0000", 
-        p["spp"]["casualty"], 
-        p["spp"]["completion"], 
-        p["spp"]["interception"], 
-        p["spp"]["mvp"], 
-        p["spp"]["td"], 
+        p["position"][:18],
+        p["team"] if p["team"] else "0000",
+        p["spp"]["casualty"],
+        p["spp"]["completion"],
+        p["spp"]["interception"],
+        p["spp"]["mvp"],
+        p["spp"]["td"],
         p["spp"]["total"],
         ",".join(p["upgrade"]["normal"]+p["upgrade"]["extra"]+p["status"]["injury"]),
-        p["status"]["active"]["reason"]))
+        p["status"]["active"]["reason"])
+
+
+def plprint(p, end='\n'):
+    print(plformat(p) , end=end)
 
 def psa(players):
     for p in players:
