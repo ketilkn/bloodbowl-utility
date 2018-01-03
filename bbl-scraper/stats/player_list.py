@@ -14,6 +14,35 @@ def order_by_spp(players):
                   reverse=True)
 
 
+def filter_invalid(players):
+    """Filter players used to record team stats"""
+    return filter(lambda p: p["position"].strip() != "-", players)
+
+
+def filter_nospp(players):
+    """Filter players with no star player points"""
+    return filter(lambda p: p["spp"]["total"].strip() != "" and int(p["spp"]["total"]) > 0, players)
+
+
+def flatten_player(p):
+    return {"playerid": p["playerid"],
+            "playername": p["playername"],
+            "team": p["team"],
+            "teamname": p["teamname"],
+            "MA": 6,
+            "ST": 3,
+            "AG": 3,
+            "AV": 8,
+            "skills": ",".join(p["upgrade"]["normal"] + p["upgrade"]["extra"]),
+            "injuries": p["status"]["injury"],
+            "int": p["spp"]["interception"],
+            "cmp": p["spp"]["completion"],
+            "td": p["spp"]["td"],
+            "cas": p["spp"]["casualty"],
+            "mvp": p["spp"]["mvp"],
+            "spp": p["spp"]["total"]}
+
+
 def all_players(data, include_journeymen=False):
     """Convert players in collated data to list"""
     LOG.debug("Player count is %s", len(data["player"]) if "player" in data else "No 'player' in data")
@@ -23,6 +52,8 @@ def all_players(data, include_journeymen=False):
         LOG.warning("Zero players in data")
 
     players = order_by_spp(data["player"].values())
+    players = filter_invalid(players)
+    players = filter_nospp(players)
 
     if not include_journeymen:
         LOG.debug("Filter journeymen")
@@ -32,7 +63,6 @@ def all_players(data, include_journeymen=False):
 
 def main():
     import player.display
-    from pprint import pprint
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
@@ -40,8 +70,9 @@ def main():
     players = all_players(data)
     LOG.debug("Player count is %s", len(players))
 
-    for idx, p in enumerate(players[0:75]):
+    for idx, p in enumerate(players):
         print("{:>4}".format(idx + 1), player.display.plformat(p))
+        flatten_player(p)
 
 
 if __name__ == "__main__":
