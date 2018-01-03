@@ -64,6 +64,7 @@ def add_coach_nick(data):
         match["home"]["coach"] = lookup[match["home"]["coachid"]]
     return data["game"]
 
+
 def fix_missing_coaches(data):
     def fix_coach(home_or_away, gam, coaches, teams):
         if gam[home_or_away]["coachid"] in ["0", None]:
@@ -76,6 +77,12 @@ def fix_missing_coaches(data):
         fix_coach("away", g, data["coach"], data["team"])
         
     return data["game"]
+
+
+def hide_invalid_players(players):
+    for p in players.values():
+    	p["invalid"] = p["position"].strip() in ["-", "Skaven Bookie", "Undead High Liche Priest", "Human Referee"]
+    return players
 
 def collate_coach(data):
     for coach in data["coach"].values():
@@ -97,7 +104,10 @@ def collate_match(data):
     games2 = add_team_race(data)
     return games2
 
-def collate_players(players):
+def collate_players(data):
+    players =  data["player"]
+    players = hide_invalid_players(players)
+
     return players
 
 def collate_data(coaches, teams, games, players):
@@ -109,7 +119,7 @@ def collate_data(coaches, teams, games, players):
     return {"game": collate_match(data),
             "coach": collate_coach(data),
             "team": collate_team(data),
-	    "player": collate_players(players),
+	    "player": collate_players(data),
             "_coachid": coach.dict_coaches_by_uid() 
             }
 

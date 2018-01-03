@@ -7,6 +7,13 @@ from importer.bbleague.defaults import BASEPATH
 LOG = logging.getLogger(__package__)
 
 
+def order_by_position(players):
+    """order list of players by player.spp.total"""
+    return sorted(players,
+                  key=lambda p: p["position"],
+                  reverse=False)
+
+
 def order_by_spp(players):
     """order list of players by player.spp.total"""
     return sorted(players,
@@ -16,7 +23,8 @@ def order_by_spp(players):
 
 def filter_invalid(players):
     """Filter players used to record team stats"""
-    return filter(lambda p: p["position"].strip() != "-", players)
+    return filter(lambda p: p["team"] and 
+           ("invalid" not in p or not p["invalid"]), players)
 
 
 def filter_nospp(players):
@@ -58,9 +66,11 @@ def all_players(data, include_journeymen=False):
     if "player" in data and len(data["player"]) == 0:
         LOG.warning("Zero players in data")
 
-    players = order_by_spp(data["player"].values())
+    players = data["player"].values()
     players = filter_invalid(players)
     players = filter_nospp(players)
+    players = order_by_spp(players)
+    players = order_by_position(players)
 
     if not include_journeymen:
         LOG.debug("Filter journeymen")
