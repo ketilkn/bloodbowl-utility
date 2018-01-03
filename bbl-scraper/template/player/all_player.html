@@ -28,17 +28,17 @@
 			<td class="name sort-ascending">{{player.playername}}</td>
 			<td class="position sort-ascending">{{player.position}}</td>
 			<td class="team sort-ascending"><a href="{{player.team | team_link}}">{{player.teamname}}</a></td>
-			<td class="ma sort-ascending">{{player.ma}}</td>
-			<td class="st sort-ascending">{{player.st}}</td>
-			<td class="ag sort-ascending">{{player.ag}}</td>
-			<td class="av sort-ascending">{{player.av}}</td>
+			<td class="ma sort-ascending" title="movement">{{player.ma}}</td>
+			<td class="st sort-ascending" title="strength">{{player.st}}</td>
+			<td class="ag sort-ascending" title="agility">{{player.ag}}</td>
+			<td class="av sort-ascending" title="armour">{{player.av}}</td>
 			<td class="skills sort-ascending">{{player.skills}}</td>
-			<td class="int">{{player.int}}</td>
-			<td class="cmp">{{player.cmp}}</td>
-			<td class="td">{{player.td}}</td>
-			<td class="cas">{{player.cas}}</td>
-			<td class="cas">{{player.mvp}}</td>
-			<td class="cas">{{player.spp}}</td>
+			<td class="int" title="interceptions">{{player.int}}</td>
+			<td class="cmp" title="completions">{{player.cmp}}</td>
+			<td class="td" title="touchdowns">{{player.td}}</td>
+			<td class="cas" title="casualties">{{player.cas}}</td>
+			<td class="mvp" title="MVPs">{{player.mvp}}</td>
+			<td class="spp" title="Total SPP">{{player.spp}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
