@@ -24,6 +24,12 @@ def filter_nospp(players):
     return filter(lambda p: p["spp"]["total"].strip() != "" and int(p["spp"]["total"]) > 0, players)
 
 
+def flatten_players(players):
+    """Flatten list of players"""
+    for p in players:
+        yield flatten_player(p)
+
+
 def flatten_player(p):
     return {"playerid": p["playerid"],
             "playername": p["playername"],
@@ -73,6 +79,7 @@ def main():
     for idx, p in enumerate(players):
         print("{:>4}".format(idx + 1), player.display.plformat(p))
         flatten_player(p)
+    list(flatten_players(players))
 
 
 if __name__ == "__main__":
