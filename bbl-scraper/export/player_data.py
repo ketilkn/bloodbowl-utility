@@ -12,6 +12,8 @@ def all_player(data=None):
     players = stats.player_list.flatten_players(stats.player_list.all_players(data))
     return export.get_template("player/all_player.html").render(
         players = list(players),
+        hide_position = False, 
+        hide_team = False, 
         title="All players",
         subtitle="sorted by spp")
 
