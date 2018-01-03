@@ -29,7 +29,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
     LOG.info("Exporting players")
-    with open("output/races.html", "w") as all_players_file:
+    with open("output/players.html", "w") as all_players_file:
         all_players_file.write(all_player(collated_data))
 
 
