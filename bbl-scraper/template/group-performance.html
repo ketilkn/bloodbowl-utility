@@ -16,6 +16,7 @@
 			<td class="casualty" title="casualties">Cas</td>
 			<td class="casualty_for wide-data" title="casualties for">+</td>
 			<td class="casualty_against wide-data" title="casualties against">-</td>
+			<td class="elo">elo</td>
 			<td class="points">P</td>
 		</tr>
 	</thead>
@@ -41,6 +42,7 @@
 			<td class="casualty" title="{{team.data.total.cas_for}}-{{team.data.total.cas_against}}">{%if team.data.total.cas > 0 %}+{% endif %}{{team.data.total.cas}} </td>
 			<td class="casualty wide-data">{{team.data.total.cas_for}}</td>
 			<td class="casualty wide-data">{{team.data.total.cas_against}}</td>
+			<td class="elo">{{team.data.elo}}</td>
 			<td class="points">{{team.data.total.points}}</td>
 		</tr>
 		{% endfor %}

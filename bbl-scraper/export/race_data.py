@@ -5,7 +5,7 @@ from stats.team_list import list_all_teams_by_points, list_all_games_by_race
 from stats.match_list import list_all_matches, list_all_games_by_year
 from stats.team_list import format_for_total, format_for_average
 from stats import match_list
-import datetime
+import stats.elo
 import export.filter
 from . import export
 LOG = logging.getLogger(__package__)
@@ -24,9 +24,17 @@ def add_title(races):
 
 def all_games_by_race(data=None):
     LOG.debug("all_games_by_race")
+
+    elo_rating = stats.elo.rate_all(data, lambda v: v["team"]["race"])
+    rated_race = list(add_title(list_all_games_by_race(data, no_mirror=True)))
+    for r in rated_race:
+        race_name = r["title"][0:r["title"].find("(")].strip()
+        r["data"]["elo"] = "{:.2f}".format(150+elo_rating[race_name]["games"][-1]["rating"])
+
     return export.get_template("race/races.html").render(
-        teams = filter(lambda x: x["data"]["gamesplayed"] > 25, add_title(list_all_games_by_race(data, no_mirror=True))),
-        teams_in_need = filter(lambda x: x["data"]["gamesplayed"] <= 25, add_title(list_all_games_by_race(data, no_mirror=True))),
+        show_elo = True,
+        teams = rated_race,
+        teams_in_need = rated_race,
         title="All races",
         subtitle="sorted by performance")
 
