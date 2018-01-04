@@ -1,4 +1,8 @@
 
+import logging
+
+
+LOG = logging.getLogger(__package__)
 
 START_RATING = 0
 
@@ -24,7 +28,7 @@ def elo(old, exp, score, k=10):
     return old + k * (score - exp)
 
 
-def rate_all(data):
+def rate_all(data, key=lambda v: v["coachid"]):
     def verify_coach(result, cid):
         if cid not in result:
             result[cid] = {"cid": cid, "rating": START_RATING, "games": []}
@@ -36,14 +40,13 @@ def rate_all(data):
         return result
 
     result = {} 
-    coaches = data["coach"]
     games = sorted(data["game"].values(), key=lambda x: "{0}-{1:04d}".format(x["date"], int(x["matchid"])))
     for g in games:
-        c1_id = g["home"]["coachid"]
+        c1_id = key(g["home"])
         verify_coach(result, c1_id)
         c1_gamecount = len(result[c1_id]["games"])
 
-        c2_id = g["away"]["coachid"]
+        c2_id = key(g["away"])
         verify_coach(result, c2_id)
         c2_gamecount = len(result[c2_id]["games"])
 
@@ -66,24 +69,26 @@ def rate_all(data):
         add_game(result, c2_id, g["matchid"], c2_rating, c2_newrating, c2_score)
 
     return result
-    
 
 
 def main():
     from sys import argv
     import pprint
     from stats import collate
+
+    log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
+    logging.basicConfig(level=logging.DEBUG, format=log_format)
+
     from coach.coach import dict_coaches_by_uid
 
     pp = pprint.PrettyPrinter(indent=2)
     data = collate.collate()
 
-    rates = rate_all(data)
+    rates = rate_all(data, lambda v: v["team"]["name"])
     print(pp.pprint(rates) ) 
-    pp.pprint(data["_coachid"])
+    #pp.pprint(data["coachid"])
     for r in sorted(rates.values(), key=lambda x: x["rating"]):
-        pp.pprint(r)
-        uid = r["cid"]
+        print("{:>25} {:.3g}".format(r["cid"], 150+r["games"][-1]["rating"]))
 
     if len(argv) > 1:
         pp.pprint(rates[int(argv[1])])
