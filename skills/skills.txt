@@ -168,6 +168,9 @@ counts as having a Strength equal to his opponent's when he makes the
 block. The strength of both players is calculated before any defensive or
 offensive assists are added but after all other modifiers. 
 
+Decay (Extraordinary)
+Staying on the pitch is difficult when your rotting body is barly held together. When this player suffers a Casualty result on the Injury table roll twice on the Casualty table and apply both results. The player may only ever miss  one future match as a result of their injuries, even if they suffer two results with this effect. A successful Regeneration roll will heal both results, but on a failed Regenration roll, both results still apply. A player with Decay can never benefit fom an Apothecary - they honestly wouldn't know where to start...
+
 Dirty Player (General)
 A player with this skill has trained long and hard to learn every dirty trick
 in the book. Add 1 to any Armour roll or Injury roll made by a player with
@@ -388,6 +391,9 @@ this skill, so Multiple Block can be used instead of Frenzy, but
 both skills cannot be used together. To have the option to throw
 the second block the player must still be on his feet after the first block. 
 
+Nellie's Curse (Extraordinary)
+A player suffering from Nellie's Curse will not take no for an answer. The player may never be retired. In addition the curse may come with different side effects, depending on the season.
+
 Nerves of Steel (Passing)
 The player ignores modifiers for enemy tackle zones when he
 attempts to pass, catch or intercept. 
@@ -408,6 +414,9 @@ have the Decay, Regeneration or Stunty skills. The new Rotter can be
 added to the Nurgle team for free during step 5 of Updating Your Team
 Roster (see page 29) if the team has an open Roster slot. This new
 Rotter still counts at full value towards the total value of the Nurgle team. 
+
+Monstrous Mouth (Extraodrinary)
+A player with monstrous mouth is allowed to re-reroll the D6 if they fail a Catch roll. It also allows the player to re-roll the D6 if they drop a hand-off or fail to make an interception. In addition, the strip ball skill skill will not work against a player with Monstrous mouth.
 
 Pass (Passing)
 A player with the Pass skill is allowed to re-roll the D6 if he throws
