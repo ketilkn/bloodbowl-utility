@@ -31,6 +31,13 @@ def filter_nospp(players):
     """Filter players with no star player points"""
     return filter(lambda p: p["spp"]["total"].strip() != "" and int(p["spp"]["total"]) > 0, players)
 
+def filter_team(players, team):
+    """Filter players by teams"""
+    teams = team
+    if type(team) is not list:
+        teams = list(team)
+
+    return filter(lambda p: p["team"] in teams, players) 
 
 def flatten_players(players):
     """Flatten list of players"""
@@ -79,18 +86,32 @@ def all_players(data, include_journeymen=False):
 
 
 def main():
+    import argparse
     import player.display
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
+
+    argparser=argparse.ArgumentParser()
+    argparser.add_argument("--player", help="Filter players by player id", nargs="*")
+    argparser.add_argument("--team", help="Filter players by team", nargs="*")
+    argparser.add_argument("--pid", help="Show pid only", action="store_true")
+
+    arguments=argparser.parse_args()
 
     data = stats.collate.collate(False, BASEPATH)
     players = all_players(data)
     LOG.debug("Player count is %s", len(players))
 
+    if arguments.team:
+        players = filter_team(players, arguments.team)
+
     for idx, p in enumerate(players):
-        print("{:>4}".format(idx + 1), player.display.plformat(p))
-        flatten_player(p)
-    list(flatten_players(players))
+        if arguments.pid:
+            print(p["playerid"])
+        else:
+            print("{:>4}".format(idx + 1), player.display.plformat(p))
+            flatten_player(p)
+
 
 
 if __name__ == "__main__":
