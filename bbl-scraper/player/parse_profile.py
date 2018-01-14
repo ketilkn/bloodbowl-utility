@@ -86,7 +86,10 @@ def parse_playername(soup):
 
 
 def parse_position(soup):
-    return "player position not implemented"
+    for el in soup.select("td a"):
+        if el.has_attr("href") and "default.asp?p=pt&typID=" in el["href"]:
+            return el.text
+    return "unknown"
 
 
 def parse_spp(soup):
@@ -105,7 +108,8 @@ def parse_team(player, soup):
     team = soup.select_one("a[style=font-size:11px]")
     LOG.debug("team   el %s", "{}".format(team))
 
-    player["name"] = parse_playername(soup)
+    player["playername"] = parse_playername(soup)
+    player["position"] = parse_position(soup)
     team_id = team["href"].split("=")[-1] if team and team.has_attr("href") else None
     team_name = team.text if team else ""
 
