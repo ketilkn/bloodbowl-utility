@@ -75,7 +75,6 @@ def all_players(data, include_journeymen=False):
 
     players = data["player"].values()
     players = filter_invalid(players)
-    players = filter_nospp(players)
     players = order_by_spp(players)
     players = order_by_position(players)
 
@@ -89,17 +88,19 @@ def main():
     import argparse
     import player.display
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
-    logging.basicConfig(level=logging.DEBUG, format=log_format)
+    logging.basicConfig(level=logging.WARNING, format=log_format)
 
     argparser=argparse.ArgumentParser()
     argparser.add_argument("--player", help="Filter players by player id", nargs="*")
     argparser.add_argument("--team", help="Filter players by team", nargs="*")
     argparser.add_argument("--pid", help="Show pid only", action="store_true")
+    argparser.add_argument("--journeymen", help="Include journeymen", action="store_true")
+    argparser.add_argument("--inactive", help="Include inactive players", action="store_true")
 
     arguments=argparser.parse_args()
 
     data = stats.collate.collate(False, BASEPATH)
-    players = all_players(data)
+    players = all_players(data, include_journeymen=arguments.journeymen)
     LOG.debug("Player count is %s", len(players))
 
     if arguments.team:
