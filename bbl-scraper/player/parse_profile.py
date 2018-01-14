@@ -117,14 +117,24 @@ def column_with_heading(table, heading):
     return False
 
 
-def parse_ability(soup, ability, playerid):
+def parse_abilities(soup, ability, playerid):
     table = soup.select_one("table[width='300']")
     if not table:
-        LOG.warning("Ability table not found for player %s", playerid)
+        LOG.debug("Ability table not found for player %s", playerid)
         return "0"
 
     column = column_with_heading(table, ability)
-    return column.text if "text" in column else "0"
+    return [s.strip() for s in column.find_all(text=True) if s.strip()!=","] if column else []
+
+
+def parse_ability(soup, ability, playerid):
+    table = soup.select_one("table[width='300']")
+    if not table:
+        LOG.debug("Ability table not found for player %s", playerid)
+        return "0"
+
+    column = column_with_heading(table, ability)
+    return column.text if column else "-1"
 
 
 def parse_team(player, soup):
@@ -143,6 +153,7 @@ def parse_team(player, soup):
     player["ST"] = int(parse_ability(soup, "ST", player["playerid"]))
     player["AG"] = int(parse_ability(soup, "AG", player["playerid"]))
     player["AV"] = int(parse_ability(soup, "AV", player["playerid"]))
+    player["skills"] = parse_abilities(soup, "Skills", player["playerid"])
 
 
     number = soup.select_one('td[style="max-height:20px;font-size:10px"]')
