@@ -7,10 +7,17 @@ from importer.bbleague.defaults import BASEPATH
 LOG = logging.getLogger(__package__)
 
 
+def order_by_team(players):
+    """order list of players by player.team"""
+    return sorted(players,
+                  key=lambda p: p["teamname"])
+
+
 def order_by_playername(players):
     """order list of players by player.name"""
     return sorted(players,
                   key=lambda p: p["playername"])
+
 
 def order_by_position(players):
     """order list of players by player.position"""
@@ -24,6 +31,7 @@ def order_by_spp(players):
     return sorted(players,
                   key=lambda p: int(p["spp"]["total"]) if p["spp"]["total"] else 0,
                   reverse=True)
+
 
 def order_by(players, order):
     ordering = order
@@ -42,6 +50,8 @@ def order_by(players, order):
             ordered = order_by_position(ordered)
         elif o == "name" or o == "playername":
             ordered = order_by_playername(ordered)
+        elif o == "team":
+            ordered = order_by_team(ordered)
         else:
             LOG.warning("No such ordering %s", o)
     return ordered
