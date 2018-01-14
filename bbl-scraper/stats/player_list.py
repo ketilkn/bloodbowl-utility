@@ -160,7 +160,6 @@ def main():
         else:
             print("{:>4}".format(idx + 1), player.display.plformat(p))
             flatten_player(p)
-    print(arguments.team)
 
 
 if __name__ == "__main__":
