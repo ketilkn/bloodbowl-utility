@@ -54,6 +54,11 @@ def filter_invalid(players):
            ("invalid" not in p or not p["invalid"]), players)
 
 
+def filter_position(players, position):
+    """Filter players by position"""
+    return filter(lambda p: p["position"] == position, players)
+
+
 def filter_nospp(players):
     """Filter players with no star player points"""
     return filter(lambda p: p["spp"]["total"].strip() != "" and int(p["spp"]["total"]) > 0, players)
@@ -123,8 +128,8 @@ def main():
     argparser.add_argument("--pid", help="Show pid only", action="store_true")
     argparser.add_argument("--journeymen", help="Include journeymen", action="store_true")
     argparser.add_argument("--inactive", help="Include inactive players", action="store_true")
+    argparser.add_argument("--position", help="Filter by position", nargs="*")
     argparser.add_argument("--sort", help="Sort players", nargs="*")
-
 
     arguments=argparser.parse_args()
 
@@ -134,6 +139,8 @@ def main():
 
     if arguments.team:
         players = filter_team(players, arguments.team)
+    if arguments.position:
+        players = filter_position(players, " ".join(arguments.position))
     if arguments.sort:
         players = order_by(players, arguments.sort)
 
