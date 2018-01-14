@@ -20,6 +20,26 @@ def order_by_spp(players):
                   key=lambda p: int(p["spp"]["total"]) if p["spp"]["total"] else 0,
                   reverse=True)
 
+def order_by(players, order):
+    ordering = order
+    if type(order) is not list:
+        ordering=list(order)
+    ordered = players
+    if type(players) is not list:
+        ordered=list(players)
+
+    LOG.debug("Ordering %s players by %s", len(ordered), order)
+    for o in ordering:
+        LOG.debug("Order by %s", o)
+        if o == "spp":
+            ordered = order_by_spp(ordered)
+        elif o == "position":
+            ordered = order_by_position(ordered)
+        else:
+            LOG.warning("No such ordering %s", o)
+    return ordered
+        
+
 
 def filter_invalid(players):
     """Filter players used to record team stats"""
@@ -96,6 +116,8 @@ def main():
     argparser.add_argument("--pid", help="Show pid only", action="store_true")
     argparser.add_argument("--journeymen", help="Include journeymen", action="store_true")
     argparser.add_argument("--inactive", help="Include inactive players", action="store_true")
+    argparser.add_argument("--sort", help="Sort players", nargs="*")
+
 
     arguments=argparser.parse_args()
 
@@ -105,6 +127,8 @@ def main():
 
     if arguments.team:
         players = filter_team(players, arguments.team)
+    if arguments.sort:
+        players = order_by(players, arguments.sort)
 
     for idx, p in enumerate(players):
         if arguments.pid:
@@ -112,7 +136,7 @@ def main():
         else:
             print("{:>4}".format(idx + 1), player.display.plformat(p))
             flatten_player(p)
-
+    print(arguments.team)
 
 
 if __name__ == "__main__":
