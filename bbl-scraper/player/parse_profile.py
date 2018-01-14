@@ -82,7 +82,7 @@ def parse_games(player, soup):
 
 
 def parse_playername(soup):
-    return "player name not implemented"
+    return soup.select_one("h1").text
 
 
 def parse_position(soup):
@@ -105,6 +105,7 @@ def parse_team(player, soup):
     team = soup.select_one("a[style=font-size:11px]")
     LOG.debug("team   el %s", "{}".format(team))
 
+    player["name"] = parse_playername(soup)
     team_id = team["href"].split("=")[-1] if team and team.has_attr("href") else None
     team_name = team.text if team else ""
 
