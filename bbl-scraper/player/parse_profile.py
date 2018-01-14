@@ -149,10 +149,10 @@ def parse_team(player, soup):
     team_id = team["href"].split("=")[-1] if team and team.has_attr("href") else None
     team_name = team.text if team else ""
 
-    player["MA"] = int(parse_ability(soup, "MA", player["playerid"]))
-    player["ST"] = int(parse_ability(soup, "ST", player["playerid"]))
-    player["AG"] = int(parse_ability(soup, "AG", player["playerid"]))
-    player["AV"] = int(parse_ability(soup, "AV", player["playerid"]))
+    player["ma"] = int(parse_ability(soup, "MA", player["playerid"]))
+    player["st"] = int(parse_ability(soup, "ST", player["playerid"]))
+    player["ag"] = int(parse_ability(soup, "AG", player["playerid"]))
+    player["av"] = int(parse_ability(soup, "AV", player["playerid"]))
     player["skills"] = parse_abilities(soup, "Skills", player["playerid"])
 
 
