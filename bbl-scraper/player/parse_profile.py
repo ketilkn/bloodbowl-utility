@@ -101,6 +101,31 @@ def parse_profile(player, soup):
     player["profile"] = profile.text.replace('\xa0', ' ') if profile and "----empty----" not in profile.text else ""
     return player
 
+def column_with_heading(table, heading):
+    LOG.debug("Looking for column with heading %s", heading)
+    found = False
+    rows = table.find_all("tr")
+    LOG.debug("Table has %s rows", len(rows))
+    headings = rows[0]
+    LOG.debug(headings)
+    values = rows[1]
+    LOG.debug(values)
+    for idx, h in enumerate(headings.find_all("td")):
+        LOG.debug(h)
+        if h.text == heading:
+            return values.find_all("td")[idx]
+    return False
+
+
+def parse_ability(soup, ability, playerid):
+    table = soup.select_one("table[width='300']")
+    if not table:
+        LOG.warning("Ability table not found for player %s", playerid)
+        return "0"
+
+    column = column_with_heading(table, ability)
+    return column.text if "text" in column else "0"
+
 
 def parse_team(player, soup):
     LOG.debug("parse player with id %s", player["playerid"])
@@ -110,8 +135,15 @@ def parse_team(player, soup):
 
     player["playername"] = parse_playername(soup)
     player["position"] = parse_position(soup)
+
     team_id = team["href"].split("=")[-1] if team and team.has_attr("href") else None
     team_name = team.text if team else ""
+
+    player["MA"] = int(parse_ability(soup, "MA", player["playerid"]))
+    player["ST"] = int(parse_ability(soup, "ST", player["playerid"]))
+    player["AG"] = int(parse_ability(soup, "AG", player["playerid"]))
+    player["AV"] = int(parse_ability(soup, "AV", player["playerid"]))
+
 
     number = soup.select_one('td[style="max-height:20px;font-size:10px"]')
     LOG.debug("number el %s", "{}".format(number))
