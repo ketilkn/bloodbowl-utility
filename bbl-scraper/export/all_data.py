@@ -3,7 +3,7 @@
 Progess is written to stdout using print"""
 import datetime
 
-from export import game_data, coach_data, race_data, index, team_data
+from export import game_data, coach_data, race_data, index, team_data, player_data
 
 def export_all_data():
     """Export all data to HTML"""
@@ -39,6 +39,9 @@ def export_all_data():
     coach_data.all_coaches(collated_data)
     print("Exporting coaches by year")
     coach_data.all_coaches_by_year(collated_data)
+
+    print("Exporting players")
+    player_data.all_players(collated_data)
 
     print("Exporting index")
     index.index()

@@ -22,6 +22,11 @@ def export_race_by_performance(data = None):
     with open("output/races.html", "w") as matches:
         matches.write(stats.player_list.all_games_by_race(data))
 
+def all_players(collated_data):
+    LOG.info("Exporting players")
+    with open("output/players.html", "w") as all_players_file:
+        all_players_file.write(all_player(collated_data))
+
 
 def main():
     import stats.collate
@@ -30,10 +35,7 @@ def main():
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
-    LOG.info("Exporting players")
-    with open("output/players.html", "w") as all_players_file:
-        all_players_file.write(all_player(collated_data))
-
+    all_players(collated_data)
 
 
 if __name__ == "__main__":
