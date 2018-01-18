@@ -35,7 +35,7 @@ def login(url, username, password):
     sys.exit("Could not verify session")
 
 def new_session():
-    pass
+    return requests.session()
 
 def main():
     session=login("http://www.anarchy.bloodbowlleague.com/login.asp", sys.argv[1], sys.argv[2])
