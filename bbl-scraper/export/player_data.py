@@ -7,6 +7,20 @@ from importer.bbleague.defaults import BASEPATH
 LOG = logging.getLogger(__package__)
 
 
+def top_players(data=None):
+    LOG.debug("%s players in data", len(data["player"]) if "player" in data else "No")
+    players = stats.player_list.all_players(data)
+    top_by_touchdown = {"name": "TDs",
+                        "players": list(stats.player_list.flatten_players(stats.player_list.order_by_touchdowns(players)))[:5]}
+    top_by_casualties = {"name": "cas",
+                        "players": list(stats.player_list.flatten_players(stats.player_list.order_by_casualties(players)))[:5]}
+
+    return export.get_template("player/players.html").render(
+        top_by_touchdown = top_by_touchdown,
+        title="Player performance",
+        subtitle="sorted by spp")
+
+
 def all_player(data=None):
     LOG.debug("%s players in data", len(data["player"]) if "player" in data else "No")
     players = stats.player_list.flatten_players(stats.player_list.all_players(data))
@@ -23,9 +37,13 @@ def export_race_by_performance(data = None):
         matches.write(stats.player_list.all_games_by_race(data))
 
 def all_players(collated_data):
-    LOG.info("Exporting players")
+    LOG.info("Exporting top players index")
     with open("output/players.html", "w") as all_players_file:
+        all_players_file.write(top_players(collated_data))
+    LOG.info("Exporting all players")
+    with open("output/all_players.html", "w") as all_players_file:
         all_players_file.write(all_player(collated_data))
+
 
 
 def main():

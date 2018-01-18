@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% from 'player/player_toplist.html' import player_toplist %}
+
+<h2 class="content-subhead">Most touchdowns</h2>
+{{ player_toplist(top_by_touchdown) }}
+
+{% endblock %}

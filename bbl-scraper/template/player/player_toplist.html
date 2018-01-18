@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% block content %}
+{% macro player_toplist(toplist) %}
 <table class="pure-table">
 	<thead>
 		<tr>
@@ -11,7 +10,7 @@
        {% if not hide_team %}
 			<td class="player not-sortable">Team</td>
         {% endif %}
-			<td class="toplist achievement not-sortable">{{toplist.type}}</td>
+			<td class="toplist achievement not-sortable">{{toplist.name}}</td>
 		</tr>
 	</thead>
 	
@@ -26,10 +25,10 @@
        {% if not hide_team %}
 			<td class="player sort-ascending"><a href="{{player.team | team_link}}">{{player.teamname}}</a></td>
         {% endif %}
-			<td class="toplist achievement" title="">{{player.spp}}</td>
+			<td class="toplist achievement" title="">{{player.td}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
-{% endblock %}
+{% endmacro %}
 

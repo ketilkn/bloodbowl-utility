@@ -33,6 +33,13 @@ def order_by_spp(players):
                   reverse=True)
 
 
+def order_by_touchdowns(players):
+    """order list of players by player.spp.total"""
+    return sorted(players,
+                  key=lambda p: int(p["spp"]["td"]) if p["spp"]["td"] else 0,
+                  reverse=True)
+
+
 def order_by(players, order):
     ordering = order
     if type(order) is not list:
