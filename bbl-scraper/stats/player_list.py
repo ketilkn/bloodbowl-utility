@@ -33,6 +33,13 @@ def order_by_spp(players):
                   reverse=True)
 
 
+def order_by_interception(players):
+    """order list of players by player.spp.cmp"""
+    return sorted(players,
+                  key=lambda p: int(p["spp"]["interception"]) if p["spp"]["interception"] else 0,
+                  reverse=True)
+
+
 def order_by_completion(players):
     """order list of players by player.spp.cmp"""
     return sorted(players,
