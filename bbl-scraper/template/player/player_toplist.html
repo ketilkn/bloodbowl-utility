@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="pure-table">
+	<thead>
+		<tr>
+			<td class="rank number not-sortable">#</td>
+			<td class="name  not-sortable">Player</td>
+       {% if not hide_position %}
+			<td class="position not-sortable">Position</td>
+        {% endif %}
+       {% if not hide_team %}
+			<td class="player not-sortable">Team</td>
+        {% endif %}
+			<td class="toplist achievement not-sortable">{{toplist.type}}</td>
+		</tr>
+	</thead>
+	
+	<tbody>
+		{% for player in toplist.players %}
+		<tr class="player {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+			<td class="number">{{loop.index }}</td>
+			<td class="name sort-ascending">{{player.playername}}</td>
+       {% if not hide_position %}
+			<td class="position sort-ascending">{{player.position}}</td>
+        {% endif %}
+       {% if not hide_team %}
+			<td class="player sort-ascending"><a href="{{player.team | team_link}}">{{player.teamname}}</a></td>
+        {% endif %}
+			<td class="toplist achievement" title="">{{player.spp}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
+
