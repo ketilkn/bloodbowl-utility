@@ -3,10 +3,10 @@
 
 {% from 'player/player_toplist.html' import player_toplist %}
 
-<h2 class="content-subhead">Most touchdowns</h2>
-{{ player_toplist(top_by_touchdown) }}
+{% for toplist in toplists %}
+<h2 class="content-subhead">{{toplist.heading}}</h2>
+{{ player_toplist(toplist) }}
 
-<h2 class="content-subhead">Most casualties</h2>
-{{ player_toplist(top_by_casualties) }}
+{% endfor %}
 
 {% endblock %}
