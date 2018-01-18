@@ -33,8 +33,15 @@ def order_by_spp(players):
                   reverse=True)
 
 
+def order_by_casualties(players):
+    """order list of players by player.spp.cas"""
+    return sorted(players,
+                  key=lambda p: int(p["spp"]["casualty"]) if p["spp"]["casualty"] else 0,
+                  reverse=True)
+
+
 def order_by_touchdowns(players):
-    """order list of players by player.spp.total"""
+    """order list of players by player.spp.td"""
     return sorted(players,
                   key=lambda p: int(p["spp"]["td"]) if p["spp"]["td"] else 0,
                   reverse=True)

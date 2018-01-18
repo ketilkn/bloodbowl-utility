@@ -10,13 +10,15 @@ LOG = logging.getLogger(__package__)
 def top_players(data=None):
     LOG.debug("%s players in data", len(data["player"]) if "player" in data else "No")
     players = stats.player_list.all_players(data)
-    top_by_touchdown = {"name": "TDs",
+    top_by_touchdown = {"name": "TDs", "key": "td",
                         "players": list(stats.player_list.flatten_players(stats.player_list.order_by_touchdowns(players)))[:5]}
-    top_by_casualties = {"name": "cas",
+
+    top_by_casualties = {"name": "cas", "key": "cas",
                         "players": list(stats.player_list.flatten_players(stats.player_list.order_by_casualties(players)))[:5]}
 
     return export.get_template("player/players.html").render(
         top_by_touchdown = top_by_touchdown,
+        top_by_casualties = top_by_casualties,
         title="Player performance",
         subtitle="sorted by spp")
 
