@@ -54,12 +54,12 @@
 			<td class="win">{{team.win}}</td>
 			<td class="tie">{{team.tie}}</td>
 			<td class="loss">{{team.loss}}</td>
+			<td class="casualty wide-data" title="{{team.td_for}} - {{team.td_against}}">{%if team.td > 0 %}+{% endif %}{{team.td}}</td>
 			<td class="touchdown wide-data " title="{{team.td_for}} - {{team.td_against}}">{{ team.td_for }}</td>
 			<td class="touchdown for wide-data" title="{{team.td_for}} - {{team.td_against}}">{{ team.td_against }}</td>
+			<td class="casualty wide-data" title="{{team.cas_for}}-{{team.cas_against}}">{%if team.cas > 0 %}+{% endif %}{{team.cas}} </td>
 			<td class="touchdown against wide-data" title="{{team.cas_for}}-{{team.cas_against}}">{{team.cas_for}} </td>
 			<td class="casualty" title="{{team.cas_for}}-{{team.cas_against}}">{{team.cas_against}} </td>
-			<td class="casualty wide-data" title="{{team.td_for}} - {{team.td_against}}">{%if team.td > 0 %}+{% endif %}{{team.td}}</td>
-			<td class="casualty wide-data" title="{{team.cas_for}}-{{team.cas_against}}">{%if team.cas > 0 %}+{% endif %}{{team.cas}} </td>
 			<td class="points">{{team.points}}</td>
 		</tr>
 		{% endfor %}
