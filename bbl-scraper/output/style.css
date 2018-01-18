@@ -20,7 +20,7 @@ table td {
 }
 
 
-table tbody td.name, tbody td.race, tbody td .coach {
+table tbody td.name, tbody td.race, tbody td .coach,  table tbody td,skills, table tbody td.position, table tbody td.team{
 	text-align: left;
 }
 
@@ -90,6 +90,6 @@ p.clearer {
 td.wide-data {
   display: table-cell;
 } 
-td.narrow-data {
+td.narrow-data , .hidden-data {
   display: none;
 }
