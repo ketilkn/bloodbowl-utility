@@ -9,7 +9,7 @@
 			<td class="position sort-ascending">Position</td>
         {% endif %}
        {% if not hide_team %}
-			<td class="team sort-ascending">Team</td>
+			<td class="player sort-ascending">Team</td>
         {% endif %}
 			<td class="ma sort-ascending">ma</td>
 			<td class="st sort-ascending">st</td>
@@ -33,8 +33,8 @@
        {% if not hide_position %}
 			<td class="position sort-ascending">{{player.position}}</td>
         {% endif %}
-       {% if not hide_team %}
-			<td class="team sort-ascending"><a href="{{player.team | team_link}}">{{player.teamname}}</a></td>
+       {% if not hide_player %}
+			<td class="player sort-ascending"><a href="{{player.player | player_link}}">{{player.playername}}</a></td>
         {% endif %}
 			<td class="ma sort-ascending" title="movement">{{player.ma}}</td>
 			<td class="st sort-ascending" title="strength">{{player.st}}</td>
