@@ -47,6 +47,13 @@ def order_by_completion(players):
                   reverse=True)
 
 
+def order_by_mvp(players):
+    """order list of players by player.spp.mvp"""
+    return sorted(players,
+                  key=lambda p: int(p["spp"]["mvp"]) if p["spp"]["mvp"] else 0,
+                  reverse=True)
+
+
 def order_by_casualties(players):
     """order list of players by player.spp.cas"""
     return sorted(players,

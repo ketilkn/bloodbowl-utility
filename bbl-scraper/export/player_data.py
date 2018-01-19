@@ -20,10 +20,13 @@ def top_players(data=None):
     top_by_casualties = {"name": "cas", "key": "cas", "heading": "Top hitters",
                          "players": list(stats.player_list.flatten_players(stats.player_list.order_by_casualties(players)))[:5]}
 
+    top_by_mvp = {"name": "mvp", "key": "mvp", "heading": "Top MVPs",
+                  "players": list(stats.player_list.flatten_players(stats.player_list.order_by_mvp(players)))[:5]}
+
     top_by_interception = {"name": "int", "key": "int", "heading": "Top interceptors",
                            "players": list(stats.player_list.flatten_players(stats.player_list.order_by_interception(players)))[:5]}
 
-    toplists = [top_by_touchdown, top_by_completion, top_by_interception, top_by_casualties]
+    toplists = [top_by_casualties, top_by_touchdown, top_by_completion, top_by_interception, top_by_mvp]
 
     return export.get_template("player/players.html").render(
         toplists = toplists,
