@@ -3,9 +3,13 @@
 
 {% from 'player/player_toplist.html' import player_toplist %}
 
+<a href="all_players.html">All players</a>
+
 {% for toplist in toplists %}
+<div class="top-list">
 <h2 class="content-subhead">{{toplist.heading}}</h2>
 {{ player_toplist(toplist) }}
+</div>
 
 {% endfor %}
 

@@ -93,3 +93,13 @@ td.wide-data {
 td.narrow-data , .hidden-data {
   display: none;
 }
+
+
+div.top-list {
+	width: 500px;
+	float: left;
+} 
+
+div.top-list table, div.top-list h2 {
+	width: 480px;
+}

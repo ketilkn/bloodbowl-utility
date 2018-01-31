@@ -26,12 +26,15 @@ def top_players(data=None):
     top_by_interception = {"name": "int", "key": "int", "heading": "Top interceptors",
                            "players": list(stats.player_list.flatten_players(stats.player_list.order_by_interception(players)))[:5]}
 
-    toplists = [top_by_casualties, top_by_touchdown, top_by_completion, top_by_interception, top_by_mvp]
+    top_by_spp = {"name": "int", "key": "spp", "heading": "Top stars",
+                           "players": list(stats.player_list.flatten_players(stats.player_list.order_by_spp(players)))[:14]}
+
+    toplists = [top_by_spp, top_by_touchdown, top_by_mvp, top_by_completion, top_by_interception, top_by_casualties]
 
     return export.get_template("player/players.html").render(
         toplists = toplists,
-        title="Player performance",
-        subtitle="sorted by spp")
+        title="All time top players",
+        subtitle="")
 
 
 def all_player(data=None):
@@ -42,7 +45,7 @@ def all_player(data=None):
         hide_position = False, 
         hide_team = False, 
         title="All players",
-        subtitle="sorted by spp")
+        subtitle="sorted by position + spp")
 
 
 def export_race_by_performance(data = None):
