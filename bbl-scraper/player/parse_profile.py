@@ -63,6 +63,13 @@ def parse_mvp(achievements):
     LOG.debug("achievement el %s", achievements[4])
     return achievements[4].text
 
+def parse_value(soup):
+    spans = soup.find_all("span", style="font-size:10px")
+    for span in spans:
+        if " gp" in span.text:
+            return int(span.text.strip()[:-3].replace(",",""))
+    return ""
+
 
 def parse_games(player, soup):
     LOG.debug("-==< parse player with id %s >==-", player["playerid"])
@@ -145,6 +152,7 @@ def parse_team(player, soup):
 
     player["playername"] = parse_playername(soup)
     player["position"] = parse_position(soup)
+    player["value"] = parse_value(soup)
 
     team_id = team["href"].split("=")[-1] if team and team.has_attr("href") else None
     team_name = team.text if team else ""

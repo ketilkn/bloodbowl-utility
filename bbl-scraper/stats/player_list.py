@@ -59,7 +59,13 @@ def order_by_casualties(players):
     return sorted(players,
                   key=lambda p: int(p["spp"]["casualty"]) if p["spp"]["casualty"] else 0,
                   reverse=True)
+    
 
+def order_by_value(players):
+    """order list of players by value"""
+    return sorted(players,
+                  key=lambda p: int(p["value"]) + int(p["spp"]["total"]) if "value" in p and p["value"] else 0,
+                  reverse=True)
 
 def order_by_touchdowns(players):
     """order list of players by player.spp.td"""
@@ -139,7 +145,8 @@ def flatten_player(p):
             "td": p["spp"]["td"],
             "cas": p["spp"]["casualty"],
             "mvp": p["spp"]["mvp"],
-            "spp": p["spp"]["total"]}
+            "spp": p["spp"]["total"],
+            "value": p["value"]}
 
 
 def all_players(data, include_journeymen=False):
