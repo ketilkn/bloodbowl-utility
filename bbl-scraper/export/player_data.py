@@ -29,7 +29,10 @@ def top_players(data=None):
     top_by_spp = {"name": "int", "key": "spp", "heading": "Top stars",
                            "players": list(stats.player_list.flatten_players(stats.player_list.order_by_spp(players)))[:14]}
 
-    toplists = [top_by_spp, top_by_touchdown, top_by_mvp, top_by_completion, top_by_interception, top_by_casualties]
+    top_by_value = {"name": "gp", "key": "value", "heading": "Most expensive",
+                           "players": list(stats.player_list.flatten_players(stats.player_list.order_by_value(players)))[:5]}
+
+    toplists = [top_by_spp, top_by_value, top_by_touchdown, top_by_mvp, top_by_completion, top_by_interception, top_by_casualties]
 
     return export.get_template("player/players.html").render(
         toplists = toplists,
