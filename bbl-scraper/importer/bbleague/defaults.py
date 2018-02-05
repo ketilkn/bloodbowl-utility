@@ -3,7 +3,7 @@
 import logging
 
 LOG = logging.getLogger(__package__)
-BASEPATH = "input/bbleague/anarchy.bloodbowlleague.com/"
+BASEPATH = "input/anarchy.bloodbowlleague.com/"
 
 
 def main():
