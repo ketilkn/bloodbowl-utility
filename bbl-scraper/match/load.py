@@ -25,8 +25,8 @@ def process_matchdata(match, directory):
     with open(matchdatafile, "rb") as fp:
         linje = fp.read().decode("latin-1")
         matchdata = parse.parse_matchdata(linje)
-        match["away"]["coachid"] = matchdata["coach2"]
-        match["home"]["coachid"] = matchdata["coach1"]
+        match["away_coachid"] = matchdata["coach2"]
+        match["home_coachid"] = matchdata["coach1"]
 
         return match
     return match

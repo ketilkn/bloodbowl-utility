@@ -15,13 +15,13 @@ def collate_team(data):
         team["games"]=[]
 
     for match in data["game"].values():
-        if match["matchid"] in data["team"][match["home"]["team"]["teamid"]]["games"]:
-            print("Warning {} already exists in {}".format(match["matchid"], match["home"]["team"]))
-        data["team"][match["home"]["team"]["teamid"]]["games"].append(match["matchid"])
+        if match["matchid"] in data["team"][match["home_teamid"]]["games"]:
+            print("Warning {} already exists in {}".format(match["matchid"], match["home_team"]))
+        data["team"][match["home_teamid"]]["games"].append(match["matchid"])
 
-        if match["matchid"] in data["team"][match["away"]["team"]["teamid"]]["games"]:
+        if match["matchid"] in data["team"][match["away_teamid"]]["games"]:
             print("Warning {} already exists in {}".format(match["matchid"], match["away"]["team"]))
-        data["team"][match["away"]["team"]["teamid"]]["games"].append(match["matchid"])
+        data["team"][match["away_teamid"]]["games"].append(match["matchid"])
 
     return data["team"]
 

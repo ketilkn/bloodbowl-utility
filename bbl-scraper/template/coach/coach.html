@@ -165,12 +165,12 @@
 		{% for game in games %}
 		<tr class="game {{ loop.cycle('pure-table-odd','pure-table-even') }}">
 			<td class="date{% if game.date == previous_date %} repeated{% endif %}">{{game.date.split('T')[0]}}</td>
-			<td class="home coach-team team">{{game.us.team.name}}</td>
-			<td class="away opponent-team team">{{game.them.team.name}}</td>
-			<td class="result">{{game.us.result}}</td>
-			<td class="score">{{game.us.td}}-{{game.them.td}}</td>
-			<td class="casualties">{{game.us.casualties.total}}-{{game.them.casualties.total}}</td>
-			<td class="season{% if game.season == previous_season %} repeated{% endif %}">{{game.season.season}}</td>
+			<td class="home coach-team team">{{game.home_team}}</td>
+			<td class="away opponent-team team">{{game.away_team}}</td>
+			<td class="result">{{game.home_result}}</td>
+			<td class="score">{{game.home_td}}-{{game.away_td}}</td>
+			<td class="casualties">{{game.home_total}}-{{game.away_total}}</td>
+			<td class="season{% if game.season == previous_season %} repeated{% endif %}">{{game.tournament_name}}</td>
 		</tr>
 		{% set previous_date = game.date %} 
 		{% set previous_season = game.season %} 

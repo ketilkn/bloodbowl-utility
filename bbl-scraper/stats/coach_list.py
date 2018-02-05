@@ -43,25 +43,25 @@ def eventstreak(games, event, minimum=0):
 def coach_streaks(games):
     streaks = {}
 
-    streaks["sameteam"] = eventstreak(games, 
-            event = lambda x, y: y["us"]["team"]["teamid"] == x["us"]["team"]["teamid"], 
+    streaks["sameteam"] = eventstreak(games,
+            event = lambda x, y: y["home_teamid"] == x["home_teamid"],
             minimum=2)
     streaks["differentteam"] = eventstreak(games, 
-            event = lambda x, y : y["us"]["team"]["teamid"] != x["us"]["team"]["teamid"], 
+            event = lambda x, y : y["home_teamid"] != x["home_teamid"],
             minimum=2)
 
     streaks["sameopponent"] = eventstreak(games, 
-            event = lambda x, y: y["them"]["team"]["teamid"]== x["them"]["team"]["teamid"], 
+            event = lambda x, y: y["away_teamid"]== x["away_teamid"],
             minimum=2)
     streaks["differentopponent"] = eventstreak(games, 
-            event = lambda x, y : y["them"]["team"]["teamid"] != x["them"]["team"]["teamid"], 
+            event = lambda x, y : y["away_teamid"] != x["away_teamid"],
             minimum=2)
 
     streaks["sameopponentcoach"] = eventstreak(games, 
-            event = lambda x, y: x["them"]["coachid"]== y["them"]["coachid"], 
+            event = lambda x, y: x["away_coachid"]== y["away_coachid"],
             minimum=2)
     streaks["differentopponentcoach"] = eventstreak(games, 
-            event = lambda x, y : x["them"]["coachid"]!= y["them"]["coachid"], 
+            event = lambda x, y : x["away_coachid"]!= y["away_coachid"],
             minimum=2)
 
 
@@ -69,7 +69,7 @@ def coach_streaks(games):
 
 def list_all_games_by_coach2(data, the_coach):
     coach_id = data["coach"][the_coach]["uid"]
-    return [g for g in data["game"].values() if g["home"]["coachid"] == coach_id or g["away"]["coachid"] == coach_id]
+    return [g for g in data["game"].values() if g["home_coachid"] == coach_id or g["away_coachid"] == coach_id]
 
 def coach_data(coach, coach_games):
     coach["last_game"] = coach_games[0]["date"] if len(coach_games) > 0 else "Never"
@@ -131,7 +131,7 @@ def main():
     data = stats.collate.collate()
     games = list_all_games_by_coach2(data, "Tango")
     for g in games:
-        print("{} - {}".format(g["home"]["name"], g["away"]["name"]))
+        print("{} - {}".format(g["home_name"], g["away_name"]))
     #for coach in list_all_coaches():
         #print(coach)
 

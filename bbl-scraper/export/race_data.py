@@ -25,7 +25,7 @@ def add_title(races):
 def all_games_by_race(data=None):
     LOG.debug("all_games_by_race")
 
-    elo_rating = stats.elo.rate_all(data, lambda v: v["team"]["race"])
+    elo_rating = stats.elo.rate_all(data, lambda v, y: v[y+"_race"])
     rated_race = list(add_title(list_all_games_by_race(data, no_mirror=True)))
     for r in rated_race:
         race_name = r["title"][0:r["title"].find("(")].strip()
@@ -58,7 +58,7 @@ def teams_by_race(data):
         team_race = filter(lambda x: x["race"] == r, teams)
         
         race_games = match_list.we_are_race(data["game"].values(), r)
-        race_games = filter(lambda m: m["them"]["team"]["race"] != r, race_games)
+        race_games = filter(lambda m: m["away_race"] != r, race_games)
         performance_by_race = match_list.sum_game_by_group(race_games, match_list.group_games_by_race)
 
         with open("output/race/{}.html".format(r.replace(" ","-")), "w") as fp:

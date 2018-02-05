@@ -13,24 +13,24 @@ def game_streaks(games):
     streaks = {}
     streaks["gamestreak"] = playstreak(games)
     streaks["winstreak"] = eventstreak(games, 
-            event = lambda x: x["us"]["result"] == "W", minimum=2)
+            event = lambda x: x["home_result"] == "W", minimum=2)
     streaks["losstreak"] = eventstreak(games, 
-            event = lambda x: x["us"]["result"] == "L", minimum=2) 
+            event = lambda x: x["home_result"] == "L", minimum=2)
     streaks["tiestreak"] = eventstreak(games, 
-            event = lambda x: x["us"]["result"] == "T", minimum=2)
+            event = lambda x: x["home_result"] == "T", minimum=2)
     streaks["nolosstreak"] = eventstreak(games, 
-            event = lambda x: x["us"]["result"] == "T" or x["us"]["result"] == "W", 
+            event = lambda x: x["home_result"] == "T" or x["home_result"] == "W",
             minimum=streaks["winstreak"]+1) 
     streaks["killstreak"] = eventstreak(games, 
-            event = lambda x: x["us"]["casualties"]["dead"] > 0, minimum=1) 
+            event = lambda x: x["home_dead"] > 0, minimum=1)
     streaks["wonby2"] = eventstreak(games, 
-            event = lambda x: x["us"]["td"] - x["them"]["td"] > 1, minimum=3) 
+            event = lambda x: x["home_td"] - x["away_td"] > 1, minimum=3)
     streaks["lostby2"] = eventstreak(games, 
-            event = lambda x: x["us"]["td"] - x["them"]["td"] < -1, minimum=3) 
+            event = lambda x: x["home_td"] - x["away_td"] < -1, minimum=3)
     streaks["didnotscore"] = eventstreak(games, 
-            event = lambda x: x["us"]["td"] == 0, minimum=2) 
+            event = lambda x: x["home_td"] == 0, minimum=2)
     streaks["shutoutstreak"] = eventstreak(games, 
-            event = lambda x: x["them"]["td"] == 0, minimum=2) 
+            event = lambda x: x["away_td"] == 0, minimum=2)
 
     return streaks
 
@@ -89,13 +89,13 @@ def format_for_matchlist(match):
     return {"matchid": match["matchid"],
             "date": match["date"].split("T")[0],
             "repeated_date": False,
-            "home": match["home"]["team"]["name"],
-            "away": match["away"]["team"]["name"],
-            "td_home": match["home"]["td"],
-            "td_away": match["away"]["td"],
-            "cas_home": match["home"]["casualties"]["total"],
-            "cas_away": match["away"]["casualties"]["total"],
-            "season": match["season"]["season"]
+            "home": match["home_team"],
+            "away": match["away_team"],
+            "td_home": match["home_td"],
+            "td_away": match["away_td"],
+            "cas_home": match["home_total"],
+            "cas_away": match["away_total"],
+            "season": match["tournament_name"]
     }
 def games_for_year(games, year=None):
     if not year:
@@ -148,14 +148,14 @@ def games_by_weekday(games):
 def group_games_by_weekday(games):
     return group_games(lambda x: dateutil.parser.parse(x["date"]).isoweekday(), games)
 
-def group_games_by_coach(games, who="them"):
-    return group_games(lambda x: x[who]["coachid"], games)
+def group_games_by_coach(games, who="away"):
+    return group_games(lambda x: x[who+"_coachid"], games)
 
 def group_games_by_our_coach(games):
-    return group_games_by_coach(games, who="us")
+    return group_games_by_coach(games, who="home")
 
-def group_games_by_race(games, who="them"):
-    by_race = group_games(lambda x: x[who]["team"]["race"], games)
+def group_games_by_race(games, who="away"):
+    by_race = group_games(lambda x: x[who+"_race"], games)
     return by_race
 
 def group_games(group, games):
@@ -184,16 +184,16 @@ def sum_game(games):
     for g in games:
         if "us" not in g: continue
         total["gamesplayed"] = total["gamesplayed"] + 1
-        total["td_for"] = total["td_for"] + g["us"]["td"]
-        total["td_against"] = total["td_against"] + g["them"]["td"]
-        total["cas_for"] = total["cas_for"] + g["us"]["casualties"]["total"]
-        total["cas_against"] = total["cas_against"] + g["them"]["casualties"]["total"]
-        total["dead_for"] = total["dead_for"] + g["us"]["casualties"]["dead"]
-        total["dead_against"] = total["dead_against"] + g["them"]["casualties"]["dead"]
+        total["td_for"] = total["td_for"] + g["home_td"]
+        total["td_against"] = total["td_against"] + g["away_td"]
+        total["cas_for"] = total["cas_for"] + g["home_total"]
+        total["cas_against"] = total["cas_against"] + g["away_total"]
+        total["dead_for"] = total["dead_for"] + g["home_dead"]
+        total["dead_against"] = total["dead_against"] + g["away_dead"]
 
-        if g["us"]["result"] == "W": total["win"] = total["win"] + 1
-        if g["us"]["result"] == "T": total["tie"] = total["tie"] + 1
-        if g["us"]["result"] == "L": total["loss"] = total["loss"] + 1
+        if g["home_result"] == "W": total["win"] = total["win"] + 1
+        if g["home_result"] == "T": total["tie"] = total["tie"] + 1
+        if g["home_result"] == "L": total["loss"] = total["loss"] + 1
     
     total["points"] = total["win"]*5 + total["tie"]*3 + total["loss"]
     total["performance"] = 100 * ((total["win"]*2)+total["tie"])/(total["gamesplayed"]*2) if total["gamesplayed"] > 0 else 0
@@ -212,50 +212,51 @@ def sum_game(games):
 
     return {"total": total, "average": average}
 
+def switch_homeaway(g):
+    result = {}
+    for k, v in g.items():
+        if k.startswith("home_"):
+            result["away"+k[4:]] = v
+        elif k.startswith("away_"):
+            result["home"+k[4:]] = v
+        else:
+            result[k] = v
+    return result
 
+
+#TODO Fix we_are_team for flat
 def we_are_team(games, team):
     result = []
     for g in games:
-        if g["home"]["team"]["teamid"] == team["id"]:
-            g["us"] = g["home"]
-            g["them"] = g["away"]
+        if g["home_team"] == team["id"]:
             result.append(g)
-        elif g["away"]["team"]["teamid"] == team["id"]:
-            g["us"] = g["away"]
-            g["them"] = g["home"]
-            result.append(g)
+        elif g["away_teamid"] == team["id"]:
+            result.append(switch_homeaway(g))
 
     return result
 
 
-def we_are(games, what):
+def we_are(games, what, what_away):
     result = []
     for g in games:
-        if what(g["home"]):
-            g["us"] = g["home"]
-            g["them"] = g["away"]
+        if what(g):
             result.append(g)
-        elif what(g["away"]):
-            g["us"] = g["away"]
-            g["them"] = g["home"]
-            result.append(g)
+        elif what_away(g):
+            result.append(switch_homeaway(g))
     return result
 
+
 def we_are_race(games, race):
-    return we_are(games, lambda x: x["team"]["race"] == race)
+    return we_are(games, lambda x: x["home_race"] == race, lambda x: x["away_race"])
+
 
 def we_are_coach(games, coach):
     result = []
     for g in games:
-        if g["home"]["coachid"] == coach["uid"]:
-            g["us"] = g["home"]
-            g["them"] = g["away"]
+        if g["home_coachid"] == coach["uid"]:
             result.append(g)
-        elif g["away"]["coachid"] == coach["uid"]:
-            g["us"] = g["away"]
-            g["them"] = g["home"]
-            result.append(g)
-
+        elif g["away_coachid"] == coach["uid"]:
+            result.append(switch_homeaway(g))
     return result
 
 

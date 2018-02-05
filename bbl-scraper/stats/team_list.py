@@ -10,7 +10,7 @@ def team_data(the_team, team_matches):
     data_for_team = {}
     data_for_team["head_coach"] = the_team["coach"]
     data_for_team["co_coach"] = the_team["co-coach"]
-    data_for_team["retired_coach"] = set([match["us"]["coach"] for match in team_matches if match["us"]["coach"] not in [the_team["coach"], the_team["co-coach"]]])
+    data_for_team["retired_coach"] = set([match["home_coach"] for match in team_matches if match["home_coach"] not in [the_team["coach"], the_team["co-coach"]]])
 
     data_for_team["last_game"] = team_matches[0]["date"] if len(team_matches) > 0 else "Never"
     data_for_team["first_game"] = team_matches[-1]["date"] if len(team_matches) > 0 else None
@@ -20,16 +20,16 @@ def team_data(the_team, team_matches):
     return data_for_team
 
 def matchresult(match, team1, team2):
-    return {"teamid": match[team1]["team"]["teamid"], 
-            'td_for': match[team1]["td"],
-            'td_against': match[team2]["td"],
-            'cas_for': match[team1]["casualties"]["total"],
-            'cas_against': match[team2]["casualties"]["total"],
+    return {"teamid": match[team1+"_teamid"],
+            'td_for': match[team1+"_td"],
+            'td_against': match[team2+"_td"],
+            'cas_for': match[team1+"_total"],
+            'cas_against': match[team2+"_total"],
             'matchid': match["matchid"],
             'date': match["date"],
-            "result": match[team1]["result"],
-            "coach": match[team1]["coachid"],
-            "coach_against": match[team2]["coachid"]
+            "result": match[team1+"_result"],
+            "coach": match[team1+"_coachid"],
+            "coach_against": match[team2+"_coachid"]
             }
 
 def add_result(result, match):
@@ -189,10 +189,10 @@ def list_all_games_by_race(data, no_mirror=False):
     teams = data["team"]
     team_count = team_count_by_race(teams.values())
     for m in matches:
-        m["home"]["team"]["teamid"] = teams[m["home"]["team"]["teamid"]]["race"]
-        m["away"]["team"]["teamid"] = teams[m["away"]["team"]["teamid"]]["race"]
+        m["home_teamid"] = teams[m["home_teamid"]]["race"]
+        m["away_teamid"] = teams[m["away_teamid"]]["race"]
     
-    matches = rank( filter(lambda m: m["home"]["team"]["teamid"] != m["away"]["team"]["teamid"], matches) if no_mirror else matches)
+    matches = rank( filter(lambda m: m["home_teamid"] != m["away_teamid"], matches) if no_mirror else matches)
 
     for m in matches.values():
         m["team"] = {"coach": "-", "race": "{} ({})".format(m["teamid"], team_count[m["teamid"]]), "name": m["teamid"], "teamid": m["teamid"], "teamvalue": ""} 

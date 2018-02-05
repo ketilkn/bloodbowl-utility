@@ -28,7 +28,7 @@ def elo(old, exp, score, k=10):
     return old + k * (score - exp)
 
 
-def rate_all(data, key=lambda v: v["coachid"]):
+def rate_all(data, key=lambda v, y: v[y+"_coachid"]):
     def verify_coach(result, cid):
         if cid not in result:
             result[cid] = {"cid": cid, "rating": START_RATING, "games": []}
@@ -42,11 +42,11 @@ def rate_all(data, key=lambda v: v["coachid"]):
     result = {} 
     games = sorted(data["game"].values(), key=lambda x: "{0}-{1:04d}".format(x["date"], int(x["matchid"])))
     for g in games:
-        c1_id = key(g["home"])
+        c1_id = key(g, "home")
         verify_coach(result, c1_id)
         c1_gamecount = len(result[c1_id]["games"])
 
-        c2_id = key(g["away"])
+        c2_id = key(g, "away")
         verify_coach(result, c2_id)
         c2_gamecount = len(result[c2_id]["games"])
 
@@ -59,7 +59,7 @@ def rate_all(data, key=lambda v: v["coachid"]):
         c2_kfactor = 2 if c2_gamecount > 6 else 10
         c2_expected = expected(c2_rating, c1_rating) 
 
-        c1_score = 1 if g["home"]["result"] == "W" else 0.5 if g["home"]["result"] == "T" else 0 
+        c1_score = 1 if g["home_result"] == "W" else 0.5 if g["home_result"] == "T" else 0
         c2_score = 1 - c1_score
 
         c1_newrating = elo(c1_rating, c1_expected, c1_score, c1_kfactor) #if len(result) < 10 or c2_gamecount > 4 or (c1_gamecount < 5 and c2_gamecount < 5) else c1_rating 
@@ -84,7 +84,7 @@ def main():
     pp = pprint.PrettyPrinter(indent=2)
     data = collate.collate()
 
-    rates = rate_all(data, lambda v: v["team"]["name"])
+    rates = rate_all(data, lambda v, y: v[y+"_team"])
     print(pp.pprint(rates) ) 
     #pp.pprint(data["coachid"])
     for r in sorted(rates.values(), key=lambda x: x["rating"]):

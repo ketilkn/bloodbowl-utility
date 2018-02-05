@@ -17,9 +17,9 @@ def id_from_a(a):
     return "teamid not found {}".format(a.name)
 
 
-def parse_team(team):
-    team = {"name": team.text,
-            "teamid": id_from_a(team)}
+def parse_team(prefix, team):
+    team = {prefix+"team": team.text,
+            prefix+"teamid": id_from_a(team)}
     return team
 
 
@@ -85,6 +85,7 @@ def parse_injury_column(column):
 
     return parse_scoreboard(column)
 
+
 def parse_injury_row(soup, search):
     LOG.debug("Searching for {}".format(search))
     found = soup.select(search)
@@ -97,6 +98,7 @@ def parse_injury_row(soup, search):
         injuries.extend(parse_injury_column(row.select("td")[2]))
 
     return [injured for injured in injuries if injured]
+
 
 def parse_injuries(soup):
     LOG.debug("INJURIES")
@@ -135,22 +137,22 @@ def find_casualties(soup):
     home = bh["home"] + si["home"] + de["home"]
     away = bh["away"] + si["away"] + de["away"]
 
-    return {"home": {"total": home, "bh": bh["home"], "si": si["home"], "dead": de["home"]},
-            "away": {"total": away, "bh": bh["away"], "si": si["away"], "dead": de["away"]}}
+    return {"home_total": home, "home_bh": bh["home"], "home_si": si["home"], "home_dead": de["home"],
+            "away_total": away, "away_bh": bh["away"], "away_si": si["away"], "away_dead": de["away"]}
 
 
 def find_hometeam(soup):
     # print("[[[{}]]]".format(soup.find_all("b")[2].parent))
-    return parse_team(soup.find_all("b")[2])
+    return parse_team("home_", soup.find_all("b")[2])
 
 
 def find_awayteam(soup):
     el = soup.find_all("b")[6]
     if el.text == "overtime":
         if soup.find_all("b")[7].text == "shoot-out":
-            return parse_team(soup.find_all("b")[8])
-        return parse_team(soup.find_all("b")[7])
-    return parse_team(el)
+            return parse_team("away_", soup.find_all("b")[8])
+        return parse_team("away_", soup.find_all("b")[7])
+    return parse_team("away_", el)
 
 
 def parse_season(soup):
@@ -158,7 +160,7 @@ def parse_season(soup):
     season_name, round_name = season.text.split(",", 1)
     season_id = season.select_one("a")["href"].split("=")[-1] if season.select_one("a") else None
 
-    return {"id": season_id, "season": season_name.strip(), "round": round_name.strip()}
+    return {"tournament_id": season_id, "tournament_name": season_name.strip(), "round": round_name.strip()}
 
 
 def parse_notes(soup):
@@ -185,24 +187,20 @@ def parse_match(matchid, soup):
     td_away = find_score(soup)["away"]
     match = {"matchid": matchid,
              "date": game_date,
-             "season": parse_season(soup),
-             "approved": False,
-             "home": {
-                 "team": find_hometeam(soup),
-                 "td": find_score(soup)["home"],
-                 "result": calculate_result(td_home, td_away),
-                 "casualties": find_casualties(soup)["home"]
-             },
-             "away": {
-                 "team": find_awayteam(soup),
-                 "td": td_away,
-                 "result": calculate_result(td_away, td_home),
-                 "casualties": find_casualties(soup)["away"]
-             },
+             "approved": True,
+             "home_td": find_score(soup)["home"],
+             "home_result": calculate_result(td_home, td_away),
+             "away_td": td_away,
+             "away_result": calculate_result(td_away, td_home),
              "spp": parse_spp(soup),
              "injuries": parse_injuries(soup),
              "notes": parse_notes(soup)
              }
+
+    match.update(find_hometeam(soup))
+    match.update(find_awayteam(soup))
+    match.update(find_casualties(soup))
+    match.update(parse_season(soup))
     return match
 
 
