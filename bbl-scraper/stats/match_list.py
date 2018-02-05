@@ -212,6 +212,7 @@ def sum_game(games):
 
     return {"total": total, "average": average}
 
+
 def switch_homeaway(g):
     result = {}
     for k, v in g.items():
@@ -228,7 +229,7 @@ def switch_homeaway(g):
 def we_are_team(games, team):
     result = []
     for g in games:
-        if g["home_team"] == team["id"]:
+        if g["home_teamid"] == team["id"]:
             result.append(g)
         elif g["away_teamid"] == team["id"]:
             result.append(switch_homeaway(g))
