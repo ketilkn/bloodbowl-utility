@@ -149,6 +149,16 @@ def flatten_player(p):
             "value": p["value"]}
 
 
+def all_positions(data):
+    """Return all player positions in data"""
+    LOG.debug("Print all positions in data.player")
+    positions = set()
+    for p in data["player"].values():
+        positions.add(p["position"])
+
+    return positions
+
+
 def all_players(data, include_journeymen=False):
     """Convert players in collated data to list"""
     LOG.debug("Player count is %s", len(data["player"]) if "player" in data else "No 'player' in data")
@@ -202,6 +212,8 @@ def main():
         else:
             print("{:>4}".format(idx + 1), player.display.plformat(p))
             flatten_player(p)
+
+    print(all_positions(data))
 
 
 if __name__ == "__main__":

@@ -7,32 +7,45 @@ from importer.bbleague.defaults import BASEPATH
 LOG = logging.getLogger(__package__)
 
 
+def make_top_list(players, name, key, heading="Most experienced", order=stats.player_list.order_by_spp, limit=5):
+    return {"name": name,
+            "key": key,
+            "heading": heading,
+            "players": list(stats.player_list.flatten_players(order(players)))[:limit]}
+
+
+def players_by_position(data, position):
+    LOG.debug("%s players in data", len(data["player"]) if "player" in data else "No")
+
+    players = [p for p in stats.player_list.all_players(data) if p["position"] == position]
+    players = stats.player_list.flatten_players(players)
+
+    return export.get_template("player/player_position.html").render(
+        players = list(players),
+        hide_position = False,
+        hide_team = False,
+        title=position,
+        subtitle="")
+
+
 def top_players(data=None):
     LOG.debug("%s players in data", len(data["player"]) if "player" in data else "No")
     players = stats.player_list.all_players(data)
 
-    top_by_touchdown = {"name": "TDs", "key": "td", "heading": "Top scorers",
-                        "players": list(stats.player_list.flatten_players(stats.player_list.order_by_touchdowns(players)))[:5]}
+    top_by_touchdown = make_top_list(players, "TDs", "td", "Top scorers", stats.player_list.order_by_touchdowns)
+    top_by_completion = make_top_list(players, "passes", "cmp", "Top throwers", stats.player_list.order_by_completion)
+    top_by_casualties = make_top_list(players, "cas", "cas", "Top hitters", stats.player_list.order_by_casualties)
+    top_by_mvp = make_top_list(players, "mvp", "mvp", "Top MVPs", stats.player_list.order_by_mvp)
+    top_by_interception = make_top_list(players, "int", "int", "Top interceptors", stats.player_list.order_by_interception)
+    top_by_spp = make_top_list(players, "spp", "spp", "Top stars", stats.player_list.order_by_spp, limit=14)
+    top_by_value = make_top_list(players, "gp", "value", "Most expensive", stats.player_list.order_by_value)
 
-    top_by_completion = {"name": "passes", "key": "cmp", "heading": "Top throwers",
-                         "players": list(stats.player_list.flatten_players(stats.player_list.order_by_completion(players)))[:5]}
-
-    top_by_casualties = {"name": "cas", "key": "cas", "heading": "Top hitters",
-                         "players": list(stats.player_list.flatten_players(stats.player_list.order_by_casualties(players)))[:5]}
-
-    top_by_mvp = {"name": "mvp", "key": "mvp", "heading": "Top MVPs",
-                  "players": list(stats.player_list.flatten_players(stats.player_list.order_by_mvp(players)))[:5]}
-
-    top_by_interception = {"name": "int", "key": "int", "heading": "Top interceptors",
-                           "players": list(stats.player_list.flatten_players(stats.player_list.order_by_interception(players)))[:5]}
-
-    top_by_spp = {"name": "int", "key": "spp", "heading": "Top stars",
-                           "players": list(stats.player_list.flatten_players(stats.player_list.order_by_spp(players)))[:14]}
-
-    top_by_value = {"name": "gp", "key": "value", "heading": "Most expensive",
-                           "players": list(stats.player_list.flatten_players(stats.player_list.order_by_value(players)))[:5]}
-
-    toplists = [top_by_spp, top_by_value, top_by_touchdown, top_by_mvp, top_by_completion, top_by_interception, top_by_casualties]
+    toplists = [top_by_spp, top_by_value,
+                top_by_touchdown,
+                top_by_mvp,
+                top_by_completion,
+                top_by_interception,
+                top_by_casualties]
 
     return export.get_template("player/players.html").render(
         toplists = toplists,
@@ -62,6 +75,16 @@ def all_players(collated_data):
     LOG.info("Exporting all players")
     with open("output/all_players.html", "w") as all_players_file:
         all_players_file.write(all_player(collated_data))
+
+    all_position(collated_data)
+
+
+def all_position(collated_data):
+    LOG.info("Exporting all players by position")
+    for position in stats.player_list.all_positions(collated_data):
+        filename = position.replace(" ", "-")
+        with open("output/player/{}.html".format(filename), "w") as all_players_file:
+            all_players_file.write(players_by_position(collated_data, position))
 
 
 
