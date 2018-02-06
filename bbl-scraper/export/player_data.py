@@ -61,7 +61,7 @@ def all_player(data=None):
         hide_position = False, 
         hide_team = False, 
         title="All players",
-        subtitle="sorted by position + spp")
+        subtitle="sorted by star player points")
 
 
 def export_race_by_performance(data = None):
