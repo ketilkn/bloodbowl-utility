@@ -137,8 +137,8 @@ def find_casualties(soup):
     home = bh["home"] + si["home"] + de["home"]
     away = bh["away"] + si["away"] + de["away"]
 
-    return {"home_total": home, "home_bh": bh["home"], "home_si": si["home"], "home_dead": de["home"],
-            "away_total": away, "away_bh": bh["away"], "away_si": si["away"], "away_dead": de["away"]}
+    return {"home_cas": home, "home_bh": bh["home"], "home_si": si["home"], "home_dead": de["home"],
+            "away_cas": away, "away_bh": bh["away"], "away_si": si["away"], "away_dead": de["away"]}
 
 
 def find_hometeam(soup):

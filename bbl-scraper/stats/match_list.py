@@ -93,8 +93,8 @@ def format_for_matchlist(match):
             "away": match["away_team"],
             "td_home": match["home_td"],
             "td_away": match["away_td"],
-            "cas_home": match["home_total"],
-            "cas_away": match["away_total"],
+            "cas_home": match["home_cas"],
+            "cas_away": match["away_cas"],
             "season": match["tournament_name"]
     }
 def games_for_year(games, year=None):
@@ -186,8 +186,8 @@ def sum_game(games):
         total["gamesplayed"] = total["gamesplayed"] + 1
         total["td_for"] = total["td_for"] + g["home_td"]
         total["td_against"] = total["td_against"] + g["away_td"]
-        total["cas_for"] = total["cas_for"] + g["home_total"]
-        total["cas_against"] = total["cas_against"] + g["away_total"]
+        total["cas_for"] = total["cas_for"] + g["home_cas"]
+        total["cas_against"] = total["cas_against"] + g["away_cas"]
         total["dead_for"] = total["dead_for"] + g["home_dead"]
         total["dead_against"] = total["dead_against"] + g["away_dead"]
 

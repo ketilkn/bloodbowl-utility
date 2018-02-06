@@ -169,7 +169,7 @@
 			<td class="away opponent-team team">{{game.away_team}}</td>
 			<td class="result">{{game.home_result}}</td>
 			<td class="score">{{game.home_td}}-{{game.away_td}}</td>
-			<td class="casualties">{{game.home_total}}-{{game.away_total}}</td>
+			<td class="casualties">{{game.home_cas}}-{{game.away_cas}}</td>
 			<td class="season{% if game.season == previous_season %} repeated{% endif %}">{{game.tournament_name}}</td>
 		</tr>
 		{% set previous_date = game.date %} 
