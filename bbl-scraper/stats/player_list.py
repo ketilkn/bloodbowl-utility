@@ -170,7 +170,6 @@ def all_players(data, include_journeymen=False):
     players = data["player"].values()
     players = filter_invalid(players)
     players = order_by_spp(players)
-    players = order_by_position(players)
 
     if not include_journeymen:
         LOG.debug("Filter journeymen")
