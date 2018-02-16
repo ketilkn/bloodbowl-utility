@@ -114,11 +114,10 @@ def games_for_year(games, year=None):
 def games_for_teams(data, games):
     teams = {} 
     for g in games:
-        if "us" not in g: continue
-        teamid = g["us"]["team"]["teamid"]
+        teamid = g["home_teamid"]
         if teamid not in teams:
             teams[teamid] = data["team"][teamid]
-            teams[teamid]["games"] = list(filter(lambda x: x["us"]["team"]["teamid"] == teamid, games))
+            teams[teamid]["games"] = list(filter(lambda x: x["home_teamid"] == teamid, games))
             total = sum_game(teams[teamid]["games"])
             teams[teamid]["total"] = total["total"]
             teams[teamid]["average"] = total["average"]
@@ -181,7 +180,6 @@ def sum_game(games):
                 "points": 0, "performance": 0 } 
     average = copy(total)
     for g in games:
-        if "us" not in g: continue
         total["gamesplayed"] = total["gamesplayed"] + 1
         total["td_for"] = total["td_for"] + g["home_td"]
         total["td_against"] = total["td_against"] + g["away_td"]
@@ -247,7 +245,7 @@ def we_are(games, what, what_away):
 
 
 def we_are_race(games, race):
-    return we_are(games, lambda x: x["home_race"] == race, lambda x: x["away_race"])
+    return we_are(games, lambda x: x["home_race"] == race, lambda x: x["away_race"] == race)
 
 
 def we_are_coach(games, coach):
@@ -261,7 +259,6 @@ def we_are_coach(games, coach):
 
 
 def list_all_matches():
-
     matches = match.match_list()
     formatted_matches = list(map(format_for_matchlist, matches))
     
@@ -273,12 +270,45 @@ def list_all_games_by_year(year):
     return list(filter(lambda x: x["date"] > start_date and x["date"] < end_date, list_all_matches())) 
 
 
+def print_list_all_matches():
+    for t in list_all_matches():
+        print(t)
+
+
+def test_we_are_race():
+    from . import collate
+    all_matches = collate.collate()["game"].values()
+    matches = we_are_team(all_matches, {"id":"mot"})
+
+    LOG.debug("all_matches: %s, matches: %s", len(all_matches), len(matches))
+    for m in matches:
+        LOG.debug("print match %s", m["matchid"])
+        print("{} {}({}) {}({}) {}".format( m["home_td"], m["home_team"], m["home_race"], m["away_team"], m["away_race"], m["away_td"]))
+
+
+def test_we_are_coach():
+    from . import collate
+    all_matches = collate.collate()["game"].values()
+    matches = we_are_coach(all_matches, {"uid": "71", "nick": "Kyrre"})
+
+    LOG.debug("all_matches: %s, matches: %s", len(all_matches), len(matches))
+    for m in matches:
+        LOG.debug("print match %s", m["matchid"])
+        print("{} {} {} {}".format( m["home_td"], m["home_team"], m["away_team"], m["away_td"]))
+
+
 def main():
+    import sys
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
-    for t in list_all_matches():
-        print(t)
+    if "--we-are-coach" in sys.argv:
+        test_we_are_coach()
+    elif "--we-are-race" in sys.argv:
+        test_we_are_race()
+    else:
+        print_list_all_matches()
+
 
 
 if __name__ == "__main__":
