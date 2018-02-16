@@ -1,0 +1,56 @@
+{% block content %}
+<table class="pure-table">
+    <thead>
+    <tr>
+        <td class="rank number not-sortable">#</td>
+        <td class="name sort-ascending">Player</td>
+        {% if not hide_position %}
+        <td class="position sort-ascending">Position</td>
+        {% endif %}
+        {% if not hide_team %}
+        <td class="team sort-ascending">Team</td>
+        {% endif %}
+        <td class="ma sort-ascending">ma</td>
+        <td class="st sort-ascending">st</td>
+        <td class="ag sort-ascending">ag</td>
+        <td class="av sort-ascending">av</td>
+        <td class="skills sort-ascending">skills</td>
+        <td class="int">int</td>
+        <td class="cmp">cmp</td>
+        <td class="td">td</td>
+        <td class="cas">cas</td>
+        <td class="cas">mvp</td>
+        <td class="spp current-sort reverse">spp</td>
+        <td class="gp reverse">GP</td>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for player in players %}
+    <tr class="player {{ loop.cycle('pure-table-odd','pure-table-even') }}">
+        <td class="number">{{loop.index }}</td>
+        <td class="name sort-ascending">{{player.playername}}</td>
+        {% if not hide_position %}
+        <td class="position sort-ascending"><a href="{{player.position | player_link}}">{{player.position}}</a></td>
+        {% endif %}
+        {% if not hide_team %}
+        <td class="team sort-ascending"><a href="{{player.team | team_link}}">{{player.teamname}}</a></td>
+        {% endif %}
+        <td class="ma sort-ascending" title="movement">{{player.ma}}</td>
+        <td class="st sort-ascending" title="strength">{{player.st}}</td>
+        <td class="ag sort-ascending" title="agility">{{player.ag}}</td>
+        <td class="av sort-ascending" title="armour">{{player.av}}</td>
+        <td class="skills sort-ascending">{{player.skills}}</td>
+        <td class="int" title="interceptions">{{player.int}}</td>
+        <td class="cmp" title="completions">{{player.cmp}}</td>
+        <td class="td" title="touchdowns">{{player.td}}</td>
+        <td class="cas" title="casualties">{{player.cas}}</td>
+        <td class="mvp" title="MVPs">{{player.mvp}}</td>
+        <td class="spp" title="Total SPP">{{player.spp}}</td>
+        <td class="gp">{{player.value}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
