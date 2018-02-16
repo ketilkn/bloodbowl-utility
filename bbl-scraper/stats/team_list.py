@@ -2,9 +2,13 @@
 from collections import Counter
 import copy
 from operator import itemgetter
+import logging
 from match import match
 from team import team
 from coach import coach
+
+LOG = logging.getLogger(__package__)
+
 
 def team_data(the_team, team_matches):
     data_for_team = {}
@@ -113,7 +117,7 @@ def format_for_average(teams):
     gamesplayed = sum(map(lambda x: x["gamesplayed"], teams))
     wins = sum(map(lambda x: x["win"], teams))
     ties = sum(map(lambda x: x["tie"], teams))
-    return {"win": sum(map(lambda x: x["win"], teams))/gamesplayed if gamesplayed > 0 else 0,
+    formatted = {"win": sum(map(lambda x: x["win"], teams))/gamesplayed if gamesplayed > 0 else 0,
             "tie": sum(map(lambda x: x["tie"], teams))/gamesplayed if gamesplayed > 0 else 0, 
             "loss" : sum(map(lambda x: x["loss"], teams))/gamesplayed if gamesplayed > 0 else 0,
             "td": sum(map(lambda x: x["td_for"]/gamesplayed-x["td_against"], teams))/gamesplayed if gamesplayed > 0 else 0,
@@ -126,6 +130,7 @@ def format_for_average(teams):
             "gamesplayed": gamesplayed/len(teams) if len(teams) > 0 else 0,
             "points": sum(map(lambda x: x["points"], teams))/gamesplayed if gamesplayed > 0 else 0
             }
+    return formatted
 
 def format_for_total(teams):
     gamesplayed = sum(map(lambda x: x["gamesplayed"], teams))
@@ -210,7 +215,10 @@ def list_all_games_by_race(data, no_mirror=False):
 
 def main():
     import pprint
-    import sys 
+    import sys
+    log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
+    logging.basicConfig(level=logging.DEBUG, format=log_format)
+
     for t in filter(lambda x: not "gamesplayed" in x or x["gamesplayed"] > 0, list_all_teams_by_year(int(sys.argv[1]) if len(sys.argv) > 1 else 2017)):
         print("{}:".format(t["name"] if "name" in t else t["team"]["name"]))
         pprint.pprint(t, indent=4, width=250)
