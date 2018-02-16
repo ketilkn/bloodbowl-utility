@@ -20,7 +20,7 @@
 			<td class="number">{{loop.index }}</td>
 			<td class="name sort-ascending">{{player.playername}}</td>
        {% if not hide_position %}
-			<td class="position sort-ascending">{{player.position}}</td>
+			<td class="position sort-ascending"><a href="{{player.position | player_link}}">{{player.position}}</a></td>
         {% endif %}
        {% if not hide_team %}
 			<td class="player sort-ascending"><a href="{{player.team | team_link}}">{{player.teamname}}</a></td>
