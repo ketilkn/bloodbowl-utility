@@ -40,7 +40,7 @@ def all_games_by_race(data=None):
 
 
 def all_teams_for_race(race, race_teams, performance_by_race):
-    LOG.debug("all_teams_for_race")
+    LOG.debug("All %s teams %s", race, len(race_teams))
     return export.get_template("race/teams-for-race.html").render(
         teams_average = format_for_average(race_teams),
         teams_total = format_for_total(race_teams),
@@ -58,7 +58,9 @@ def teams_by_race(data):
         team_race = filter(lambda x: x["race"] == r, teams)
         
         race_games = match_list.we_are_race(data["game"].values(), r)
-        race_games = filter(lambda m: m["away_race"] != r, race_games)
+        race_games = list(filter(lambda m: m["away_race"] != r, race_games))
+
+        LOG.debug("race_games length is %s", len(race_games))
         performance_by_race = match_list.sum_game_by_group(race_games, match_list.group_games_by_race)
 
         with open("output/race/{}.html".format(r.replace(" ","-")), "w") as fp:
