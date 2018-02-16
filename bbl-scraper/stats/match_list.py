@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 import dateutil
-import datetime
-from datetime import date
 from operator import itemgetter
-from copy import deepcopy, copy
+from copy import  copy
+import logging
 
 from match import match
-from team import team
-from coach import coach
+
+LOG = logging.getLogger(__package__)
 
 def game_streaks(games):
     streaks = {}
@@ -275,6 +274,9 @@ def list_all_games_by_year(year):
 
 
 def main():
+    log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
+    logging.basicConfig(level=logging.DEBUG, format=log_format)
+
     for t in list_all_matches():
         print(t)
 
