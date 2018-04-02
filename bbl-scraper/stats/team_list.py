@@ -29,6 +29,8 @@ def matchresult(match, team1, team2):
             'td_against': match[team2+"_td"],
             'cas_for': match[team1+"_cas"],
             'cas_against': match[team2+"_cas"],
+            'kill_for': match[team1+"_dead"],
+            'kill_against': match[team2+"_dead"],
             'matchid': match["matchid"],
             'date': match["date"],
             "result": match[team1+"_result"],
@@ -47,6 +49,8 @@ def add_result(result, match):
             'td_against': 0,
             'cas_for': 0,
             'cas_against': 0,
+            'kill_for': 0,
+            'kill_against': 0,
 
             'matches': [],
             'coaches': Counter(),
@@ -57,6 +61,8 @@ def add_result(result, match):
     result[teamid]["td_against"] = result[teamid]["td_against"] + match["td_against"]
     result[teamid]["cas_for"] = result[teamid]["cas_for"] + match["cas_for"]
     result[teamid]["cas_against"] = result[teamid]["cas_against"] + match["cas_against"]
+    result[teamid]["kill_for"] = result[teamid]["kill_for"] + match["kill_for"]
+    result[teamid]["kill_against"] = result[teamid]["kill_against"] + match["kill_against"]
     result[teamid]["matches"].append(match["matchid"])
     if result[teamid]["first_match"] == None or result[teamid]["first_match"] > match["date"]:
         result[teamid]["first_match"] = match["date"] 
@@ -110,6 +116,9 @@ def format_for_teamlist(ranked_team):
             "cas": ranked_team["cas_for"] - ranked_team["cas_against"],
             "cas_for": ranked_team["cas_for"],
             "cas_against": ranked_team["cas_against"],
+            "kill": ranked_team["kill_for"] - ranked_team["kill_against"],
+            "kill_for": ranked_team["kill_for"],
+            "kill_against": ranked_team["kill_against"],
             "points": (ranked_team["W"]*5)+(ranked_team["T"]*3)+ranked_team["L"]
     }
 
@@ -126,6 +135,9 @@ def format_for_average(teams):
             "cas": sum(map(lambda x: x["cas_for"]/gamesplayed-x["cas_against"], teams))/gamesplayed if gamesplayed > 0 else 0,
             "cas_for": sum(map(lambda x: x["cas_for"], teams))/gamesplayed if gamesplayed > 0 else 0,
             "cas_against": sum(map(lambda x: x["cas_against"], teams))/gamesplayed if gamesplayed > 0 else 0,
+            "kill": sum(map(lambda x: x["kill_for"]/gamesplayed-x["kill_against"], teams))/gamesplayed if gamesplayed > 0 else 0,
+            "kill_for": sum(map(lambda x: x["kill_for"], teams))/gamesplayed if gamesplayed > 0 else 0,
+            "kill_against": sum(map(lambda x: x["kill_against"], teams))/gamesplayed if gamesplayed > 0 else 0,
             "performance" : sum(map(lambda x: x["performance"], teams)) / len(teams) if len(teams) > 0 else 0, #(wins*2+ties)/(gamesplayed*2)*100 if gamesplayed > 0 else 0,
             "gamesplayed": gamesplayed/len(teams) if len(teams) > 0 else 0,
             "points": sum(map(lambda x: x["points"], teams))/gamesplayed if gamesplayed > 0 else 0
@@ -145,6 +157,9 @@ def format_for_total(teams):
             "cas": sum(map(lambda x: x["cas_for"]-x["cas_against"], teams)),
             "cas_for": sum(map(lambda x: x["cas_for"], teams)),
             "cas_against": sum(map(lambda x: x["cas_against"], teams)),
+            "kill": sum(map(lambda x: x["kill_for"]-x["kill_against"], teams)),
+            "kill_for": sum(map(lambda x: x["kill_for"], teams)),
+            "kill_against": sum(map(lambda x: x["kill_against"], teams)),
             "performance" : (wins*2+ties)/(gamesplayed*2)*100 if gamesplayed > 0 else 0,
             "gamesplayed": gamesplayed,
             "points": sum(map(lambda x: x["points"], teams))
