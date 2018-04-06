@@ -34,7 +34,9 @@ def parse_date(soup):
     for div in found:
         if "Result added" in div.text:
             LOG.debug("Found Result added")
-            return convert_to_isodate(div.text.strip()[13:])
+            found_date = convert_to_isodate(div.text.strip()[13:])
+            LOG.debug("Match date is %s", found_date)
+            return found_date
     LOG.debug("Did not find date location.")
     return None
 
