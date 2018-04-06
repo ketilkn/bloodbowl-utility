@@ -20,15 +20,17 @@ def download_to(session, url, target):
         print(" Server error {} to {}".format(url, response.status_code))
     return False
 
+
 def verify_session(session, response = None):
     #TODO check if session is logged in
-    return response.status_code == 200
+    return response.status_code == 200 and response.url.endswith("/default.asp?p=adm")
+
 
 def login(url, username, password):
     s = requests.session()
     r = s.post(url, data={"user":username, "pass":password})
 
-    if verify_session(s,r):
+    if verify_session(s, r):
         return s
     #FIXME Throw exception ? / return None?
     print("Could not verify session")
