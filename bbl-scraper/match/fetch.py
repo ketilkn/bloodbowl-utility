@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 import logging
 from importer.bbleague.defaults import BASEPATH
 
-BASE_URL = "http://www.anarchy.bloodbowlleague.com/default.asp?p=m&m={}"
-DATA_URL = "http://www.anarchy.bloodbowlleague.com/matchdata.asp?m={}"
+BASE_URL = "{}/default.asp?p=m&m={}"
+DATA_URL = "{}/matchdata.asp?m={}"
 
 LOG = logging.getLogger(__package__)
 
@@ -26,9 +26,9 @@ def parse_index(basepath=BASEPATH):
     return result
 
 
-def new_games(basepath=BASEPATH):
-    download_to("http://www.anarchy.bloodbowlleague.com/", os.path.join(basepath, "html", "index.html"))
-    return parse_index()
+def new_games(base_path=BASEPATH, base_url="http://www.anarchy.bloodbowlleague.com/"):
+    download_to(base_url, os.path.join(base_path, "html", "index.html"))
+    return parse_index(base_path)
 
 
 def download_to(url, target):
@@ -50,10 +50,10 @@ def download_to(url, target):
         LOG.warning(" Server error {} to {}".format(url, target))
 
 
-def download_match(matchid, directory=BASEPATH):
-        download_to(DATA_URL.format(matchid), os.path.join(directory, "html/match/", "matchdata-{}.html".format(matchid)))
+def download_match(matchid, directory=BASEPATH, base_url="http://www.anarchy.bloodbowlleague.com"):
+        download_to(DATA_URL.format(base_url, matchid), os.path.join(directory, "html/match/", "matchdata-{}.html".format(matchid)))
         sleep(1)
-        download_to(BASE_URL.format(matchid), os.path.join(directory, "html/match/", "match-{}.html".format(matchid)))
+        download_to(BASE_URL.format(base_url, matchid), os.path.join(directory, "html/match/", "match-{}.html".format(matchid)))
         sleep(3)
 
 
@@ -71,15 +71,21 @@ def force_download():
     return "--force" in sys.argv
 
 
-def recent_matches(basepath = BASEPATH, force=force_download()):
+def recent_matches(base_url="http://www.anarchy.bloodbowlleague.com/", base_path = BASEPATH, force=force_download()):
     """Download recent matches from host. If force is True existing matches will be downloaded again"""
     LOG.info("Fetch recent games")
-    games = new_games()
+    games = new_games(base_path, base_url)
     LOG.info(" {} recent game{} {}".format(len(games), "s" if len(games) != 1 else "",  games))
+    target_path = os.path.join(base_path, "match")
+
+    if not os.path.isdir(target_path):
+        LOG.warning("Target path %s does not exist. Attempting to create", target_path)
+        os.makedirs(target_path)
+
     for g in games:
-        if not is_match_downloaded(g, basepath) or force:
+        if not is_match_downloaded(g, base_path) or force:
             LOG.info("Downloading game {}".format(g))
-            download_match(g)
+            download_match(g, directory=base_path, base_url=base_url)
         else:
             LOG.info("Game {} already downloaded use --force to reload".format(g))
 
