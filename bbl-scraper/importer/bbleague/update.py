@@ -10,14 +10,41 @@ import match.fetch
 LOG = logging.getLogger(__package__)
 
 
-def import_bloodbowlleague(host, username, password):
+def load_config(section):
+    import configparser
+    config = configparser.ConfigParser()
+    LOG.debug("Loading config from bbl-scrape.ini")
+    config.read("bbl-scrape.ini")
+    if section not in config.sections():
+       LOG.error("No such section %s in bbl-scrape.ini", section)
+       sys.exit("Giving up")
+    return config[section]
+
+
+def import_bloodbowlleague(config):
     """Import data from host"""
-    LOG.info("Importing data from %s", host)
+    LOG.info("Importing data from %s", config.get("base_url"))
 
-    scrape.fetch_teamlist.download_team_list(username, password)
-    scrape.fetch_coachlist.download_coach_list(username, password)
-    match.fetch.recent_matches()
+    scrape.fetch_teamlist.download_team_list(base_url=config.get("base_url"),
+                                             username=config.get("username"),
+                                             password=config.get("password"),
+                                             base_path=config.get("base_path"))
 
+    scrape.fetch_coachlist.download_coach_list(base_url=config.get("base_url"),
+                                               username=config.get("username"),
+                                               password=config.get("password"),
+                                               base_path=config.get("base_path"))
+    #scrape.fetch_coachlist.download_coach_list(username, password)
+    #match.fetch.recent_matches()
+
+
+def testing():
+    pass
+    #teams = team_list.parse(load(
+        #fetch(cache("http://example.com/t={}", "team/{}", "mot"),
+              #session=session(username, password, "http://example.com/login"))))
+
+    #teams = team_list.parse(fetch("http://www.anarchy.bloodbowlleague.com/default.asp?p=te", "teamlist.html")))
 
 def main():
     """Run import_bloodbowlleague from command line"""
