@@ -13,7 +13,8 @@ def id_from_onclick(el):
 
 
 def parse_match(match):
-    return id_from_onclick(match)
+    return {"matchid": id_from_onclick(match),
+            "match_played": match.has_attr("title")}
 
 
 def parse_matches(soup):
