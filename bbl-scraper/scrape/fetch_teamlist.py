@@ -10,8 +10,8 @@ teams_script = "default.asp?p=te"
 
 
 def download(session, url, path):
-
     pass
+
 
 def download_team_list(base_url, username, password, base_path):
     LOG.debug("Download teamlist from %s to %s", base_url, base_path)
