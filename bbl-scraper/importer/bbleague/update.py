@@ -22,7 +22,7 @@ def load_config(section):
 
 
 def import_bloodbowlleague(config):
-    """Import data from host"""
+    """Import teamlist, coaches and recent match data from host"""
     LOG.info("Importing data from %s", config.get("base_url"))
 
     scrape.fetch_teamlist.download_team_list(base_url=config.get("base_url"),
@@ -38,14 +38,6 @@ def import_bloodbowlleague(config):
                                base_path=config.get("base_path"),
                                force=True)
 
-
-def testing():
-    pass
-    #teams = team_list.parse(load(
-        #fetch(cache("http://example.com/t={}", "team/{}", "mot"),
-              #session=session(username, password, "http://example.com/login"))))
-
-    #teams = team_list.parse(fetch("http://www.anarchy.bloodbowlleague.com/default.asp?p=te", "teamlist.html")))
 
 def main():
     """Run import_bloodbowlleague from command line"""
