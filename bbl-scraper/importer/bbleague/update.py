@@ -34,8 +34,9 @@ def import_bloodbowlleague(config):
                                                username=config.get("username"),
                                                password=config.get("password"),
                                                base_path=config.get("base_path"))
-    #scrape.fetch_coachlist.download_coach_list(username, password)
-    #match.fetch.recent_matches()
+    match.fetch.recent_matches(base_url=config.get("base_url"),
+                               base_path=config.get("base_path"),
+                               force=True)
 
 
 def testing():
