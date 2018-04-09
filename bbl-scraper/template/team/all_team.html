@@ -82,12 +82,12 @@
 		<td class="tie" title="ties">{%if teams_total.gamesplayed > 0 %}{{'%0.3f' %(teams_total.tie/teams_total.gamesplayed)}}{%endif%}</td>
 		<td>L</td>
 		<td class="touchdown">{{'%0.2f' % teams_average.td_for}}</td>
-		<td class="empty"></td>
-		<td class="empty"></td>
+		<td class="empty wide-data"></td>
+		<td class="empty wide-data"></td>
 		<td class="casualty">{{'%0.2f' % teams_average.cas_for}}</td>
-		<td class="empty"></td>
-		<td class="empty"></td>
-		<td class="kills">{{'%0.2f' % teams_average.kill_for}}</td>
+		<td class="empty wide-data"></td>
+		<td class="empty wide-data"></td>
+		<td class="kills wide-data">{{'%0.2f' % teams_average.kill_for}}</td>
 		<td class="points">-</td>
 	</tr>
 	{% endif %}
@@ -101,16 +101,16 @@
 		<td class="gamesplayed">{{'%0.0f' %(teams_total.gamesplayed/2)}}</td>
 		<!--td class="win-tie-loss" title="ties">{%if teams_total.gamesplayed > 0 %}{{'%0.3f' %(teams_total.tie/teams_total.gamesplayed)}}{%endif%}</td-->
 		<td class="performance">{{'%0.2f' % teams_total.performance}}%</td>
-		<td>W</td>
+		<td></td>
 		<td class="tie" title="ties">{%if teams_total.gamesplayed > 0 %}{{'%0.3f' %(teams_total.tie/teams_total.gamesplayed)}}{%endif%}</td>
-		<td>L</td>
+		<td></td>
 		<td class="touchdown" >{{teams_total.td_for}}</td>
-		<td class="empty"></td>
-		<td class="empty"></td>
+		<td class="empty wide-data"></td>
+		<td class="empty wide-data"></td>
 		<td class="casualty" >{{teams_total.cas_for}}</td>
-		<td class="empty"></td>
-		<td class="empty"></td>
-		<td class="kills" >{{teams_total.kill_for}}</td>
+		<td class="empty wide-data"></td>
+		<td class="empty wide-data"></td>
+		<td class="kills wide-data" >{{teams_total.kill_for}}</td>
 		<td class="points">{{'%0.0f' %(teams_total.points/2)}}</td>
 	</tr>
 	</tfoot>
