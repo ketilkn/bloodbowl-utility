@@ -27,9 +27,9 @@ def main():
         sys.exit("username password team_name")
     s = scrape.session.login("http://test.bloodbowlleague.com/login.asp", username=sys.argv[1], password=sys.argv[2])
     team_name=" ".join(sys.argv[3:])
-    team_race="3"
+    team_race="5"
     coach="Ketil"
-    co_coach="Plumba"
+    co_coach=""
 
     if s:
         LOG.debug("Session seems OK")
