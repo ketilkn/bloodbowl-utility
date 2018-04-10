@@ -39,11 +39,11 @@ def download_to(url, target):
                 html = response.readlines()
                 try:
                     open(target, "wb").writelines(html)
-                    LOG.info(" Wrote {} to {}".format(url, target))
+                    LOG.debug(" Wrote {} to {}".format(url, target))
                 except OSError:
                     LOG.error(" Failed writing {} to {}".format(url, target))
             else:
-                print(" Server redirect {} to {}".format(url, response.geturl()))
+                LOG.error(" Server redirect {} to {}".format(url, response.geturl()))
     except HTTPError as error:
         html = error.readlines()
         open(target, "wb").writelines(html)
@@ -73,9 +73,9 @@ def force_download():
 
 def recent_matches(base_url="http://www.anarchy.bloodbowlleague.com/", base_path = BASEPATH, force=force_download()):
     """Download recent matches from host. If force is True existing matches will be downloaded again"""
-    LOG.info("Fetch recent games")
+    LOG.debug("Fetch recent matches")
     games = new_games(base_path, base_url)
-    LOG.info(" {} recent game{} {}".format(len(games), "s" if len(games) != 1 else "",  games))
+    LOG.info("{} recent match{} {}".format(len(games), "es" if len(games) != 1 else "",  games))
     target_path = os.path.join(base_path, "match")
 
     if not os.path.isdir(target_path):
@@ -84,10 +84,10 @@ def recent_matches(base_url="http://www.anarchy.bloodbowlleague.com/", base_path
 
     for g in games:
         if not is_match_downloaded(g, base_path) or force:
-            LOG.info("Downloading game {}".format(g))
+            LOG.info("Downloading match {}".format(g))
             download_match(g, directory=base_path, base_url=base_url)
         else:
-            LOG.info("Game {} already downloaded use --force to reload".format(g))
+            LOG.debug("Match {} already downloaded use --force to reload".format(g))
 
 
 def main():

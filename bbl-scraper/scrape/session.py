@@ -13,7 +13,7 @@ def download_to(session, url, target):
         html = response.text
         try:
             open(target, "w").write(html)
-            LOG.info(" Wrote {} to {}".format(url, target))
+            LOG.debug(" Wrote {} to {}".format(url, target))
             return True
         except OSError:
             LOG.error(" Failed writing {} to {}".format(url, target))
