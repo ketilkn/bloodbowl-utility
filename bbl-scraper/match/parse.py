@@ -121,8 +121,6 @@ def parse_spp(soup):
 
 def find_score(soup):
     scoreboard = soup.select('tr[style="background-color:#f4fff4"]')[0]
-    # print("\n{}\n".format(scoreboard.select(".td10")[0].prettify()))
-    # print("\n{}\n".format(scoreboard.select(".td10")[1].prettify()))
     return {"home": parse_score(scoreboard.select(".td10")[0]), "away": parse_score(scoreboard.select(".td10")[1])}
 
 
@@ -149,12 +147,8 @@ def find_hometeam(soup):
 
 
 def find_awayteam(soup):
-    el = soup.find_all("b")[6]
-    if el.text == "overtime":
-        if soup.find_all("b")[7].text == "shoot-out":
-            return parse_team("away_", soup.find_all("b")[8])
-        return parse_team("away_", soup.find_all("b")[7])
-    return parse_team("away_", el)
+    el = soup.findAll("td", {"width": "180"})
+    return parse_team("away_", el[1].select_one("a"))
 
 
 def parse_season(soup):
@@ -185,7 +179,11 @@ def parse_match(matchid, soup):
     game_date = parse_date(soup)
     if not game_date:
         LOG.warning("No game_date in file with match id: %s", matchid)
-        return {"approved": False}
+        match = {"approved": False}
+        match.update(find_hometeam(soup))
+        match.update(find_awayteam(soup))
+        return match
+
     td_home = find_score(soup)["home"]
     td_away = find_score(soup)["away"]
     match = {"matchid": matchid,
