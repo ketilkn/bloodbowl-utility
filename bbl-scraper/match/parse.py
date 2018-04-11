@@ -176,6 +176,8 @@ def parse_match(matchid, soup):
             return "L"
         return "T"
     LOG.debug("Parse match {}".format(matchid))
+    if not soup.findAll("h1", text="Match result"):
+        return False
     game_date = parse_date(soup)
     if not game_date:
         LOG.warning("No game_date in file with match id: %s", matchid)
