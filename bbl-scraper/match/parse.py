@@ -173,6 +173,7 @@ def parse_notes(soup):
 
     return notes.text.replace('\xa0', ' ')
 
+
 def parse_match(matchid, soup):
     def calculate_result(us, them):
         if us > them:
@@ -184,7 +185,7 @@ def parse_match(matchid, soup):
     game_date = parse_date(soup)
     if not game_date:
         LOG.warning("No game_date in file with match id: %s", matchid)
-        return None
+        return {"approved": False}
     td_home = find_score(soup)["home"]
     td_away = find_score(soup)["away"]
     match = {"matchid": matchid,
