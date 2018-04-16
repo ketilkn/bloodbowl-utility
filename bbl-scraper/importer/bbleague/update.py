@@ -21,7 +21,7 @@ def load_config(section):
     return config[section]
 
 
-def import_bloodbowlleague(config):
+def import_bbleague(config):
     """Import teamlist, coaches and recent match data from host"""
 #   LOG.info("Importing data %s to %s", config.get("base_url"), config.get("base_path"))
     LOG.info("Importing data")
@@ -50,7 +50,7 @@ def main():
     """Run import_bloodbowlleague from command line"""
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
-    import_bloodbowlleague(sys.argv[1], sys.argv[2], sys.argv[3])
+    import_bbleague(sys.argv[1], sys.argv[2], sys.argv[3])
 
 
 if __name__ == "__main__":
