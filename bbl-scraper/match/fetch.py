@@ -62,20 +62,15 @@ def is_match_downloaded(matchid, directory=BASEPATH+"html/match/"):
         and os.path.isfile(os.path.join(directory, "match-{}.html".format(matchid)))
 
 
-def download_matches(basepath, from_match, to_match):
-    for matchid in range(from_match, to_match):
-            download_match(matchid, basepath)
+def download_matches(basepath, from_match, to_match, force=True):
+    download_matches2(base_path=basepath, games=list(range(from_match, to_match)), force=force)
 
 
 def force_download():
     return "--force" in sys.argv
 
 
-def recent_matches(base_url="http://www.anarchy.bloodbowlleague.com/", base_path = BASEPATH, force=force_download()):
-    """Download recent matches from host. If force is True existing matches will be downloaded again"""
-    LOG.debug("Fetch recent matches")
-    games = new_games(base_path, base_url)
-    LOG.info("{} recent match{} {}".format(len(games), "es" if len(games) != 1 else "",  games))
+def download_matches2(base_url="http://www.anarchy.bloodbowlleague.com/", base_path=BASEPATH, force=force_download(), games=[]):
     target_path = os.path.join(base_path, "match")
 
     if not os.path.isdir(target_path):
@@ -90,22 +85,33 @@ def recent_matches(base_url="http://www.anarchy.bloodbowlleague.com/", base_path
             LOG.debug("Match {} already downloaded use --force to reload".format(g))
 
 
+def recent_matches(base_url="http://www.anarchy.bloodbowlleague.com/", base_path = BASEPATH, force=force_download()):
+    """Download recent matches from host. If force is True existing matches will be downloaded again"""
+    LOG.debug("Fetch recent matches")
+    games = new_games(base_path, base_url)
+    LOG.info("{} recent match{} {}".format(len(games), "es" if len(games) != 1 else "",  games))
+
+    download_matches2(base_url, base_path=base_path, force=force, games=games)
+
+
 def main():
+    import importer.bbleague.update
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
     LOG.debug("Command line arguments %s", sys.argv)
     LOG.info("Fetch match")
 
-    basepath = sys.argv[1] if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]) else BASEPATH
+    site = sys.argv[1] if len(sys.argv) > 1 else "anbbl"
+    config = importer.bbleague.update.load_config(site)
 
     if len(sys.argv) == 3 and sys.argv[2].isnumeric():
-        download_match(sys.argv[2], basepath)
+        download_match(sys.argv[2], config.get("base_path"))
     elif len(sys.argv) == 4:
         from_match = int(sys.argv[2])
         to_match = int(sys.argv[3]) + 1
-        download_matches(basepath, from_match, to_match)
+        download_matches(config.get("base_path"), from_match, to_match)
     else:
-        recent_matches(basepath)
+        recent_matches(base_path=config.get("base_path"))
 
 
 if __name__ == "__main__":
