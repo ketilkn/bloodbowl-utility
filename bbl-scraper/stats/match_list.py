@@ -8,6 +8,7 @@ from match import match
 
 LOG = logging.getLogger(__package__)
 
+
 def game_streaks(games):
     streaks = {}
     streaks["gamestreak"] = playstreak(games)
@@ -84,6 +85,7 @@ def playstreak(games):
         return None
     return best_score
 
+
 def format_for_matchlist(match):
     return {"matchid": match["matchid"],
             "date": match["date"].split("T")[0],
@@ -94,7 +96,9 @@ def format_for_matchlist(match):
             "td_away": match["away_td"],
             "cas_home": match["home_cas"],
             "cas_away": match["away_cas"],
-            "season": match["tournament_name"]
+            "season": match["tournament_name"],
+            "home_coach": match["home_coach"],
+            "away_coach": match["away_coach"]
     }
 def games_for_year(games, year=None):
     if not year:
@@ -263,6 +267,7 @@ def list_all_matches():
     formatted_matches = list(map(format_for_matchlist, matches))
     
     return sorted(formatted_matches, key=itemgetter("date"), reverse=True)
+
 
 def list_all_games_by_year(year):
     start_date = "{}-99-99".format(year-1)
