@@ -5,8 +5,9 @@ import datetime
 
 from export import game_data, coach_data, race_data, index, team_data, player_data
 
-def export_all_data():
+def export_all_data(config=None):
     """Export all data to HTML"""
+
     import stats.collate
     collated_data = stats.collate.collate()
 

@@ -41,7 +41,7 @@ def main():
 
     matches = open_matches(sys.argv[1])
     for m in matches:
-        print(m)
+        print(m["matchid"])
 
 
 if __name__ == "__main__":
