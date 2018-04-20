@@ -124,7 +124,8 @@ def find_score(soup):
     return {"home": parse_score(scoreboard.select(".td10")[0]), "away": parse_score(scoreboard.select(".td10")[1])}
 
 
-def parse_casualty(soup):
+def parse_casualties(soup):
+    LOG.debug(str(soup.select(".td10")[0]))
     home = len(soup.select(".td10")[0].select("br"))
     away = len(soup.select(".td10")[1].select("br"))
     return {"home": home, "away": away}
