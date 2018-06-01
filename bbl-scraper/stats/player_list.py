@@ -64,7 +64,7 @@ def order_by_casualties(players):
 def order_by_value(players):
     """order list of players by value"""
     return sorted(players,
-                  key=lambda p: int(p["value"]) + int(p["spp"]["total"]) if "value" in p and p["value"] else 0,
+                  key=lambda p: int(p["value"]) + int(p["spp"]["total"]) if "value" in p and p["value"] and p["value"] and p["spp"]["total"] else 0,
                   reverse=True)
 
 def order_by_touchdowns(players):
@@ -212,7 +212,7 @@ def main():
             print("{:>4}".format(idx + 1), player.display.plformat(p))
             flatten_player(p)
 
-    print(all_positions(data))
+    #print(all_positions(data))
 
 
 if __name__ == "__main__":
