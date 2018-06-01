@@ -76,7 +76,7 @@ def parse_date(row):
             return "{}-{}-{}T{}".format(year, text.split("/")[1].strip().zfill(2), text.split("/")[0].strip().zfill(2), clock)
     return "Found no date"
 def parse_coach_row(row):
-    coach = {'nick': parse_nick(row), 
+    coach = {'nick': parse_nick(row),
             'email': parse_email(row),
             'naf': parse_naf(row),
             'role': parse_role(row),
@@ -110,7 +110,7 @@ def load(basepath = BASEPATH):
     LOG.debug("exists: %s", os.path.isfile(filepath))
     html = open(filepath, "r").read()
     soup = BeautifulSoup(normalize("NFC", html), "lxml")
-    print(soup)
+    #print(soup)
     coaches = parse_rows(find_rows(soup))
     return coaches
 

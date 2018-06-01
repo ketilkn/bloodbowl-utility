@@ -34,7 +34,9 @@ def parse_date(soup):
     for div in found:
         if "Result added" in div.text:
             LOG.debug("Found Result added")
-            return convert_to_isodate(div.text.strip()[13:])
+            found_date = convert_to_isodate(div.text.strip()[13:])
+            LOG.debug("Match date is %s", found_date)
+            return found_date
     LOG.debug("Did not find date location.")
     return None
 
@@ -119,12 +121,11 @@ def parse_spp(soup):
 
 def find_score(soup):
     scoreboard = soup.select('tr[style="background-color:#f4fff4"]')[0]
-    # print("\n{}\n".format(scoreboard.select(".td10")[0].prettify()))
-    # print("\n{}\n".format(scoreboard.select(".td10")[1].prettify()))
     return {"home": parse_score(scoreboard.select(".td10")[0]), "away": parse_score(scoreboard.select(".td10")[1])}
 
 
-def parse_casualty(soup):
+def parse_casualties(soup):
+    LOG.debug(str(soup.select(".td10")[0]))
     home = len(soup.select(".td10")[0].select("br"))
     away = len(soup.select(".td10")[1].select("br"))
     return {"home": home, "away": away}
@@ -147,12 +148,8 @@ def find_hometeam(soup):
 
 
 def find_awayteam(soup):
-    el = soup.find_all("b")[6]
-    if el.text == "overtime":
-        if soup.find_all("b")[7].text == "shoot-out":
-            return parse_team("away_", soup.find_all("b")[8])
-        return parse_team("away_", soup.find_all("b")[7])
-    return parse_team("away_", el)
+    el = soup.findAll("td", {"width": "180"})
+    return parse_team("away_", el[1].select_one("a"))
 
 
 def parse_season(soup):
@@ -171,6 +168,7 @@ def parse_notes(soup):
 
     return notes.text.replace('\xa0', ' ')
 
+
 def parse_match(matchid, soup):
     def calculate_result(us, them):
         if us > them:
@@ -179,10 +177,16 @@ def parse_match(matchid, soup):
             return "L"
         return "T"
     LOG.debug("Parse match {}".format(matchid))
+    if not soup.findAll("h1", text="Match result"):
+        return False
     game_date = parse_date(soup)
     if not game_date:
         LOG.warning("No game_date in file with match id: %s", matchid)
-        return None
+        match = {"approved": False}
+        match.update(find_hometeam(soup))
+        match.update(find_awayteam(soup))
+        return match
+
     td_home = find_score(soup)["home"]
     td_away = find_score(soup)["away"]
     match = {"matchid": matchid,
