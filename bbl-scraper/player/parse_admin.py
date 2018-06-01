@@ -176,7 +176,7 @@ def parse_player(playerid, soup):
 
 
 def parse_fromfile(path, playerid):
-    LOG.debug("%s %s", path, playerid)
+    LOG.info("%s %s", path, playerid)
     import player.load
     parsed_player = parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
     return parsed_player

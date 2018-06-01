@@ -8,7 +8,7 @@ import sys
 
 def download_to(session, url, target):
     response = session.get(url)
-    if not response.history and response.status_code==200: 
+    if not response.history or response.status_code==200: 
         html = response.text
         try:
             open(target, "w").write(html)
@@ -17,7 +17,7 @@ def download_to(session, url, target):
         except OSError:
             print(" Failed writing {} to {}".format(url, target))
     else:
-        print(" Server error {} to {}".format(url, response.status_code))
+        print(" Server error {} for {}".format(response.status_code, url))
     return False
 
 def verify_session(session, response = None):

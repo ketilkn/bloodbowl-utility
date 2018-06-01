@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 from player import parse
 from importer.bbleague.defaults import BASEPATH
 
+LOG=logging.getLogger(__name__)
+
 
 def from_file(filename):
     html = open(filename, "rb").read()
@@ -43,6 +45,7 @@ def write_json(player, path="input/json/player"):
 
 
 def load_player(path, filename):
+    print("Open file {} {}".format(path, filename))
     with open(os.path.join(path, filename), "r") as infile:
         return json.load(infile)
 
