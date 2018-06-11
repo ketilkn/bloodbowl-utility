@@ -26,10 +26,19 @@ def download_team_list(base_url, username, password, base_path):
 
 
 def main():
+    import argparse
     log_format = "[%(levelname)s:%(filename)s:%(lineno)s - %(funcName)20s ] %(message)s"
     logging.basicConfig(level=logging.DEBUG, format=log_format)
+    parser = argparse.ArgumentParser()
 
-    download_team_list(sys.argv[3], sys.argv[1], sys.argv[2], sys.argv[4])
+    parser.add_argument("username")
+    parser.add_argument("password")
+    parser.add_argument("base_url")
+    parser.add_argument("base_path")
+
+    arguments = parser.parse_args()
+
+    download_team_list(arguments.base_url,  arguments.username,  arguments.password, arguments.base_path) 
 
 
 if __name__ == "__main__":

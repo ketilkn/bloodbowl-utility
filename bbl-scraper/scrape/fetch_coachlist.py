@@ -24,7 +24,17 @@ def download_coach_list(base_url, username, password, base_path):
 
 
 def main():
-    download_coach_list("http://www.anarchy.bloodbowlleague.com", sys.argv[1], sys.argv[2], "input/anarchy.bloodbowlleague.com")
+    import argparse
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("username")
+    parser.add_argument("password")
+    parser.add_argument("base_url")
+    parser.add_argument("base_path")
+
+    arguments = parser.parse_args()
+    
+    download_coach_list(arguments.base_url, arguments.username, arguments.password, arguments.base_path)
 
 
 if __name__ == "__main__":
