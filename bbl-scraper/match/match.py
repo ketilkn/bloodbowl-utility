@@ -25,6 +25,8 @@ def dict_games():
 
 
 def match_list():
+    games = load.from_json()
+    return games
     import stats.collate
     data = stats.collate.collate()
     return data["game"].values() if "game" in data else load.from_json()
