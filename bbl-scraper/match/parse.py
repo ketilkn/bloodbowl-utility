@@ -132,9 +132,9 @@ def parse_casualties(soup):
 
 
 def find_casualties(soup):
-    bh = parse_casualty(soup.select('tr[style="background-color:#fcfcf0"]')[0])
-    si = parse_casualty(soup.select('tr[style="background-color:#fff9f0"]')[0])
-    de = parse_casualty(soup.select('tr[style="background-color:#fff4f4"]')[0])
+    bh = parse_casualties(soup.select('tr[style="background-color:#fcfcf0"]')[0])
+    si = parse_casualties(soup.select('tr[style="background-color:#fff9f0"]')[0])
+    de = parse_casualties(soup.select('tr[style="background-color:#fff4f4"]')[0])
     home = bh["home"] + si["home"] + de["home"]
     away = bh["away"] + si["away"] + de["away"]
 
