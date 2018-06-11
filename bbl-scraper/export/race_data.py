@@ -53,7 +53,7 @@ def all_teams_for_race(race, race_teams, performance_by_race):
 def teams_by_race(data):
     LOG.debug("teams_by_race")
     race = team.list_race(data)    
-    teams =  list_all_teams_by_points(data["game"].values())
+    teams =  list_all_teams_by_points(data)
     for r in race:
         team_race = filter(lambda x: x["race"] == r, teams)
         

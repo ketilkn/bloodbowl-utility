@@ -13,6 +13,7 @@ def add_team_race(data):
 
 
 def add_coach_nick(data):
+    print("add_coach_nick, {} {}".format( type(data), len(data)))
     lookup = {c["uid"]:c["nick"] for c in data["coach"].values()}
     for match in data["game"].values():
         match["away_coach"] = lookup[match["away_coachid"]]

@@ -100,6 +100,8 @@ def format_for_matchlist(match):
             "home_coach": match["home_coach"],
             "away_coach": match["away_coach"]
     }
+
+
 def games_for_year(games, year=None):
     if not year:
         return games
@@ -262,17 +264,17 @@ def we_are_coach(games, coach):
     return result
 
 
-def list_all_matches():
-    matches = match.match_list()
+def list_all_matches(data=None):
+    matches = data["game"].values() if data else match.match_list()
     formatted_matches = list(map(format_for_matchlist, matches))
     
     return sorted(formatted_matches, key=itemgetter("date"), reverse=True)
 
 
-def list_all_games_by_year(year):
+def list_all_games_by_year(data, year):
     start_date = "{}-99-99".format(year-1)
     end_date = "{}-00-00".format(int(year)+1)
-    return list(filter(lambda x: x["date"] > start_date and x["date"] < end_date, list_all_matches())) 
+    return list(filter(lambda x: x["date"] > start_date and x["date"] < end_date, data["game"].values())) 
 
 
 def print_list_all_matches():

@@ -60,7 +60,7 @@ def all_teams_for_coach(data, coach, coach_teams, coach_games):
 
 def teams_by_coach(data):
     coaches = coach.list_coaches()    
-    teams =  sorted(team_list.list_all_teams_by_points(data["game"].values()), key=lambda x: x["gamesplayed"], reverse=True)
+    teams =  sorted(team_list.list_all_teams_by_points(data), key=lambda x: x["gamesplayed"], reverse=True)
     
     add_elo(data)
     #games = list_all_games_by_coach()

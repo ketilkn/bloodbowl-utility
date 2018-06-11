@@ -188,10 +188,14 @@ def list_all_teams_by_period(start_date, end_date):
 
     return list(rank_teams(add_teamdata(rank(matches)).values()))
 
-def list_all_teams_by_points(games=None):
+def list_all_teams_by_points(data=None, games=None):
     gamesplayed = games
-    if games == None:
+
+    if not games and data:
+        gamesplayed = data["game"].values()
+    elif not games:
         gamesplayed = match.match_list()
+
     return list(rank_teams(add_teamdata(rank(gamesplayed)).values()))
 
 def team_count_by_race(teams):

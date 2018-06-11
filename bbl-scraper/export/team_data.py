@@ -56,13 +56,13 @@ def team_stats(data, teams, games, the_team):
 
 
 def all_games_by_team(data):
-    teams = team.list_teams()
-    games = match_list.list_all_matches() 
+    teams = data["team"].values() 
+    games = data["game"].values() 
     for t in teams:
         team_stats(data, teams, games, t)
 
-def all_teams_by_year(year):
-    teams = team_list.list_all_teams_by_year(year) 
+def all_teams_by_year(data, year):
+    teams = team_list.list_all_teams_by_year(year)
     return export.get_template("team/all_team.html").render(
         teams_average = team_list.format_for_average(teams),
         teams_total = team_list.format_for_total(teams),
@@ -70,8 +70,9 @@ def all_teams_by_year(year):
         title="All teams in {}".format(year),
         subtitle="sorted by points")
 
-def all_teams():
-    teams = team_list.list_all_teams_by_points() 
+def all_teams(data):
+    teams = team_list.list_all_teams_by_points(data=data)
+
     return export.get_template("team/all_team.html").render(
         teams_average = team_list.format_for_average(teams),
         teams_total = team_list.format_for_total(teams),
@@ -79,15 +80,15 @@ def all_teams():
         title="All teams",
         subtitle="sorted by points")
 
-def teams_by_year(start, end):
+def teams_by_year(data, start, end):
     for year in range(start, end): 
         with open("output/team-{}.html".format(year), "w") as teams:
-            teams.write(all_teams_by_year(year))
+            teams.write(all_teams_by_year(data, year))
 
 
-def export_all_teams():
+def export_all_teams(data):
     with open("output/team.html", "w") as teams:
-        teams.write(all_teams())
+        teams.write(all_teams(data))
 
 
 
@@ -100,11 +101,11 @@ def main():
 
     print("Exporting teams by points")
     with open("output/team.html", "w") as teams:
-        teams.write(all_teams())
+        teams.write(all_teams(collated_data))
 
     print("Exporting teams by year")
-    teams_by_year(2007, datetime.datetime.now().year+1)
+    teams_by_year(collated_data, 2007, datetime.datetime.now().year+1)
 
-    index.index()
+    #index.index()
 if __name__ == "__main__":
     main()
