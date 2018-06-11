@@ -9,27 +9,29 @@ from export import export, coach_data, race_data
 
 from export import index
 
-def all_games_by_year(year):
+def all_games_by_year(data, year):
     return export.get_template("game/all_games.html").render(
-        matches = list_all_games_by_year(year), 
+        matches = list_all_games_by_year(data, year), 
         title="All games in {}".format(year),
         subtitle="sorted by date")
 
-def all_games():
+def all_games(data):
+    games = list_all_matches(data)
     return export.get_template("game/all_games.html").render(
-        matches = list_all_matches(), 
+        matches = games, 
         title="All games",
         subtitle="sorted by date")
 
 
-def games_by_year(start, end):
+def games_by_year(data, start, end):
+    games = list_all_matches(data)
     for year in range(start, end): 
         with open("output/games-{}.html".format(year), "w") as teams:
-            teams.write(all_games_by_year(year))
+            teams.write(all_games_by_year(data, year))
 
-def export_games_by_date():
+def export_games_by_date(data):
     with open("output/games.html", "w") as matches:
-        matches.write(all_games())
+        matches.write(all_games(data))
 
 def main():
     import stats.collate
@@ -37,10 +39,10 @@ def main():
 
     print("Exporting games by date")
     with open("output/games.html", "w") as matches:
-        matches.write(all_games())
+        matches.write(all_games(collated_data))
 
     print("Exporting games by year")
-    games_by_year(2007, datetime.datetime.now().year+1)
+    games_by_year(collated_data, 2007, datetime.datetime.now().year+1)
     
 
 
