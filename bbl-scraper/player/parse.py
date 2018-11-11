@@ -17,14 +17,20 @@ LOG = logging.getLogger(__package__)
 def parse_fromfile(path, playerid):
     LOG.debug("%s %s", path, playerid)
     import player.load
-    parsed_player = parse_admin.parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
 
-    parsed_player = parse_profile.parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
-    parsed_player = parse_profile.parse_team(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
-    if not parsed_player["journeyman"] and parsed_player["status"]["active"]["reason"] == "no status":
-        LOG.warning("%s %s %s %s has no status", parsed_player["team"], playerid, parsed_player["playername"],
-                 parsed_player["position"])
-    return parsed_player
+    try:
+        parsed_player = parse_admin.parse_player(playerid, soup=player.load.from_file("{}/admin-player-{}.html".format(path, playerid)))
+        parsed_player = parse_profile.parse_games(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+        parsed_player = parse_profile.parse_team(parsed_player, soup=player.load.from_file("{}/player-{}.html".format(path, playerid)))
+
+        if not parsed_player["journeyman"] and parsed_player["status"]["active"]["reason"] == "no status":
+            LOG.warning("%s %s %s %s has no status", parsed_player["team"], playerid, parsed_player["playername"],
+                     parsed_player["position"])
+        return parsed_player
+    except:
+        LOG.exception("Exception while parsing %s in %s", playerid, path)
+
+
 
 
 def main():
