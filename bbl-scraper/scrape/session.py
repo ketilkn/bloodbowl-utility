@@ -5,6 +5,9 @@ import logging
 
 LOG = logging.getLogger(__package__)
 
+USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'
+ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3'
+
 
 def download_to(session, url, target):
     LOG.debug("Downloading %s to %s", url, target)
@@ -31,11 +34,12 @@ def verify_session(session, response = None):
 def login(url, username, password):
     LOG.debug("Logging in to %s using %s", url, username)
     s = requests.session()
-    r = s.post(url, data={"user":username, "pass":password})
+    r = s.post(url, headers={'Accept': ACCEPT, 'User-Agent': USER_AGENT}, data={"user":username, "pass":password})
 
     if verify_session(s, r):
         return s
     LOG.error("Could not verify session")
+    print(r.content)
     sys.exit("Could not verify session")
 
 
