@@ -74,8 +74,8 @@
 <p class="clearer"></p>
 
 
-<h2 class="content-subhead">Teams coached by {{title}}</h2>
-<table class="pure-table">
+<h2 id='teams-coached-by-{{title}}' class="content-subhead">Teams coached by {{title}}</h2>
+<table id='coach-teams' class="pure-table">
 	<thead>
 		<tr>
 			<td class="rank number not-sortable">#</td>
@@ -124,7 +124,7 @@
 
 </table>
 
-<div class="hidden-data">
+<div>
 <h2 class="content-subhead">Performance against race</h2>
 
 {% from 'group-performance.html' import group_performance %}
@@ -132,12 +132,20 @@
 
 </div>
 
-<div class="hidden-data">
+<div>
+<h2 class="content-subhead" id="performance-with-race">Performance with race</h2>
+
+{% from 'group-performance.html' import group_performance %}
+{{ group_performance(games_with_race) }}
+
+</div>
+
+<div>
 <h2 class="content-subhead">Performance against coach</h2>
 {{ group_performance(games_by_coach) }}
 </div>
 
-<div class="hidden-data">
+<div>
 <h2 class="content-subhead">Games by weekday</h2>
 {{ group_performance(games_by_weekday) }}
 </div>
