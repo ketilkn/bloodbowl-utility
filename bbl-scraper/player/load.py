@@ -89,12 +89,18 @@ def main():
         logging.info("Looking for %s", interesting)
     pp = pprint.PrettyPrinter(indent=4)
 
+    invalid_count = 0
     for player in parse_path(path):
+        if not player:
+            LOG.debug('Ignoring invalid file')
+            invalid_count = invalid_count + 1
+            continue
         if not interesting or player["playerid"] in interesting:
             if do_print:
                 pp.pprint(player)
             if do_json:
                 write_json(player=player, path=os.path.join(BASEPATH, "json/player/"))
+    LOG.debug("%s invalid files", invalid_count)
 
 
 if __name__ == "__main__":
