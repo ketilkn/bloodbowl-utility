@@ -11,7 +11,7 @@ ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image
 
 def download_to(session, url, target):
     LOG.debug("Downloading %s to %s", url, target)
-    response = session.get(url)
+    response = session.get(url, headers={'Accept': ACCEPT, 'User-Agent': USER_AGENT} )
     if not response.history or response.status_code==200: 
         html = response.text
         try:
