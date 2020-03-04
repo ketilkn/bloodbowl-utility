@@ -13,8 +13,13 @@
 
     <base href="{%if basehref %}{{ basehref }}{% else %}/{% endif %}">
 	<script src="/script.js"></script>
+	<script>
+  function resizeIframe(obj) {
+	      obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+	        }
+	</script>
 </head>
-<body>
+<body onload='setTimeout(function(){sendHeight();}, 200);'>
 <div id="layout">
     <!-- Menu toggle -->
     <!--a href="#menu" id="menuLink" class="menu-link">
@@ -26,9 +31,9 @@
 		<!--a class="non-pure-menu-heading" href="/bb">AnBBL</a>-->
 
             <ul class="non-pure-menu-list">
-                <li class="non-pure-menu-item non-pure-menu-selected2"><a href="team-2018.html" class="non-pure-menu-link ">Teams</a></li>
-		<li class="non-pure-menu-item"><a href="games-2018.html" class="non-pure-menu-link">Games</a></li>
-		<li class="non-pure-menu-item"><a href="coaches-2018.html" class="non-pure-menu-link">Coach</a></li>
+                <li class="non-pure-menu-item non-pure-menu-selected2"><a href="team-2020.html" class="non-pure-menu-link ">Teams</a></li>
+		<li class="non-pure-menu-item"><a href="games.html" class="non-pure-menu-link">Games</a></li>
+		<li class="non-pure-menu-item"><a href="coaches-2020.html" class="non-pure-menu-link">Coach</a></li>
 		<li class="non-pure-menu-item"><a href="races.html" class="non-pure-menu-link">Race</a></li>
 		<li class="non-pure-menu-item"><a href="players.html" class="non-pure-menu-link">Players</a></li>
 		<!--li class="non-pure-menu-item"><a href="/bb/recent-matches.html" class="non-pure-menu-link">Recent</a></li>
@@ -59,7 +64,22 @@
 
 
 <!-- script src="/bb/ui.js"></script -->
-
+<script type="text/javascript">
+function sendHeight()
+{
+    console.log('sendHEight');
+    if(parent.postMessage)
+    {
+	console.log('parent.postMessage true');
+        // replace #wrapper with element that contains 
+        // actual page content
+        var height= document.getElementById('layout').offsetHeight;
+	console.log('height is '+height);
+        parent.postMessage(height+100, '*');
+    }
+}
+sendHeight();
+</script>
 </body>
 </html>
 
