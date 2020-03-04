@@ -158,6 +158,11 @@ def group_games_by_coach(games, who="away"):
 def group_games_by_our_coach(games):
     return group_games_by_coach(games, who="home")
 
+
+def group_games_with_race(games, who="home"):
+    return group_games_by_race(games, who=who)
+
+
 def group_games_by_race(games, who="away"):
     by_race = group_games(lambda x: x[who+"_race"], games)
     return by_race
