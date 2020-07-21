@@ -17,6 +17,9 @@ class Link:
                                             onclick=onclick)
         return None
 
+    def is_link(self):
+        return self.href or self.onclick
+
 @dataclass
 class Page:
     menu: typing.List[Link]
