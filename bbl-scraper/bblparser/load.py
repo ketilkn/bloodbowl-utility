@@ -24,7 +24,7 @@ def load_file(filename) -> str:
 
 def load_document(document) -> str:
     if document == sys.stdin:
-        return load_file(sys.stdin.fileno())
+        return load_raw(sys.stdin.fileno())
     else:
         return load_file(document)
 
