@@ -41,11 +41,13 @@ def main():
     arg_p.add_argument('--json', action='store_true', help="JSON print parser result")
 
     arguments = arg_p.parse_args()
-    result = next(bblparser.load.load_documents(arguments.documents))
+    result = [parse(d) for d in bblparser.load.load_documents(arguments.documents)]
     if arguments.pprint > 0 or arguments.pprint == -1:
         import pprint
         if arguments.pprint > 0:
-            pprint.pprint(result[:arguments.pprint])
+            for p in result:
+                for l in p.menu:
+                    pprint.pprint(l, indent=4)
         else:
             pprint.pprint(result)
     return result, arguments
