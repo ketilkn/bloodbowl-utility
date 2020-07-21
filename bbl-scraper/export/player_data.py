@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import datetime
+import os
+
 import logging
 import export.filter
 import stats.player_list
@@ -53,11 +56,20 @@ def top_players(data=None):
         subtitle="")
 
 
+def get_players_modification_date():
+    try:
+        return datetime.datetime.fromtimestamp(os.path.getmtime('input/anarchy.bloodbowlleague.com/json/players.json')).strftime("%Y-%m-%d")
+    except:
+        return "?"
+
+
 def all_player(data=None):
     LOG.debug("%s players in data", len(data["player"]) if "player" in data else "No")
     players = stats.player_list.flatten_players(stats.player_list.all_players(data))
+    players_updated = get_players_modification_date()
     return export.get_template("player/all_player.html").render(
         players = list(players),
+        players_updated = players_updated,
         hide_position = False, 
         hide_team = False, 
         title="All players",
