@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Viagra for Anarchy Blood Bowl League
 // @namespace    http://www.anarchy.bloodbowlleague.com/
-// @version      0.9
+// @version      0.10
 // @description  Convert onclick to anchor for bloodbowlleague.com
 // @license      MIT
 // @author       Ketil Nordstad
