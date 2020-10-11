@@ -20,10 +20,29 @@
 // 0.7: Searchable bounty selector, support for arosbb.dk.
 // 0.8: Improved bounty selector. Support for arrowkeys. Fixed empty search text bug.
 // 0.9: Added search to new match 
+// 0.10: Added link to quickly go to league matches (and new match for semi pro)
 
 (function() {
     'use strict';
-    
+
+    //From: https://gist.github.com/niyazpk/f8ac616f181f6042d1e0
+    // Add / Update a key-value pair in the URL query parameters
+    function updateUrlParameter(uri, key, value) {
+        // remove the hash part before operating on the uri
+        var i = uri.indexOf('#');
+        var hash = i === -1 ? '' : uri.substr(i);
+        uri = i === -1 ? uri : uri.substr(0, i);
+
+        var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+        var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+        if (uri.match(re)) {
+            uri = uri.replace(re, '$1' + key + "=" + value + '$2');
+        } else {
+            uri = uri + separator + key + "=" + value;
+        }
+        return uri + hash; // finally append the hash as well
+    }
+
     function getStyle(el, styleProp) {
   var value, defaultView = (el.ownerDocument || document).defaultView;
   // W3C standard way:
@@ -135,12 +154,34 @@
 
     };
 
+    var addLinkToParent = function(el, linkText) {
+        var a = document.createElement("a");
+        a.innerText=linkText;
+        a.href = el.href;
+        el.parentNode.appendChild(a);
+        return a;
+    }
+
     var processMenuTd = function(el) {
         //alert(el.getAttribute("onclick"));
         var link = extractLink(el);
         //alert(link);
-        wrapAnchor(el, link);  
+        wrapAnchor(el, link);
         el.setAttribute("onclick", "");
+
+        var leagueLink = el.querySelector('a');
+        if(el.querySelector('a').href.indexOf('&s=') >= 0){
+            var matchLink = addLinkToParent(leagueLink, '[m]');
+            matchLink.href = updateUrlParameter(matchLink.href, 'p', 'ma');
+            matchLink.href = updateUrlParameter(matchLink.href, 'so', 's');
+            matchLink.title = 'Show matches';
+
+            if(leagueLink.innerText.indexOf('Semi Pro') == 0) {
+                var newLink = addLinkToParent(leagueLink, '[+]');
+                newLink.href = updateUrlParameter(newLink.href, 'p', 'am');
+                newLink.title = 'Create matches';
+            }
+        }
     };
 
 
