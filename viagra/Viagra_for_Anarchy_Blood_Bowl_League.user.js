@@ -3,6 +3,7 @@
 // @namespace    http://www.anarchy.bloodbowlleague.com/
 // @version      0.9
 // @description  Convert onclick to anchor for bloodbowlleague.com
+// @license      MIT
 // @author       Ketil Nordstad
 // @match        http://*.bloodbowlleague.com/*
 // @match        http://www.arosbb.dk/*
