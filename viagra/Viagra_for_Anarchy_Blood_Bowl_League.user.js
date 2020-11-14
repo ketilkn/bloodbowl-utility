@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Viagra for Anarchy Blood Bowl League
 // @namespace    http://www.anarchy.bloodbowlleague.com/
-// @version      0.10
+// @version      0.11
 // @description  Convert onclick to anchor for bloodbowlleague.com
 // @license      MIT
 // @author       Ketil Nordstad
 // @match        http://*.bloodbowlleague.com/*
+// @match        http://*.bloodbowlleague.net/*
 // @match        http://www.arosbb.dk/*
 // @grant        none
 // @updateURL    https://openuserjs.org/src/scripts/ketilkn/Viagra_for_Anarchy_Blood_Bowl_League.user.js#  
@@ -22,6 +23,7 @@
 // 0.8: Improved bounty selector. Support for arrowkeys. Fixed empty search text bug.
 // 0.9: Added search to new match 
 // 0.10: Added link to quickly go to league matches (and new match for semi pro)
+// 0.11: Added bloodbowlleauge.net
 
 (function() {
     'use strict';
