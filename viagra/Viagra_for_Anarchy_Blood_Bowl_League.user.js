@@ -163,7 +163,7 @@
         a.href = el.href;
         el.parentNode.appendChild(a);
         return a;
-    }
+    };
 
     var processMenuTd = function(el) {
         //alert(el.getAttribute("onclick"));
@@ -238,9 +238,9 @@
 
         }else if (event.keyCode == 40 ) {
             //down    
-            var index = this.dropdown.selectedIndex;
-            if(index < this.dropdown.length -1 ) {
-                this.dropdown.selectedIndex =index +1;
+            var idx = this.dropdown.selectedIndex;
+            if(idx < this.dropdown.length -1 ) {
+                this.dropdown.selectedIndex =idx +1;
             }
 
 
@@ -277,8 +277,8 @@
                 if("OPTION" == target.childNodes[j].tagName && target.childNodes[j].value !== previousId) {
                     //console.log(target.childNodes[j].tagName +  "::" + target.childNodes[j].value+ "::" + previousId);
                     previousId = target.childNodes[j].value;
-                    var name = option.textContent || target.childNodes[j].innerText;
-                    var player = {"id": target.childNodes[j].value, "name":name};
+                    var nam = option.textContent || target.childNodes[j].innerText;
+                    var player = {"id": target.childNodes[j].value, "name":nam};
                     dropdownSearch.options.push( player );
                 }
 
