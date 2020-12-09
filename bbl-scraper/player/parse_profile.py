@@ -154,7 +154,7 @@ def parse_ability(soup, ability, playerid):
 def parse_team(player, soup):
     LOG.debug("parse player with id %s", player["playerid"])
     LOG.debug("TEAM >========-")
-    team = soup.select_one("a[style=font-size:11px]")
+    team = soup.select_one("a[style='font-size:11px']")
     LOG.debug("team   el %s", "{}".format(team))
 
     player["playername"] = parse_playername(soup)
