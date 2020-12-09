@@ -51,9 +51,10 @@ def parse_interception(achievements):
     return achievements[0].text
 
 
-def parse_total(achievements):
+def parse_total(spp_table):
     LOG.debug("-==< parse TOTAL >==-")
-    LOG.debug("achievement el %s", achievements[5])
+    LOG.debug("achievement el %s", spp_table)
+    return row_with_heading(spp_table, 'Star Player Points')
     return achievements[-3].text
 
 
@@ -72,17 +73,18 @@ def parse_value(soup):
 
 
 def find_achievements(soup):
-    el = soup.select("table[style='background-color:#F0F0F0;border:1px solid #808080'] td[align=center]")
+    el = soup.select_one("table[style='background-color:#F0F0F0;border:1px solid #808080'] table")
     if el:
         return el
-    return soup.select('tr.trborder td table td[align=center]')
+    return soup.select_one('tr.trborder td table td[align=center] table')
 
 
 def parse_games(player, soup):
     LOG.debug("-==< parse player with id %s >==-", player["playerid"])
 
-    achievements = find_achievements(soup)
-    spp_table = soup.select_one("table[style='background-color:#F0F0F0;border:1px solid #808080'] table")
+    spp_table = find_achievements(soup)
+    achievements = spp_table.select('td[align=center]')
+    #spp_table = soup.select_one("table[style='background-color:#F0F0F0;border:1px solid #808080'] table")
 
     LOG.debug("achievements len %s", len(achievements))
     
@@ -91,7 +93,7 @@ def parse_games(player, soup):
             "casualty": parse_casualties(achievements), 
             "completion": parse_completions(achievements), 
             "mvp": parse_mvp(achievements),
-            "total": achievements[5].text}
+            "total": parse_total(spp_table)}
     return player
 
 
