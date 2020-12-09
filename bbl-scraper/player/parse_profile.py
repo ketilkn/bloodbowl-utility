@@ -54,7 +54,7 @@ def parse_interception(achievements):
 def parse_total(achievements):
     LOG.debug("-==< parse TOTAL >==-")
     LOG.debug("achievement el %s", achievements[5])
-    return achievements[-3].text
+    return achievements[-3].text.strip()
 
 
 
