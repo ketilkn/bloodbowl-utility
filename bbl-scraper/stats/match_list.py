@@ -3,6 +3,8 @@ import dateutil
 from operator import itemgetter
 from copy import  copy
 import logging
+import pprint
+import sys
 
 from match import match
 
@@ -87,19 +89,26 @@ def playstreak(games):
 
 
 def format_for_matchlist(match):
-    return {"matchid": match["matchid"],
-            "date": match["date"].split("T")[0],
-            "repeated_date": False,
-            "home": match["home_team"],
-            "away": match["away_team"],
-            "td_home": match["home_td"],
-            "td_away": match["away_td"],
-            "cas_home": match["home_cas"],
-            "cas_away": match["away_cas"],
-            "season": match["tournament_name"],
-            "home_coach": match["home_coach"],
-            "away_coach": match["away_coach"]
-    }
+    try:
+        return {"matchid": match["matchid"],
+                "date": match["date"].split("T")[0],
+                "repeated_date": False,
+                "home": match["home_team"],
+                "homeid": match["home_teamid"],
+                "awayid": match["away_teamid"],
+                "away": match["away_team"],
+                "td_home": match["home_td"],
+                "td_away": match["away_td"],
+                "cas_home": match["home_cas"],
+                "cas_away": match["away_cas"],
+                "season": match["tournament_name"],
+                "home_coach": match["home_coach"] if 'home_coach' in match else None,
+                "away_coach": match["away_coach"] if 'away_coach' in match else None
+        }
+    except KeyError as kerr:
+        print("Crashed on format_for_matchlist:", file=sys.stderr)
+        pprint.pprint(match, indent=2)
+        raise kerr
 
 
 def games_for_year(games, year=None):
