@@ -71,10 +71,17 @@ def parse_value(soup):
     return ""
 
 
+def find_achievements(soup):
+    el = soup.select("table[style='background-color:#F0F0F0;border:1px solid #808080'] td[align=center]")
+    if el:
+        return el
+    return soup.select('tr.trborder td table td[align=center]')
+
+
 def parse_games(player, soup):
     LOG.debug("-==< parse player with id %s >==-", player["playerid"])
 
-    achievements = soup.select("table[style='background-color:#F0F0F0;border:1px solid #808080'] td[align=center]")
+    achievements = find_achievements(soup)
     spp_table = soup.select_one("table[style='background-color:#F0F0F0;border:1px solid #808080'] table")
 
     LOG.debug("achievements len %s", len(achievements))
@@ -84,7 +91,7 @@ def parse_games(player, soup):
             "casualty": parse_casualties(achievements), 
             "completion": parse_completions(achievements), 
             "mvp": parse_mvp(achievements),
-            "total": row_with_heading(spp_table, "Star Player Points")} 
+            "total": achievements[-1].text}
     return player
 
 
