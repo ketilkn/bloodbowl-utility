@@ -50,7 +50,7 @@ def download_to(url, target):
         LOG.warning(" Server error {} to {}".format(url, target))
 
 
-def download_match(matchid, directory=BASEPATH, base_url="http://www.anarchy.bloodbowlleague.com"):
+def download_match(matchid, directory=BASEPATH, base_url="http://www.anarchy.bloodbowlleague.net"):
         download_to(DATA_URL.format(base_url, matchid), os.path.join(directory, "html/match/", "matchdata-{}.html".format(matchid)))
         sleep(1)
         download_to(BASE_URL.format(base_url, matchid), os.path.join(directory, "html/match/", "match-{}.html".format(matchid)))
@@ -85,7 +85,7 @@ def download_matches2(base_url="http://www.anarchy.bloodbowlleague.com/", base_p
             LOG.debug("Match {} already downloaded use --force to reload".format(g))
 
 
-def recent_matches(base_url="http://www.anarchy.bloodbowlleague.com/", base_path = BASEPATH, force=force_download()):
+def recent_matches(base_url="http://www.anarchy.bloodbowlleague.net/", base_path = BASEPATH, force=force_download()):
     """Download recent matches from host. If force is True existing matches will be downloaded again"""
     LOG.debug("Fetch recent matches")
     games = new_games(base_path, base_url)
