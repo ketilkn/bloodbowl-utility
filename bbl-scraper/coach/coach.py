@@ -62,7 +62,7 @@ def list_coaches(basepath = BASEPATH):
 
 def find_uid_for_nick(coaches, nick):
     for the_coach in coaches.values():
-        if the_coach["nick"] == nick:
+        if the_coach["nick"].lower() == nick.lower():
             return the_coach["uid"]
     return None
     # return [key for key, value in coaches if value["nick"] == nick]

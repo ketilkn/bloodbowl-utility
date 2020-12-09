@@ -35,7 +35,7 @@ def parse_nick(row):
             return td.find("b").text
     return "Found no nick"
 def parse_uid(row):
-    found = row.select("div.b1")
+    found = row.select("div.divbutton")
     for div in found:
         if div.has_attr("onclick"):
             onclick = div["onclick"]

@@ -7,6 +7,12 @@ from importer.bbleague.defaults import BASEPATH
 LOG = logging.getLogger(__package__)
 
 
+def order_by_pid(players):
+    """order list of players by player.player_id"""
+    return sorted(players,
+                  key=lambda p: int(p["playerid"]))
+
+
 def order_by_team(players):
     """order list of players by player.team"""
     return sorted(players,
@@ -93,6 +99,8 @@ def order_by(players, order):
             ordered = order_by_playername(ordered)
         elif o == "team":
             ordered = order_by_team(ordered)
+        elif o in ["playerid", 'pid']:
+            ordered = order_by_pid(ordered)
         else:
             LOG.warning("No such ordering %s", o)
     return ordered
