@@ -91,7 +91,7 @@ def parse_games(player, soup):
             "casualty": parse_casualties(achievements), 
             "completion": parse_completions(achievements), 
             "mvp": parse_mvp(achievements),
-            "total": achievements[-1].text}
+            "total": achievements[5].text}
     return player
 
 
