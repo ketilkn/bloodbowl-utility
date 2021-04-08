@@ -31,10 +31,10 @@ def verify_session(session, response = None):
     return response.status_code == 200 and response.url.endswith("/default.asp?p=adm")
 
 
-def login(url, username, password):
+def login(url, username, password, league_id=14):
     LOG.debug("Logging in to %s using %s", url, username)
     s = requests.session()
-    r = s.post(url, headers={'Accept': ACCEPT, 'User-Agent': USER_AGENT}, data={"user":username, "pass":password})
+    r = s.post(url, headers={'Accept': ACCEPT, 'User-Agent': USER_AGENT}, data={"user":username, "pass":password, 'ligaID': league_id})
 
     if verify_session(s, r):
         return s
